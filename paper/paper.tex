@@ -1,0 +1,226 @@
+% vim: set spell spelllang=en tw=100 et sw=4 sts=4 :
+
+\documentclass{llncs}
+
+\usepackage{showframe}
+
+\usepackage{microtype}
+\usepackage{complexity}                % \P, \NP etc
+\usepackage{tikz}                      % For pretty pictures
+\usepackage{amsmath}                   % \operatorname
+\usepackage{hyperref}                  % clicky links
+\usepackage{cleveref}                  % no need to type Figure etc
+\usepackage{gnuplot-lua-tikz}          % graphs
+\usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
+\usepackage{placeins}                  % \FloatBarrier
+\usepackage{cite}
+
+\usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing, patterns}
+
+% lncs style
+\crefname{algocf}{Algorithm}{Algorithms}
+\Crefname{algocf}{Algorithm}{Algorithms}
+\crefname{figure}{Fig.}{Figs.}
+\Crefname{figure}{Fig.}{Figs.}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+
+\newcommand{\lineref}[1]{line~\ref{#1}}
+
+\title{Clique and Constraint Models for Maximum Common (Connected) Subgraph Problems}
+
+\author{Ciaran McCreesh\thanks{This work was supported by the Engineering and Physical Sciences
+Research Council [grant number EP/K503058/1]}\inst{1} \and Samba Ndojh Ndiaye\inst{2} \and Patrick
+Prosser\inst{1} \and Christine Solnon \inst{3}}
+\institute{University of Glasgow, Glasgow, Scotland \and
+Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR5205, F-69621, France}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
+    This problem can be solved either by constraint-based search, or by reduction to the maximum
+    clique problem. We evaluate these two approaches using modern algorithms. We also propose a
+    restricted branching technique for the connected version of the problem, and show how to
+    implement this in constraint-based and clique-inspired algorithms.
+\end{abstract}
+
+\section{Introduction}
+
+Max common subgraph ?? cite some history and why we care
+
+Connected \cite{DBLP:journals/tcs/Koch01,DBLP:conf/mco/VismaraV08}
+
+CP models \cite{DBLP:conf/cp/NdiayeS11}
+
+Clique models, discuss below.
+
+\subsection{Definitions and Notation}
+
+\subsection{Datasets}
+
+\cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}
+
+\section{Re-Evaluating the Clique Model}
+
+Previous experimental work has used a maximal clique enumeration algorithm, even for the
+maximisation problem. ?? check this! I recall someone using a bad max clique algorithm too.
+\cite{DBLP:conf/sspr/BunkeFGSV02,DBLP:journals/jgaa/ConteFV07}
+
+We instead use a maximum clique algorithm. There has been a lot of recent
+research on this
+\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10,DBLP:journals/cor/SegundoRJ11,DBLP:journals/algorithms/Prosser12,DBLP:journals/ol/SegundoMRH13,DBLP:conf/ictai/LiFX13,DBLP:journals/cor/SegundoT14,DBLP:conf/lion/SegundoLB14,DBLP:conf/cp/McCreeshP14,DBLP:journals/jco/BatsynGMP14,DBLP:journals/cor/SegundoNB15,DBLP:conf/lion/NikolaevBS15,DBLP:conf/lion/LiJX15}.
+
+Also sparse stuff, but association graphs aren't sparse enough.
+
+Say which clique algorithm we're using.
+
+\subsection{Reduction to Maximum Clique in an Association Graph}
+
+Explain association graph. ?? cite history, connections to microstructure
+
+Discuss how edge labels, vertex labels, directed edges, etc, are handled. Note that we can generally
+only handle very local side constraints, or injectivity (which is decomposable).
+
+\subsection{Experimental Evaluation}
+
+\cref{figure:unconnected-33}
+
+\cref{figure:unconnected-plain}
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-unconnected-33}
+    \caption{Clique versus CP, 33\% labelled. On the top, the cumulative
+    number of instances solved by each approach, in under a certain time. On the bottom, the best
+    clique approach compared to the best CP approach: the colour at a point indicates the number of
+    instances with these runtimes.} \label{figure:unconnected-33}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-unconnected-plain}
+    \caption{Clique versus CP, undirected, unlabelled. On the top, the cumulative
+    number of instances solved by each approach, in under a certain time. On the bottom, the best
+    clique approach compared to the best CP approach: the colour at a point indicates the number of
+    instances with these runtimes.} \label{figure:unconnected-plain}
+\end{figure}
+
+\subsection{Parallel Search}
+
+\cite{DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16}
+
+?? Stuff on EHPs, how work stealing matters here too
+
+\section{Maximum Common Connected Subgraph}
+
+Connectedness is not hereditary, but can be built up one vertex at a time. Alternatively,
+connectedness is a constraint.
+
+\subsection{Connectedness via Restricted Branching}
+
+The key idea is that whenever we branch (except for the first choice we make), we select only from
+variables which correspond to vertices which are adjacent to at least one other variable which has
+been instantiated to a non-null value. If no such variables remain, the subgraph we are building
+cannot grow any further, and all remaining variables must be instantiated to null.
+
+?? We only need to work off whichever input gives us the variables. But the CP approach seems to
+look at both?
+
+?? Patrick reckons this reminds him of Prim's algorithm for minimum spanning trees.
+
+\subsection{Connectedness as a Constraint}
+
+Connectedness \cite{Brown:2005}
+
+Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
+
+\subsection{A Clique-Inspired Algorithm}
+
+We can use the branching idea inside a ``maximum clique'' algorithm, by providing additional
+information on the meaning behind vertices in the association graph as input. To fit in with the
+bitset encoding, we preconstruct a bitset for each vertex $v$ in the association graph, saying which
+association graph vertices correspond to vertices adjacent to $v$ in the left-hand graph.
+
+?? This gets confusing. Maybe we can come up with some clever terminology: when I was talking about
+search trees and clique algorithms, I used the term 'node' for something in a search tree, and
+'vertex' for something in a graph. Maybe we can use different terms for things in the association
+graph, versus things in the two input graphs? Should we call association graph vertices
+'assignments' and edges 'compatibilities' instead?
+
+We keep track of allowed branching vertices in a set we call $A$. We only branch on vertices which
+are present in $P \cap A$.
+
+?? We could make this faster, since it'll be the same for each vertex corresponding to the same
+left-hand vertex.
+
+We must also ensure that the bound remains valid. The branching and bounding are integrated, and it
+is not possible to alter the branching rule without also changing the bound. Our observation is that
+the bound rule works for any valid colouring, not just a greedy one, so long as we always iterate
+from the last colour class downwards, without skipping any vertices. Thus we construct a two-pass
+greedy colouring such that all the vertices in $P \setminus A$ are to the left, and the vertices in
+$P \cap A$ are to the right.
+
+\cite{DBLP:conf/cp/McCreeshP14}
+
+\subsection{Experimental Evaluation}
+
+\paragraph{Connected, Undirected, 33\% Labelled} \cref{figure:connected-undir33} Above two seconds,
+    the clique approach dominates except for three instances, and there is only one instance which
+    the CP model can solve but the clique model cannot (?? is this an EHP and does parallel get rid
+    of it?). The clique model is unable to solve only ??  instances within one hour, ?? all of which
+    have 90 or 100 vertices.  On the other hand, for trivial instances, the clique approach is often
+    expensive due to the association graph construction.
+
+\paragraph{Connected, Undirected, Unlabelled} \cref{figure:connected-plain}, looks like the clique
+approach doesn't do so well\ldots
+
+?? My gut feeling is that if we have edge labels, the clique model wins, and if we don't, it's
+likely to lose. So maybe I should run some experiments with vertex labels but not edge labels to
+test this.
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-connected-undir33}
+    \caption{Clique versus CP, connected, undirected, 33\% labelled, up to 100 vertices. On the top,
+        the cumulative number of instances solved by each approach, in under a certain time. On the
+        bottom, the best clique approach compared to the best CP approach: the colour at a point
+        indicates the number of instances with these runtimes.} \label{figure:connected-undir33}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-connected-plain}
+    \caption{Clique versus CP, connected, undirected, unlabelled, up to 25 vertices (and some 30 and
+        35, which are still running\ldots). On the top, the cumulative number of instances solved by
+    each approach, in under a certain time. On the bottom, the best clique approach compared to the
+best CP approach: the colour at a point indicates the number of instances with these runtimes.}
+\label{figure:connected-plain}
+\end{figure}
+
+\subsection{Parallel Search}
+
+\cite{DBLP:conf/ictai/MinotNS15}
+
+\section{Conclusion}
+
+Some immoral perspectives on closely coupling branching with a particular constraint. Whether this
+is useful for other things, like ASP.
+
+We haven't discussed partial subgraphs, or connected directed.
+
+Possibly portfolios.
+
+Better instances.
+
+\FloatBarrier
+
+\bibliographystyle{splncs}
+\bibliography{paper}
+
+\end{document}
+
