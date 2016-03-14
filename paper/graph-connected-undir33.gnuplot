@@ -1,6 +1,6 @@
 # vim: set et ft=gnuplot sw=4 :
 
-set terminal tikz color size 4.5in,6.8in font '\scriptsize'
+set terminal tikz color size 4.5in,6.6in font '\scriptsize'
 
 set output "gen-graph-connected-undir33.tex"
 
@@ -16,7 +16,7 @@ set logscale x
 unset logscale y
 unset logscale cb
 set xtics nomirror add ('1' 1) add ('1h' 3600e3)
-set ytics nomirror add ('81000' 81000)
+set ytics nomirror add ('' 80000) ('81000' 81000)
 set grid
 set xrange [1:3600e3]
 set yrange [1:81000]

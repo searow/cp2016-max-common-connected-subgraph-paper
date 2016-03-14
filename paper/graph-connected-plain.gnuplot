@@ -1,6 +1,6 @@
 # vim: set et ft=gnuplot sw=4 :
 
-set terminal tikz color size 4.5in,6.8in font '\scriptsize'
+set terminal tikz color size 4.5in,6.6in font '\scriptsize'
 
 set output "gen-graph-connected-plain.tex"
 
@@ -16,10 +16,10 @@ set logscale x
 unset logscale y
 unset logscale cb
 set xtics nomirror add ('1' 1) add ('1h' 3600e3)
-set ytics nomirror
+set ytics nomirror add ('27500' 27500)
 set grid
 set xrange [1:3600e3]
-unset yrange
+set yrange [0:27500]
 set format x '$10^{%T}$'
 unset format y
 
@@ -46,6 +46,7 @@ set logscale y
 set logscale cb
 set cbrange [1:1000]
 set xtics nomirror add ('1' 1) add ('1h' 3600e3)
+unset ytics
 set ytics nomirror add ('1' 1) add ('1h' 3600e3)
 set cbtics 0 add ('0' 1) ('1' 2) ('10' 10) ('$10^2$' 1e2) ('$\ge10^3$' 1e3)
 set format x '$10^{%T}$'
