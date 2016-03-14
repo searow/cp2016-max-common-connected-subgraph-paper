@@ -29,11 +29,14 @@
 
 \newcommand{\lineref}[1]{line~\ref{#1}}
 
+\newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
+
 \title{Clique and Constraint Models for Maximum Common (Connected) Subgraph Problems}
 
 \author{Ciaran McCreesh\thanks{This work was supported by the Engineering and Physical Sciences
-Research Council [grant number EP/K503058/1]}\inst{1} \and Samba Ndojh Ndiaye\inst{2} \and Patrick
-Prosser\inst{1} \and Christine Solnon \inst{3}}
+    Research Council [grant number EP/K503058/1]}\inst{1} \and Samba Ndojh Ndiaye\thanks{This work
+was supported by the ANR project SoLStiCe (ANR-13-BS02-0002-01)}\inst{2} \and Patrick
+Prosser\inst{1} \and Christine Solnon\samethanks[2] \inst{3}}
 \institute{University of Glasgow, Glasgow, Scotland \and
 Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR5205, F-69621, France}
 
