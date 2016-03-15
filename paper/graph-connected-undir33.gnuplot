@@ -16,10 +16,10 @@ set logscale x
 unset logscale y
 unset logscale cb
 set xtics nomirror add ('1' 1) add ('1h' 3600e3)
-set ytics nomirror add ('' 80000) ('81000' 81000)
+set ytics nomirror add ('' 80000) ('81400' 81400)
 set grid
 set xrange [1:3600e3]
-set yrange [1:81000]
+set yrange [1:81400]
 set format x '$10^{%T}$'
 unset format y
 
