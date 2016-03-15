@@ -144,6 +144,41 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 
 \subsection{A Clique-Inspired Algorithm}
 
+\begin{algorithm}[tb] \DontPrintSemicolon
+\nl $\FuncSty{cliquishMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
+\nl \Begin{
+    \nl $\KwSty{global} ~ C_{\mathit{max}} \gets \emptyset$ \;
+    \nl $G \gets \FuncSty{encode}(G_1, G_2)$ \;
+    \nl $\FuncSty{expand}(G, \operatorname{V}(G), \emptyset, \emptyset)$ \;
+    \nl $\KwSty{return} ~ \FuncSty{decode}(C_{\mathit{max}})$ \;
+}
+\vspace{1ex}
+\nl $\FuncSty{expand}$ :: (Graph $G$, Set $C$, Set $A$, Set $P$) \;
+\nl \Begin{
+    \nl $\mathit{colourClasses} \gets \FuncSty{colour}(G, A, P)$ \;
+    \nl \While{$\FuncSty{length}(\mathit{colourClasses}) > 0$}{
+        \nl \ForEach{$v \textnormal{~in~} \FuncSty{last}(\mathit{colourClasses}) \textnormal{~in reverse order}$}{
+            \nl \lIf{$|C| + \FuncSty{length}(\mathit{colourClasses}) \leq |C_{\mathit{max}}|$}{\KwSty{return}}
+            \nl \lIf{$v \notin A ~ \KwSty{and} ~ C \ne \emptyset$}{\KwSty{return}}
+            \nl $C' \gets C \cup \{ v \}$\;
+            \nl \lIf{$|C'| > |C_{\mathit{max}}|$}{$C_{\mathit{max}} \gets C'$}
+            \nl $A' \gets A \cup \FuncSty{connected}(v)$ \;
+            \nl $P' \gets P \cap \operatorname{N}(G, v)$ \;
+            \nl \lIf{$P' \neq \emptyset$}{$\FuncSty{expand}(G, C', A', P')$}
+         }
+         \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
+     }
+}
+\vspace{1ex}
+\nl $\FuncSty{colour}$ :: (Graph $G$, Set $A$, Set $P$) $\rightarrow$ List of List of Vertex \;
+\nl \Begin{
+    \nl $\KwSty{return}$ a greedy colouring of $P \setminus A$, followed by a greedy colouring of $P
+    \cap A$, both using static degree order in $G$ \;
+}
+\caption{A clique-inspired algorithm for MCCIS.}
+\label{algorithm:mc}
+\end{algorithm}
+
 We can use the branching idea inside a ``maximum clique'' algorithm, by providing additional
 information on the meaning behind vertices in the association graph as input. To fit in with the
 bitset encoding, we preconstruct a bitset for each vertex $v$ in the association graph, saying which
