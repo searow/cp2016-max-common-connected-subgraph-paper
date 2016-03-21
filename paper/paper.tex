@@ -148,33 +148,49 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 \begin{algorithm}[tb] \DontPrintSemicolon
 \nl $\FuncSty{cliquishMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
 \nl \Begin{
-    \nl $\KwSty{global} ~ C_{\mathit{max}} \gets \emptyset$ \;
+    \nl $\KwSty{global} ~ \mathit{incumbent} \gets \emptyset$ \;
     \nl $G \gets \FuncSty{encode}(G_1, G_2)$ \;
     \nl $\FuncSty{expand}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \;
     \nl $\KwSty{return} ~ \FuncSty{decode}(C_{\mathit{max}})$ \;
 }
 \vspace{1ex}
-\nl $\FuncSty{expand}$ :: (Graph $G$, Set $C$, Set $A$, Set $P$) \;
+\nl $\FuncSty{expand}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{adjacent}$, Set $\mathit{remaining}$) \;
 \nl \Begin{
-    \nl $\mathit{colourClasses} \gets \FuncSty{colour}(G, A, P)$ \;
+    \nl $\mathit{colourClasses} \gets \FuncSty{concatenate}($ \;
+    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \setminus \mathit{adjacent}),$ \;
+    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \cap \mathit{adjacent}))$ \;
     \nl \While{$\FuncSty{length}(\mathit{colourClasses}) > 0$}{
-        \nl \ForEach{$v \textnormal{~in~} \FuncSty{last}(\mathit{colourClasses}) \textnormal{~in reverse order}$}{
-            \nl \lIf{$|C| + \FuncSty{length}(\mathit{colourClasses}) \leq |C_{\mathit{max}}|$}{\KwSty{return}}
-            \nl \lIf{$v \notin A ~ \KwSty{and} ~ C \ne \emptyset$}{\KwSty{return}}
-            \nl $C' \gets C \cup \{ v \}$\;
-            \nl \lIf{$|C'| > |C_{\mathit{max}}|$}{$C_{\mathit{max}} \gets C'$}
-            \nl $A' \gets A \cup \FuncSty{connected}(v)$ \;
-            \nl $P' \gets P \cap \operatorname{N}(G, v)$ \;
-            \nl \lIf{$P' \neq \emptyset$}{$\FuncSty{expand}(G, C', A', P')$}
+        \nl \ForEach{$v \in \FuncSty{last}(\mathit{colourClasses}) \textnormal{~in reverse order}$}{
+            \nl \lIf{$|\mathit{solution}| + \FuncSty{length}(\mathit{colourClasses}) \leq |\mathit{incumbent}|$}{\KwSty{return}}
+            \nl \lIf{$v \notin \mathit{adjacent} ~ \KwSty{and} ~ \mathit{solution} \ne \emptyset$}{\KwSty{return}}
+            \nl $\mathit{solution}' \gets \mathit{solution} \cup \{ v \}$\;
+            \nl \lIf{$|\mathit{solution}'| > |\mathit{incumbent}|$}{$\mathit{incumbent} \gets
+            \mathit{solution}'$}
+            \nl $\mathit{adjacent}' \gets \mathit{adjacent} \cup \FuncSty{connected}(v)$ \;
+            \nl $\mathit{remaining}' \gets \mathit{remaining} \cap \operatorname{N}(G, v)$ \;
+            \nl \lIf{$\mathit{remaining}' \neq \emptyset$}{$\FuncSty{expand}(G, \mathit{solution}',
+            \mathit{adjacent}', \mathit{remaining}')$}
          }
          \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
      }
 }
 \vspace{1ex}
-\nl $\FuncSty{colour}$ :: (Graph $G$, Set $A$, Set $P$) $\rightarrow$ List of List of Vertex \;
+\nl $\FuncSty{colour}$ :: (Graph $G$, Set $\mathit{uncoloured}$) $\rightarrow$ List of List of Vertex \;
 \nl \Begin{
-    \nl $\KwSty{return}$ a greedy colouring of $P \setminus A$, followed by a greedy colouring of $P
-    \cap A$, both using static degree order in $G$ \;
+    \nl $\mathit{result} \gets []$ \;
+    \nl \While{$\mathit{uncoloured} \ne \emptyset$}{
+        \nl $\mathit{colour} \gets []$ \;
+        \nl $\mathit{colourable} \gets \mathit{uncoloured}$ \;
+        \nl \While{$\mathit{colourable} \ne \emptyset$}{
+            \nl $v \gets \textnormal{the first vertex from}~\mathit{uncoloured}~\textnormal{by
+            static degree order from}~G$ \;
+            \nl $\FuncSty{append}(\mathit{colour}, v)$ \;
+            \nl $uncoloured \gets uncoloured \setminus \{ v \}$ \;
+            \nl $\mathit{colourable} \gets \mathit{colourable} \setminus \operatorname{N}(G, v)$ \;
+        }
+        \nl $\FuncSty{append}(\mathit{result}, \mathit{colour})$ \;
+    }
+    \nl $\KwSty{return} ~ \mathit{result}$ \;
 }
 \caption{A clique-inspired algorithm for MCCIS.}
 \label{algorithm:mc}
