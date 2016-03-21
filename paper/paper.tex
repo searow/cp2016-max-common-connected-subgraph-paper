@@ -2,7 +2,7 @@
 
 \documentclass{llncs}
 
-\usepackage{showframe}
+% \usepackage{showframe}
 
 \usepackage{microtype}
 \usepackage{complexity}                % \P, \NP etc
@@ -48,8 +48,9 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
     The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
     This problem can be solved either by constraint-based search, or by reduction to the maximum
     clique problem. We evaluate these two approaches using modern algorithms. We also propose a
-    restricted branching technique for the connected version of the problem, and show how to
-    implement this in constraint-based and clique-inspired algorithms.
+    restricted branching approach for the connected version of the problem,
+    show how to implement this in constraint-based and clique-inspired
+    algorithms, and compare it to conventional propagation.
 \end{abstract}
 
 \section{Introduction}
@@ -149,7 +150,7 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 \nl \Begin{
     \nl $\KwSty{global} ~ C_{\mathit{max}} \gets \emptyset$ \;
     \nl $G \gets \FuncSty{encode}(G_1, G_2)$ \;
-    \nl $\FuncSty{expand}(G, \operatorname{V}(G), \emptyset, \emptyset)$ \;
+    \nl $\FuncSty{expand}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \;
     \nl $\KwSty{return} ~ \FuncSty{decode}(C_{\mathit{max}})$ \;
 }
 \vspace{1ex}
