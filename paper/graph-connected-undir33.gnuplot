@@ -26,8 +26,8 @@ unset format y
 set rmargin 10
 
 plot \
-    "connected-undir33.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP Branching" at end, \
-    "connected-undir33.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" at end
+    "connected-undir33.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP Branching" at end lc rgb '#CCEBC5', \
+    "connected-undir33.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Association" at end lc rgb '#08589E'
 
 set border 3
 
@@ -36,7 +36,7 @@ set nokey
 unset rmargin
 set size square
 set xlabel "CP Branching Runtime (ms)"
-set ylabel "Clique Runtime (ms)"
+set ylabel "Association Graph Runtime (ms)"
 set x2range [0:100]
 set y2range [0:100]
 set xrange [1:3600e3]

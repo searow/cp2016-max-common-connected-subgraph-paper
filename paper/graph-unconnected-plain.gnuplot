@@ -26,8 +26,8 @@ unset format y
 set rmargin 10
 
 plot \
-    "unconnected-plain.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP" at end, \
-    "unconnected-plain.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" at end
+    "unconnected-plain.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP" at end lc rgb '#CCEBC5', \
+    "unconnected-plain.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" at end lc rgb '#08589E'
 
 set border 3
 

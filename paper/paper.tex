@@ -31,6 +31,11 @@
 
 \newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
 
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+
 \title{Clique and Constraint Models for Maximum Common (Connected) Subgraph Problems}
 
 \author{Ciaran McCreesh\thanks{This work was supported by the Engineering and Physical Sciences
@@ -143,33 +148,33 @@ Connectedness \cite{Brown:2005}
 
 Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 
-\subsection{A Clique-Inspired Algorithm}
+\subsection{Connectedness in an Association Graph Algorithm}
 
 \begin{algorithm}[tb] \DontPrintSemicolon
-\nl $\FuncSty{cliquishMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
+\nl $\FuncSty{associationMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
 \nl \Begin{
     \nl $\KwSty{global} ~ \mathit{incumbent} \gets \emptyset$ \;
     \nl $G \gets \FuncSty{encode}(G_1, G_2)$ \;
-    \nl $\FuncSty{expand}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \;
+    \nl $\FuncSty{search}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \;
     \nl $\KwSty{return} ~ \FuncSty{decode}(C_{\mathit{max}})$ \;
 }
 \vspace{1ex}
-\nl $\FuncSty{expand}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{adjacent}$, Set $\mathit{remaining}$) \;
+\nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{branchable}$, Set $\mathit{remaining}$) \;
 \nl \Begin{
     \nl $\mathit{colourClasses} \gets \FuncSty{concatenate}($ \;
-    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \setminus \mathit{adjacent}),$ \;
-    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \cap \mathit{adjacent}))$ \;
+    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \setminus \mathit{branchable}),$ \;
+    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \cap \mathit{branchable}))$ \;
     \nl \While{$\FuncSty{length}(\mathit{colourClasses}) > 0$}{
         \nl \ForEach{$v \in \FuncSty{last}(\mathit{colourClasses}) \textnormal{~in reverse order}$}{
             \nl \lIf{$|\mathit{solution}| + \FuncSty{length}(\mathit{colourClasses}) \leq |\mathit{incumbent}|$}{\KwSty{return}}
-            \nl \lIf{$v \notin \mathit{adjacent} ~ \KwSty{and} ~ \mathit{solution} \ne \emptyset$}{\KwSty{return}}
+            \nl \lIf{$v \notin \mathit{branchable} ~ \KwSty{and} ~ \mathit{solution} \ne \emptyset$}{\KwSty{return}}
             \nl $\mathit{solution}' \gets \mathit{solution} \cup \{ v \}$\;
             \nl \lIf{$|\mathit{solution}'| > |\mathit{incumbent}|$}{$\mathit{incumbent} \gets
             \mathit{solution}'$}
-            \nl $\mathit{adjacent}' \gets \mathit{adjacent} \cup \FuncSty{connected}(v)$ \;
+            \nl $\mathit{branchable}' \gets \mathit{branchable} \cup \FuncSty{connected}(v)$ \;
             \nl $\mathit{remaining}' \gets \mathit{remaining} \cap \operatorname{N}(G, v)$ \;
-            \nl \lIf{$\mathit{remaining}' \neq \emptyset$}{$\FuncSty{expand}(G, \mathit{solution}',
-            \mathit{adjacent}', \mathit{remaining}')$}
+            \nl \lIf{$\mathit{remaining}' \neq \emptyset$}{$\FuncSty{search}(G, \mathit{solution}',
+            \mathit{branchable}', \mathit{remaining}')$}
          }
          \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
      }
@@ -179,20 +184,20 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 \nl \Begin{
     \nl $\mathit{result} \gets []$ \;
     \nl \While{$\mathit{uncoloured} \ne \emptyset$}{
-        \nl $\mathit{colour} \gets []$ \;
+        \nl $\mathit{colourClass} \gets []$ \;
         \nl $\mathit{colourable} \gets \mathit{uncoloured}$ \;
         \nl \While{$\mathit{colourable} \ne \emptyset$}{
             \nl $v \gets \textnormal{the first vertex from}~\mathit{uncoloured}~\textnormal{by
             static degree order from}~G$ \;
-            \nl $\FuncSty{append}(\mathit{colour}, v)$ \;
+            \nl $\FuncSty{append}(\mathit{colourClass}, v)$ \;
             \nl $uncoloured \gets uncoloured \setminus \{ v \}$ \;
             \nl $\mathit{colourable} \gets \mathit{colourable} \setminus \operatorname{N}(G, v)$ \;
         }
-        \nl $\FuncSty{append}(\mathit{result}, \mathit{colour})$ \;
+        \nl $\FuncSty{append}(\mathit{result}, \mathit{colourClass})$ \;
     }
     \nl $\KwSty{return} ~ \mathit{result}$ \;
 }
-\caption{A clique-inspired algorithm for MCCIS.}
+\caption{An algorithm for MCCIS via an association graph.}
 \label{algorithm:mc}
 \end{algorithm}
 
