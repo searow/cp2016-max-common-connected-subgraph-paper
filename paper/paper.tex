@@ -2,7 +2,7 @@
 
 \documentclass{llncs}
 
-% \usepackage{showframe}
+\usepackage{showframe}
 
 \usepackage{microtype}
 \usepackage{complexity}                % \P, \NP etc
@@ -30,11 +30,6 @@
 \newcommand{\lineref}[1]{line~\ref{#1}}
 
 \newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
-
-\renewcommand{\topfraction}{0.9}
-\renewcommand{\bottomfraction}{0.8}
-\renewcommand{\textfraction}{0.05}
-\renewcommand{\floatpagefraction}{0.85}
 
 \title{Clique and Constraint Models for Maximum Common (Connected) Subgraph Problems}
 
@@ -150,13 +145,13 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 
 \subsection{Connectedness in an Association Graph Algorithm}
 
-\begin{algorithm}[tb] \DontPrintSemicolon
+\begin{algorithm}[p] \DontPrintSemicolon
 \nl $\FuncSty{associationMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
 \nl \Begin{
     \nl $\KwSty{global} ~ \mathit{incumbent} \gets \emptyset$ \;
-    \nl $G \gets \FuncSty{encode}(G_1, G_2)$ \;
+    \nl $G \gets \FuncSty{associationGraph}(G_1, G_2)$ \;
     \nl $\FuncSty{search}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \;
-    \nl $\KwSty{return} ~ \FuncSty{decode}(C_{\mathit{max}})$ \;
+    \nl $\KwSty{return} ~ \mathit{incumbent}$ \;
 }
 \vspace{1ex}
 \nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{branchable}$, Set $\mathit{remaining}$) \;
@@ -171,7 +166,7 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
             \nl $\mathit{solution}' \gets \mathit{solution} \cup \{ v \}$\;
             \nl \lIf{$|\mathit{solution}'| > |\mathit{incumbent}|$}{$\mathit{incumbent} \gets
             \mathit{solution}'$}
-            \nl $\mathit{branchable}' \gets \mathit{branchable} \cup \FuncSty{connected}(v)$ \;
+            \nl $\mathit{branchable}' \gets \mathit{branchable} \cup \FuncSty{connected}(G, v)$ \;
             \nl $\mathit{remaining}' \gets \mathit{remaining} \cap \operatorname{N}(G, v)$ \;
             \nl \lIf{$\mathit{remaining}' \neq \emptyset$}{$\FuncSty{search}(G, \mathit{solution}',
             \mathit{branchable}', \mathit{remaining}')$}
@@ -196,6 +191,19 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
         \nl $\FuncSty{append}(\mathit{result}, \mathit{colourClass})$ \;
     }
     \nl $\KwSty{return} ~ \mathit{result}$ \;
+}
+\vspace{1ex}
+\nl $\FuncSty{connected}$ :: (Graph $G$, Vertex $v$) $\rightarrow$ Set \;
+\nl \Begin{
+    \nl $\KwSty{return} ~ \{ w \in G : \FuncSty{first}(w) \in \operatorname{N}(G, \FuncSty{first}(v)) \}$ \;
+}
+\vspace{1ex}
+\nl $\FuncSty{associationGraph}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Graph \;
+\nl \Begin{
+    \nl $V \gets \{ (v_1, v_2) \in G_1 \times G_2 : \FuncSty{compatible}(v_1, v_2) \}$ \;
+    \nl $E \gets \{ ((v_1, v_2), (w_1, w_2)) \in V \times V : \FuncSty{compatible}((v_1, v_2), (w_1,
+    w_2)) \}$ \;
+    \nl $\KwSty{return} ~ (V, E)$ \;
 }
 \caption{An algorithm for MCCIS via an association graph.}
 \label{algorithm:mc}
