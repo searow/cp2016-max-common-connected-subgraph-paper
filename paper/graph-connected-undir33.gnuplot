@@ -23,6 +23,8 @@ set yrange [1:81400]
 set format x '$10^{%T}$'
 unset format y
 
+set label 1 front center at screen 0.5, screen 0.9 "Old clique algorithm, the startup is faster now"
+
 set rmargin 10
 
 plot \
@@ -32,6 +34,8 @@ plot \
 set border 3
 
 set nokey
+
+unset label 1
 
 unset rmargin
 set size square

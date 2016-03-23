@@ -24,11 +24,15 @@ set yrange [0:27500]
 set format x '$10^{%T}$'
 unset format y
 
+set label 1 front center at screen 0.5, screen 0.9 "Old clique algorithm, the startup is faster now"
+
 set rmargin 10
 
 plot \
     "connected-plain.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP Branching" at end lc rgb '#CCEBC5', \
     "connected-plain.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Association" at end lc rgb '#08589E'
+
+unset label 1
 
 set border 3
 
