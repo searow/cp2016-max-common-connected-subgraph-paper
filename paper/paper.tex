@@ -14,6 +14,7 @@
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
 \usepackage{placeins}                  % \FloatBarrier
 \usepackage{cite}
+\usepackage[bottom]{footmisc}
 
 \usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing, patterns}
 
@@ -49,20 +50,149 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
     The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
     This problem can be solved either by constraint-based search, or by reduction to the maximum
     clique problem. We evaluate these two approaches using modern algorithms. We also propose a
-    restricted branching approach for the connected version of the problem,
-    show how to implement this in constraint-based and clique-inspired
-    algorithms, and compare it to conventional propagation.
+    restricted branching approach for the connected version of the problem, show how to implement
+    this in constraint-based and clique-inspired algorithms, and compare it to conventional
+    propagation.
 \end{abstract}
 
 \section{Introduction}
 
-Max common subgraph ?? cite some history and why we care
+\begin{figure}[b] % first page if possible
+    \centering
+    \begin{tikzpicture}[scale=0.4]%{{{
+        \definecolor{uofgcobalt}{rgb}{0, 0.615686, 0.92549}
+        \definecolor{uofgsunshine}{rgb}{1.0, 0.862745, 0.211765}
+        \definecolor{uofgsandstone}{rgb}{0.321569, 0.278431, 0.231373}
+        \begin{scope}
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
 
-Connected \cite{DBLP:journals/tcs/Koch01,DBLP:conf/mco/VismaraV08}
+            \draw [very thick] (M1) -- (M2);
+            \draw [very thick] (M2) -- (M4);
+            \draw [very thick] (M3) -- (M5);
+            \draw [color=uofgsandstone!40] (M4) -- (M6);
+            \draw [color=uofgsandstone!40] (M5) -- (M6);
+            \draw [very thick] (M3) -- (M1);
+            \draw [color=uofgsandstone!40] (M6) -- (M7);
+            \draw [color=uofgsandstone!40] (M6) -- (M8);
+            \draw [color=uofgsandstone!40] (M6) -- (M9);
+            \draw [very thick] (M7) -- (M9);
+            \draw [very thick] (M8) -- (M9);
+        \end{scope}
 
-CP models \cite{DBLP:conf/cp/NdiayeS11}
+        \begin{scope}[xshift=5cm]
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
 
-Clique models, discuss below.
+            \draw [very thick] (M1) -- (M2);
+            \draw [very thick] (M2) -- (M4);
+            \draw [very thick] (M3) -- (M5);
+            \draw [color=uofgsandstone!40] (M4) -- (M6);
+            \draw [color=uofgsandstone!40] (M5) -- (M6);
+            \draw [very thick] (M3) -- (M1);
+            \draw [color=uofgsandstone!40] (M6) -- (M7);
+            \draw [very thick] (M7) -- (M8);
+            \draw [very thick] (M8) -- (M9);
+        \end{scope}
+
+        \begin{scope}[xshift=12cm]
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
+
+            \draw [very thick] (M1) -- (M2);
+            \draw [very thick] (M2) -- (M4);
+            \draw [very thick] (M3) -- (M5);
+            \draw [very thick] (M4) -- (M6);
+            \draw [very thick] (M5) -- (M6);
+            \draw [very thick] (M3) -- (M1);
+            \draw [color=uofgsandstone!40] (M6) -- (M7);
+            \draw [very thick] (M6) -- (M8);
+            \draw [color=uofgsandstone!40] (M6) -- (M9);
+            \draw [color=uofgsandstone!40] (M7) -- (M9);
+            \draw [color=uofgsandstone!40] (M8) -- (M9);
+        \end{scope}
+
+        \begin{scope}[xshift=17cm]
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
+
+            \draw [very thick] (M1) -- (M2);
+            \draw [very thick] (M2) -- (M4);
+            \draw [very thick] (M3) -- (M5);
+            \draw [very thick] (M4) -- (M6);
+            \draw [very thick] (M5) -- (M6);
+            \draw [very thick] (M3) -- (M1);
+            \draw [very thick] (M6) -- (M7);
+            \draw [draw=uofgsandstone!40] (M7) -- (M8);
+            \draw [draw=uofgsandstone!40] (M8) -- (M9);
+        \end{scope}
+\end{tikzpicture}
+\caption{A maximum common induced subgraph of the first two graphs has eight vertices. There are
+four symmetric solutions, all involving the shaded vertices. However, if we require the common
+subgraph to be connected, only seven vertices may be selected---one way to do this is shown in the
+third and fourth graphs.}\label{figure:mcsexample}
+\end{figure}
+
+A common subgraph of two graphs is a graph which is subgraph-isomorphic to both graphs---we
+illustrate this concept in \cref{figure:mcsexample}, and define this formally below. Finding a
+maximum common subgraph gives a measure of the similarity between two graphs, and allows for the
+edit distance to be computed ?? cite. Maximum common subgraph problems have applications in
+chemistry, computer vision, ?? cite.
+
+One approach to this problem is via constraint programming (CP) models
+\cite{DBLP:conf/cp/NdiayeS11}. These models are based upon constructing an injective mapping from
+the vertices of one graph (typically the smaller) to the other, in a similar manner to subgraph
+isomorphism algorithms ?? cite. However, to allow for a partial mapping, a special null value is
+added to each domain (and the injectivity condition does not apply to null values). The problem then
+becomes an optimisation problem, where we seek to minimise the number of null values. ?? find a way
+to work weak all diff in here. Unfortunately, this null value invalidates many of the invariants
+used for subgraph isomorphism---we may no longer reason using the degree of vertices, or the
+distances between them, for example, and so the problem can be much more challenging in practice.
+
+Another popular approach is to reduce the problem to finding a maximum clique (or sometimes,
+equivalently, an independent set or a vertex cover) in an association graph (which we describe
+below). This seems to be less effective in practice, but previous experimental evaluations have used
+weak clique algorithms, or even clique enumeration algorithms. Maximum clique algorithms are an
+active research area
+\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10,DBLP:journals/cor/SegundoRJ11,DBLP:journals/algorithms/Prosser12,DBLP:journals/ol/SegundoMRH13,DBLP:conf/ictai/LiFX13,DBLP:journals/cor/SegundoT14,DBLP:conf/lion/SegundoLB14,DBLP:conf/cp/McCreeshP14,DBLP:journals/jco/BatsynGMP14,DBLP:journals/cor/SegundoNB15,DBLP:conf/lion/NikolaevBS15,DBLP:conf/lion/LiJX15,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16},
+and so the first half of this paper re-evaluates this approach using a modern algorithm.
+
+(Other approaches have been tried, including MIP ?? cite, SAT.)
+
+A particularly challenging variant of the maximum common subgraph problem requires the selected
+subgraph to be connected \cite{DBLP:journals/tcs/Koch01,DBLP:conf/mco/VismaraV08}. The second half
+of the paper looks at this variant. In principle, for a CP approach, we may simply add a ``forms a
+connected graph'' global constraint to the model. However, we will show that better results may be
+obtained via a special branching rule. We then explain how to adapt this branching rule to run
+inside a clique-like algorithm, to solve the problem via an association graph.
 
 \subsection{Definitions and Notation}
 
@@ -93,7 +223,7 @@ maximisation problem. ?? check this! I recall someone using a bad max clique alg
 
 We instead use a maximum clique algorithm. There has been a lot of recent
 research on this
-\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10,DBLP:journals/cor/SegundoRJ11,DBLP:journals/algorithms/Prosser12,DBLP:journals/ol/SegundoMRH13,DBLP:conf/ictai/LiFX13,DBLP:journals/cor/SegundoT14,DBLP:conf/lion/SegundoLB14,DBLP:conf/cp/McCreeshP14,DBLP:journals/jco/BatsynGMP14,DBLP:journals/cor/SegundoNB15,DBLP:conf/lion/NikolaevBS15,DBLP:conf/lion/LiJX15}.
+.
 
 Also sparse stuff, but association graphs aren't sparse enough.
 
