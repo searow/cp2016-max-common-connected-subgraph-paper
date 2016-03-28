@@ -23,15 +23,11 @@ set yrange [1:81400]
 set format x '$10^{%T}$'
 unset format y
 
-set label 1 front center at screen 0.5, screen 0.9 "Still running, incomplete results!"
-
 set rmargin 10
 
 plot \
-    "unconnected-33.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP" at end lc rgb '#CCEBC5', \
-    "unconnected-33.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" at end lc rgb '#08589E'
-
-unset label 1
+    "unconnected-33.data" u ($2 * 1000):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "CP" at end lc rgb '#4EB3D3', \
+    "unconnected-33.data" u ($3):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" at end lc rgb '#7A0177'
 
 set border 3
 

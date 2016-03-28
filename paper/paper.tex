@@ -49,7 +49,7 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
 \begin{abstract}
     The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
     This problem can be solved either by constraint-based search, or by reduction to the maximum
-    clique problem. We evaluate these two approaches using modern algorithms. We also propose a
+    clique problem. We evaluate these two approaches using modern algorithms. We also investigate a
     restricted branching approach for the connected version of the problem, show how to implement
     this in constraint-based and clique-inspired algorithms, and compare it to conventional
     propagation.
@@ -59,20 +59,20 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
 
 \begin{figure}[b] % first page if possible
     \centering
-    \begin{tikzpicture}[scale=0.4]%{{{
+    \begin{tikzpicture}[scale=0.33]%{{{
         \definecolor{uofgcobalt}{rgb}{0, 0.615686, 0.92549}
         \definecolor{uofgsunshine}{rgb}{1.0, 0.862745, 0.211765}
         \definecolor{uofgsandstone}{rgb}{0.321569, 0.278431, 0.231373}
-        \begin{scope}
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
-            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
+        \begin{scope}[rotate=90]
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
             \draw [very thick] (M2) -- (M4);
@@ -87,16 +87,16 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
             \draw [very thick] (M8) -- (M9);
         \end{scope}
 
-        \begin{scope}[xshift=5cm]
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
-            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=1pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
+        \begin{scope}[xshift=7cm, rotate=90]
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
             \draw [very thick] (M2) -- (M4);
@@ -109,16 +109,16 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
             \draw [very thick] (M8) -- (M9);
         \end{scope}
 
-        \begin{scope}[xshift=12cm]
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
+        \begin{scope}[xshift=18cm, rotate=90]
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
             \draw [very thick] (M2) -- (M4);
@@ -133,16 +133,16 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
             \draw [color=uofgsandstone!40] (M8) -- (M9);
         \end{scope}
 
-        \begin{scope}[xshift=17cm]
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=1pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=1pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
+        \begin{scope}[xshift=25cm, rotate=90]
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
             \draw [very thick] (M2) -- (M4);
@@ -161,38 +161,11 @@ subgraph to be connected, only seven vertices may be selected---one way to do th
 third and fourth graphs.}\label{figure:mcsexample}
 \end{figure}
 
-A common subgraph of two graphs is a graph which is subgraph-isomorphic to both graphs---we
-illustrate this concept in \cref{figure:mcsexample}, and define this formally below. Finding a
-maximum common subgraph gives a measure of the similarity between two graphs, and allows for the
-edit distance to be computed ?? cite. Maximum common subgraph problems have applications in
-chemistry, computer vision, ?? cite.
-
-One approach to this problem is via constraint programming (CP) models
-\cite{DBLP:conf/cp/NdiayeS11}. These models are based upon constructing an injective mapping from
-the vertices of one graph (typically the smaller) to the other, in a similar manner to subgraph
-isomorphism algorithms ?? cite. However, to allow for a partial mapping, a special null value is
-added to each domain (and the injectivity condition does not apply to null values). The problem then
-becomes an optimisation problem, where we seek to minimise the number of null values. ?? find a way
-to work weak all diff in here. Unfortunately, this null value invalidates many of the invariants
-used for subgraph isomorphism---we may no longer reason using the degree of vertices, or the
-distances between them, for example, and so the problem can be much more challenging in practice.
-
-Another popular approach is to reduce the problem to finding a maximum clique (or sometimes,
-equivalently, an independent set or a vertex cover) in an association graph (which we describe
-below). This seems to be less effective in practice, but previous experimental evaluations have used
-weak clique algorithms, or even clique enumeration algorithms. Maximum clique algorithms are an
-active research area
-\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10,DBLP:journals/cor/SegundoRJ11,DBLP:journals/algorithms/Prosser12,DBLP:journals/ol/SegundoMRH13,DBLP:conf/ictai/LiFX13,DBLP:journals/cor/SegundoT14,DBLP:conf/lion/SegundoLB14,DBLP:conf/cp/McCreeshP14,DBLP:journals/jco/BatsynGMP14,DBLP:journals/cor/SegundoNB15,DBLP:conf/lion/NikolaevBS15,DBLP:conf/lion/LiJX15,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16},
-and so the first half of this paper re-evaluates this approach using a modern algorithm.
-
-(Other approaches have been tried, including MIP ?? cite, SAT.)
-
-A particularly challenging variant of the maximum common subgraph problem requires the selected
-subgraph to be connected \cite{DBLP:journals/tcs/Koch01,DBLP:conf/mco/VismaraV08}. The second half
-of the paper looks at this variant. In principle, for a CP approach, we may simply add a ``forms a
-connected graph'' global constraint to the model. However, we will show that better results may be
-obtained via a special branching rule. We then explain how to adapt this branching rule to run
-inside a clique-like algorithm, to solve the problem via an association graph.
+Maximum common subgraph problems arise in biology and chemistry
+\cite{DBLP:journals/jcamd/RaymondW02a,Ehrlich:2011}, computer vision ?? what should we cite?, ??
+anything else?, both directly and as a way of measuring the similarity or difference between two
+graphs \cite{DBLP:journals/prl/Bunke97,DBLP:journals/prl/FernandezV01,KriegeThesis}. We illustrate
+this in \cref{figure:mcsexample}, and define the problem formally below.
 
 \subsection{Definitions and Notation}
 
@@ -210,6 +183,52 @@ Given two graphs $G_1$ and $G_2$, we say two pairs of vertices $(v_1, w_1) \in \
 non-adjacent or adjacent with the same label, and if the same holds for $(w_1, v_1)$ and $(w_2,
 v_2)$.  We say two vertices $v \in \operatorname{V}(G_1)$ and $w \in \operatorname{V}(G_2)$ are
 \emph{compatible} if they share the same label, and $(v, v)$ is compatible with $(w, w)$.
+
+?? Get edge vs vertex in early.
+
+\subsection{Existing Approaches}
+
+One approach to maximum common subgraph problems is via constraint programming
+\cite{DBLP:conf/mco/VismaraV08,DBLP:conf/cp/NdiayeS11}. The models are based upon constructing an
+injective mapping from the vertices of one graph (typically the smaller) to the other, in a similar
+manner to subgraph isomorphism algorithms
+\cite{DBLP:journals/ai/Solnon10,DBLP:conf/cp/AudemardLMGP14,DBLP:conf/cp/McCreeshP15}. However, to
+allow for a partial mapping, a special $\bot$ value is added to each domain. The objective is then
+to minimise the number of variables given the $\bot$ value---for best results, a special propagator
+for the injectivity condition is used, which simultaneously enforces that all variables taking
+non-$\bot$ are different, and restricts the number of $\bot$ values which may be used based upon the
+objective \cite{DBLP:conf/cp/PetitRB01}.  Unfortunately, the addition of $\bot$ also invalidates
+many of the invariants used for subgraph isomorphism---we may no longer reason using the degree of
+vertices, or the distances between them, for example, and so maximum common subgraph problems can be
+much more challenging in practice.
+
+Another widely studied approach is to reduce the problem to finding a maximum clique (or sometimes,
+equivalently, an independent set or a vertex cover) in an association graph (which we describe
+below). Conventional wisdom is that this approach is less effective in practice, but previous
+experimental evaluations have used weak clique algorithms, or even maximal clique enumeration
+algorithms. Maximum clique algorithms are an active research area
+\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10,DBLP:journals/cor/SegundoRJ11,DBLP:journals/algorithms/Prosser12,DBLP:journals/ol/SegundoMRH13,DBLP:conf/ictai/LiFX13,DBLP:journals/cor/SegundoT14,DBLP:conf/lion/SegundoLB14,DBLP:conf/cp/McCreeshP14,DBLP:journals/jco/BatsynGMP14,DBLP:journals/cor/SegundoNB15,DBLP:conf/lion/NikolaevBS15,DBLP:conf/lion/LiJX15,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16},
+and so the first half of this paper re-evaluates the association graph approach using a modern
+algorithm.
+
+(Other approaches have been tried, including mixed integer programming
+\cite{DBLP:journals/anor/PivaS12}; SAT encodings seem to struggle even for subgraph isomorphism??
+cite IJCAI if it's not rejected?.)
+
+An interesting variant of the maximum common subgraph problem requires the selected subgraph to be
+connected
+\cite{DBLP:journals/tcs/Koch01,DBLP:journals/jcamd/RaymondW02a,DBLP:conf/mco/VismaraV08,Ehrlich:2011}.
+Adding the connectedness requirement makes certain special cases solvable in polynomial time,
+including outerplanar graphs of bounded degree \cite{DBLP:journals/algorithms/AkutsuT13} and trees
+\cite{DBLP:journals/corr/DroschinskyKM16}, but the general case remains \NP-hard. The second half of
+this paper looks at this variant on arbitrary graphs. In principle, for a constraint programming
+approach, we may simply add a ``forms a connected graph'' global constraint to the model
+\cite{Brown:2005,DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}. Alternatively, we could use a
+special branching rule to maintain connectedness during search ?? cite. We see that using both
+approaches together gives best results ?? does it?.  We also explain how to adapt this branching
+rule to run inside a modern clique-like algorithm, to solve the problem via an association graph.
+
+?? Summary, association graph is better when edges have labels.
 
 \subsection{Datasets}
 
@@ -245,20 +264,22 @@ only handle very local side constraints, or injectivity (which is decomposable).
 \begin{figure}[p]
     \centering
     \input{gen-graph-unconnected-33}
-    \caption{Clique versus CP, 33\% labelled. On the top, the cumulative
+    \caption{Clique versus constraint programming, 33\% labelled. On the top, the cumulative
     number of instances solved by each approach, in under a certain time. On the bottom, the best
-    clique approach compared to the best CP approach: the colour at a point indicates the number of
+    clique approach compared to the best constraint programming approach: the colour at a point indicates the number of
     instances with these runtimes.} \label{figure:unconnected-33}
 \end{figure}
 
 \begin{figure}[p]
     \centering
     \input{gen-graph-unconnected-plain}
-    \caption{Clique versus CP, undirected, unlabelled. On the top, the cumulative
+    \caption{Clique versus constraint programming, undirected, unlabelled. On the top, the cumulative
     number of instances solved by each approach, in under a certain time. On the bottom, the best
-    clique approach compared to the best CP approach: the colour at a point indicates the number of
+    clique approach compared to the best constraint programming approach: the colour at a point indicates the number of
     instances with these runtimes.} \label{figure:unconnected-plain}
 \end{figure}
+
+\subsection{Edge Labels}
 
 \subsection{Parallel Search}
 
@@ -266,7 +287,7 @@ only handle very local side constraints, or injectivity (which is decomposable).
 
 ?? Stuff on EHPs, how work stealing matters here too \cite{DBLP:journals/jco/BatsynGMP14}
 
-\section{Maximum Common Connected Subgraph}
+\section{Find Maximum Common Connected Subgraphs}
 
 Connectedness is not hereditary, but can be built up one vertex at a time. Alternatively,
 connectedness is a constraint.
@@ -281,10 +302,10 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 
 The key idea is that whenever we branch (except for the first choice we make), we select only from
 variables which correspond to vertices which are adjacent to at least one other variable which has
-been instantiated to a non-null value. If no such variables remain, the subgraph we are building
-cannot grow any further, and all remaining variables must be instantiated to null.
+been instantiated to a value other than $\bot$. If no such variables remain, the subgraph we are building
+cannot grow any further, and all remaining variables must be instantiated to $\bot$.
 
-?? We only need to work off whichever input gives us the variables. But the CP approach seems to
+?? We only need to work off whichever input gives us the variables. But the constraint programming approach seems to
 look at both?
 
 ?? Patrick reckons this reminds him of Prim's algorithm for minimum spanning trees.
@@ -401,7 +422,7 @@ $\mathit{solution'}$ (\lineref{addvtosolution}), and create a new $\mathit{remai
 only the vertices in $\mathit{remaining}$ which are adjacent to $v$ (\lineref{filterremaining}).
 
 The $\mathit{branchable}$ set contains the set of association graph vertices which correspond to
-vertices adjacent to an already-accepted vertex in the first input graph---in CP terms, it is the
+vertices adjacent to an already-accepted vertex in the first input graph---in constraint programming terms, it is the
 set of assignments which could be made next which preserve connectedness. (Using only one of the two
 input graphs is sufficient for correctness, and has the advantage that the $\FuncSty{connected}$
 function may be implemented as a simple lookup into a precomputed array which maps each vertex in
@@ -456,7 +477,7 @@ properties of the association graph could be exploited in this step.)
 
 \paragraph{Connected, Undirected, 33\% Labelled} \cref{figure:connected-undir33} Above two seconds,
     the clique approach dominates except for three instances, and there is only one instance which
-    the CP model can solve but the clique model cannot (?? is this an EHP and does parallel get rid
+    the constraint programming model can solve but the clique model cannot (?? is this an EHP and does parallel get rid
     of it?). The clique model is unable to solve only ??  instances within one hour, ?? all of which
     have 90 or 100 vertices.  On the other hand, for trivial instances, the clique approach is often
     expensive due to the association graph construction.
@@ -471,18 +492,18 @@ test this.
 \begin{figure}[p]
     \centering
     \input{gen-graph-connected-undir33}
-    \caption{Clique versus CP, connected, undirected, 33\% labelled, up to 100 vertices. On the top,
+    \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, up to 100 vertices. On the top,
         the cumulative number of instances solved by each approach, in under a certain time. On the
-        bottom, the best clique approach compared to the best CP approach: the colour at a point
+        bottom, the best clique approach compared to the best constraint programming approach: the colour at a point
         indicates the number of instances with these runtimes.} \label{figure:connected-undir33}
 \end{figure}
 
 \begin{figure}[p]
     \centering
     \input{gen-graph-connected-plain}
-    \caption{Clique versus CP, connected, undirected, unlabelled, up to 35 vertices. On the top, the
+    \caption{Clique versus constraint programming, connected, undirected, unlabelled, up to 35 vertices. On the top, the
     cumulative number of instances solved by each approach, in under a certain time. On the bottom,
-    the best clique approach compared to the best CP approach: the colour at a point indicates the
+    the best clique approach compared to the best constraint programming approach: the colour at a point indicates the
     number of instances with these runtimes.}
 \label{figure:connected-plain}
 \end{figure}
