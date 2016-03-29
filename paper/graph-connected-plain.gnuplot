@@ -26,11 +26,13 @@ unset format y
 
 set rmargin 10
 
+set key Left at graph 0.6, graph 0.905
+
 plot \
-    "connected-plain.data" u ($2*1000):($2*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Filtering" at end lc rgb '#CCEBC5', \
-    "connected-plain.data" u ($3*1000):($3*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Branching" at end lc rgb '#4EB3D3', \
-    "connected-plain.data" u ($4*1000):($4*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Both" at end lc rgb '#08589E', \
-    "connected-plain.data" u ($5):($5>=3600e3?1e-10:1) smooth cumulative ti "Association" at end lc rgb '#7A0177'
+    "connected-plain.data" u ($4*1000):($4*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Both" lc rgb '#CCEBC5' dt "_", \
+    "connected-plain.data" u ($3*1000):($3*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Branching" lc rgb '#4EB3D3' dt "-", \
+    "connected-plain.data" u ($2*1000):($2*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Filtering" lc rgb '#08589E' dt ".", \
+    "connected-plain.data" u ($5):($5>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#7A0177'
 
 set border 3
 
