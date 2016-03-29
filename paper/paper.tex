@@ -234,15 +234,15 @@ rule to run inside a modern clique-like algorithm, to solve the problem via an a
 
 \cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}
 
+?? More? Can we scale to some of the SIP graphs?
+
 \section{Re-Evaluating the Clique Model}
 
 Previous experimental work has used a maximal clique enumeration algorithm, even for the
 maximisation problem. ?? check this! I recall someone using a bad max clique algorithm too.
 \cite{DBLP:conf/sspr/BunkeFGSV02,DBLP:journals/jgaa/ConteFV07}
 
-We instead use a maximum clique algorithm. There has been a lot of recent
-research on this
-.
+We instead use a maximum clique algorithm.
 
 Also sparse stuff, but association graphs aren't sparse enough.
 
@@ -265,18 +265,18 @@ only handle very local side constraints, or injectivity (which is decomposable).
     \centering
     \input{gen-graph-unconnected-33}
     \caption{Clique versus constraint programming, 33\% labelled. On the top, the cumulative
-    number of instances solved by each approach, in under a certain time. On the bottom, the best
-    clique approach compared to the best constraint programming approach: the colour at a point indicates the number of
-    instances with these runtimes.} \label{figure:unconnected-33}
+    number of instances solved by each approach, in under a certain time. On the bottom, an
+    instance-by-instance comparison of the two approaches: the colour at a point indicates the
+    number of instances with these runtimes.} \label{figure:unconnected-33}
 \end{figure}
 
 \begin{figure}[p]
     \centering
     \input{gen-graph-unconnected-plain}
     \caption{Clique versus constraint programming, undirected, unlabelled. On the top, the cumulative
-    number of instances solved by each approach, in under a certain time. On the bottom, the best
-    clique approach compared to the best constraint programming approach: the colour at a point indicates the number of
-    instances with these runtimes.} \label{figure:unconnected-plain}
+    number of instances solved by each approach, in under a certain time. On the bottom, an
+        instance-by-instance comparison of the two approaches: the colour at a point indicates the
+    number of instances with these runtimes.} \label{figure:unconnected-plain}
 \end{figure}
 
 \subsection{Edge Labels}
@@ -489,22 +489,25 @@ approach doesn't do so well\ldots
 likely to lose. So maybe I should run some experiments with vertex labels but not edge labels to
 test this.
 
+\paragraph{Does connected make instances easier or harder?} We could plot connected vs not connected
+difficulties, and result sizes?
+
 \begin{figure}[p]
     \centering
     \input{gen-graph-connected-undir33}
     \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, up to 100 vertices. On the top,
         the cumulative number of instances solved by each approach, in under a certain time. On the
-        bottom, the best clique approach compared to the best constraint programming approach: the colour at a point
-        indicates the number of instances with these runtimes.} \label{figure:connected-undir33}
+        bottom, the association graph approach compared to the constraint programming approach with
+        both branching and filtering.} \label{figure:connected-undir33}
 \end{figure}
 
 \begin{figure}[p]
     \centering
     \input{gen-graph-connected-plain}
     \caption{Clique versus constraint programming, connected, undirected, unlabelled, up to 35 vertices. On the top, the
-    cumulative number of instances solved by each approach, in under a certain time. On the bottom,
-    the best clique approach compared to the best constraint programming approach: the colour at a point indicates the
-    number of instances with these runtimes.}
+        cumulative number of instances solved by each approach, in under a certain time. On the
+        bottom, the association graph approach compared to the constraint programming approach
+    with both branching and filtering.}
 \label{figure:connected-plain}
 \end{figure}
 
