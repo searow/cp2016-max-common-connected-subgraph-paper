@@ -25,9 +25,9 @@ unset format y
 
 set rmargin 10
 
-set label 1 center at graph 0.5, graph 0.25 "Still running, done up to 70 vertices so far"
+set label 1 center at graph 0.5, graph 0.9 "Still running, done up to 80 vertices so far"
 
-set key Left at graph 0.6, graph 0.905
+set key Left at graph 0.9, graph 0.245
 
 plot \
     "connected-undir33.data" u ($4*1000):($4*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Both" lc rgb '#CCEBC5' dt "_", \

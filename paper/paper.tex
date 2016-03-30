@@ -177,9 +177,10 @@ edge) labels, we just pick our favourite number and give it to every vertex (or 
 distinct label $\bot$ to represent the \emph{lack of} an edge between two vertices.  We write
 $\operatorname{V}(G)$ for $V$, and $\operatorname{N}(G, v)$ for the \emph{undirected neighbourhood}
 of a vertex $v$ (that is, the set of vertices $w$ such that either $e(v, w) \ne \bot$ or $e(w, v)
-\ne \bot$).  A \emph{path} between two vertices $v$ and $w$ is a sequence of $n$ vertices $v = v_1,
-v_2, \ldots, v_n = w$ such that for each $m \in \{ 1 \ldots n - 1 \}$, $e(v_m, v_{m + 1}) \ne \bot$.
-A graph is \emph{connected} if a path exists between each distinct pair of vertices.
+\ne \bot$); a vertex is \emph{isolated} if its neighbourhood is empty. A \emph{path} between two
+vertices $v$ and $w$ is a sequence of $n$ vertices $v = v_1, v_2, \ldots, v_n = w$ such that for
+each $m \in \{ 1 \ldots n - 1 \}$, $e(v_m, v_{m + 1}) \ne \bot$.  A graph is \emph{connected} if a
+path exists between each distinct pair of vertices.
 
 Given two graphs $G_1 = (V_1, \ell_1, e_1)$ and $G_2 = (V_2, \ell_2, e_2)$, we say two pairs of
 vertices $(v_1, w_1) \in \operatorname{V}(G_1) \times \operatorname{V}(G_1)$ and $(v_2, w_2) \in
@@ -274,6 +275,12 @@ Say which clique algorithm we're using.
 
 \subsection{Reduction to Maximum Clique in an Association Graph}
 
+Explain association graph \cref{figure:association}, cite history, connections to microstructure
+\cite{DBLP:conf/aaai/Jegou93a}.
+
+Discuss how edge labels, vertex labels, directed edges, etc, are handled. Note that we can generally
+only handle very local side constraints, or injectivity (which is decomposable).
+
 \begin{figure}[tb]
     \centering
     \begin{tikzpicture}[scale=0.33]%{{{
@@ -319,10 +326,10 @@ Say which clique algorithm we're using.
         \end{scope}
 
         \begin{scope}[xshift=15cm]
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma1) at (2, 9.5) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma2) at (4, 9.5) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma3) at (6, 9.5) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma4) at (8, 9.5) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma1) at (2.6, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma2) at (4.2, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma3) at (5.8, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma4) at (7.4, 9) {\phantom{0}};
             \node [above = 0 of Ma1, font=\small] { \vphantom{0}1 };
             \node [above = 0 of Ma2, font=\small] { \vphantom{0}2 };
             \node [above = 0 of Ma3, font=\small] { \vphantom{0}3 };
@@ -331,10 +338,10 @@ Say which clique algorithm we're using.
             \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Ma1.north west) -- (Ma4.north east)
             node [midway, above=0.7cm] { $a \mapsto$ };
 
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb1) at (0.5, 2) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb2) at (0.5, 4) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb3) at (0.5, 6) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb4) at (0.5, 8) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb1) at (1, 2.6) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb2) at (1, 4.2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb3) at (1, 5.8) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb4) at (1, 7.4) {\phantom{0}};
             \node [left = 0 of Mb1, font=\small] { \vphantom{0}1 };
             \node [left = 0 of Mb2, font=\small] { \vphantom{0}2 };
             \node [left = 0 of Mb3, font=\small] { \vphantom{0}3 };
@@ -343,10 +350,10 @@ Say which clique algorithm we're using.
             \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Mb1.south west) -- (Mb4.north west)
             node [midway, left=0.7cm] { $b \mapsto$ };
 
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc1) at (2, 0.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mc2) at (4, 0.5) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc3) at (6, 0.5) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc4) at (8, 0.5) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc1) at (2.6, 1) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mc2) at (4.2, 1) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc3) at (5.8, 1) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc4) at (7.4, 1) {\phantom{0}};
             \node [below = 0 of Mc1, font=\small] { \vphantom{0}1 };
             \node [below = 0 of Mc2, font=\small] { \vphantom{0}2 };
             \node [below = 0 of Mc3, font=\small] { \vphantom{0}3 };
@@ -355,10 +362,10 @@ Say which clique algorithm we're using.
             \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Mc4.south east) -- (Mc1.south west)
             node [midway, below=0.7cm] { $c \mapsto$ };
 
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md1) at (9.5, 2) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md2) at (9.5, 4) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md3) at (9.5, 6) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Md4) at (9.5, 8) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md1) at (9, 2.6) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md2) at (9, 4.2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md3) at (9, 5.8) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Md4) at (9, 7.4) {\phantom{0}};
             \node [right = 0 of Md1, font=\small] { \vphantom{0}1 };
             \node [right = 0 of Md2, font=\small] { \vphantom{0}2 };
             \node [right = 0 of Md3, font=\small] { \vphantom{0}3 };
@@ -385,13 +392,10 @@ Say which clique algorithm we're using.
 
     \caption{A maximum common induced subgraph between the two graphs on the left has three
         vertices---one solution is highlighted. On the right, the association graph encoding: the
-    highlighted clique of size three shows the same solution.}\label{figure:association}
+        highlighted clique of size three shows the same solution. In practice the isolated vertices
+        (corresponding to assignments between incompatible vertices, which are unary constraints) would be
+        omitted.}\label{figure:association}
 \end{figure}
-
-Explain association graph. ?? cite history, connections to microstructure
-
-Discuss how edge labels, vertex labels, directed edges, etc, are handled. Note that we can generally
-only handle very local side constraints, or injectivity (which is decomposable).
 
 ?? Discuss the partial version briefly, cite the reduction.
 
@@ -400,6 +404,8 @@ only handle very local side constraints, or injectivity (which is decomposable).
 \cref{figure:unconnected-33}
 
 \cref{figure:unconnected-plain}
+
+?? Break this down more by family, size, etc.
 
 \begin{figure}[p]
     \centering
@@ -419,7 +425,7 @@ only handle very local side constraints, or injectivity (which is decomposable).
     number of instances with these runtimes.} \label{figure:unconnected-plain}
 \end{figure}
 
-\subsection{Edge Labels}
+\subsection{Filtering from Edge Labels}
 
 \subsection{Parallel Search}
 
@@ -645,7 +651,7 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
             \draw [color=uofgsandstone!40] (M3) -- (M4);
 
             \node [anchor=base, yshift=-2.2cm] at ($(Ma)!0.5!(M2)$) {
-                \stepcounter{stepcounter}\roman{stepcounter}) Forced $e \mapsto \bot$ };
+                \stepcounter{stepcounter}\roman{stepcounter}) $e \mapsto \bot$ is forced };
         \end{scope}
     \end{tikzpicture}
 
@@ -664,12 +670,7 @@ other variable which has been instantiated to a value other than $\bot$. If no s
 remain, the subgraph we are building cannot grow any further, and all remaining variables must be
 instantiated to $\bot$.
 
-?? We only need to work off whichever input gives us the variables. But the constraint programming
-approach seems to look at both?
-
 ?? Patrick reckons this reminds him of Prim's algorithm for minimum spanning trees.
-
-?? We need a picture here.
 
 \subsection{Connectedness in an Association Graph Algorithm}
 
@@ -848,8 +849,11 @@ approach doesn't do so well\ldots
 likely to lose. So maybe I should run some experiments with vertex labels but not edge labels to
 test this.
 
+\paragraph{By family} ?? Break this down more by family, size, etc.
+
 \paragraph{Does connected make instances easier or harder?} We could plot connected vs not connected
 difficulties, and result sizes?
+
 
 \begin{figure}[p]
     \centering
