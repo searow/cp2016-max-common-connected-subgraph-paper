@@ -25,6 +25,8 @@ unset format y
 
 set rmargin 10
 
+set label 1 center at graph 0.5, graph 0.25 "Still running, done up to 70 vertices so far"
+
 set key Left at graph 0.6, graph 0.905
 
 plot \
@@ -34,6 +36,8 @@ plot \
     "connected-undir33.data" u ($5):($5>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#7A0177'
 
 set border 3
+
+unset label 1
 
 set nokey
 

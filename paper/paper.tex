@@ -2,19 +2,19 @@
 
 \documentclass{llncs}
 
-% \usepackage{showframe}
+\usepackage{showframe}
 
-\usepackage{microtype}
+\usepackage{microtype}                 % typographic perfection
 \usepackage{complexity}                % \P, \NP etc
 \usepackage{tikz}                      % For pretty pictures
 \usepackage{amsmath}                   % \operatorname
+\usepackage{amsfonts}                  % \mathbb
 \usepackage{hyperref}                  % clicky links
 \usepackage{cleveref}                  % no need to type Figure etc
 \usepackage{gnuplot-lua-tikz}          % graphs
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
-\usepackage{placeins}                  % \FloatBarrier
-\usepackage{cite}
-\usepackage[bottom]{footmisc}
+\usepackage{cite}                      % automatically sort mass cites
+\usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
 
 \usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing, patterns}
 
@@ -155,10 +155,9 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
             \draw [draw=uofgsandstone!40] (M8) -- (M9);
         \end{scope}
 \end{tikzpicture}
-\caption{A maximum common induced subgraph of the first two graphs has eight vertices. There are
-four symmetric solutions, all involving the shaded vertices. However, if we require the common
-subgraph to be connected, only seven vertices may be selected---one way to do this is shown in the
-third and fourth graphs.}\label{figure:mcsexample}
+\caption{A maximum common induced subgraph of the first two graphs has eight vertices, shaded.
+However, if we require the common subgraph to be connected, only seven vertices may be
+selected---one way to do this is shown in the third and fourth graphs.}\label{figure:mcsexample}
 \end{figure}
 
 Maximum common subgraph problems arise in biology and chemistry
@@ -169,22 +168,45 @@ this in \cref{figure:mcsexample}, and define the problem formally below.
 
 \subsection{Definitions and Notation}
 
-A \emph{graph} $G = (V, E)$ consists of a set of vertices $V$ and a set of edges $E \subseteq V
-\times V$. In this paper our graphs may be directed, may have loops, and there is a label associated
-with each vertex and with each edge. For convenience, we treat undirected graphs as being directed
-graphs with symmetric adjacencies, and for unlabelled graphs we treat each vertex as having the same
-label, and each edge as having the same label. We write $\operatorname{V}(G)$ for $V$, and
-$\operatorname{N}(G, v)$ for the \emph{undirected neighbourhood} of a vertex $v$ (that is, the set
-of vertices $w$ such that either $(v, w)$ or $(w, v)$ is an edge).
+We will be working with graphs which may be directed, which may have labels associated with
+vertices, edges, or both, and which may contain loops. To simplify notation, we will work with a
+single definition throughout: we define a \emph{graph} $G = (V, \ell, e)$ to be a set of vertices
+$V$, a vertex labelling function $\ell : V \rightarrow \mathbb{N}$, and an edge labelling function
+$e : V \times V \rightarrow \mathbb{N} \cup \{ \bot \}$. To represent graphs without vertex (or
+edge) labels, we just pick our favourite number and give it to every vertex (or edge). We also use a
+distinct label $\bot$ to represent the \emph{lack of} an edge between two vertices.  We write
+$\operatorname{V}(G)$ for $V$, and $\operatorname{N}(G, v)$ for the \emph{undirected neighbourhood}
+of a vertex $v$ (that is, the set of vertices $w$ such that either $e(v, w) \ne \bot$ or $e(w, v)
+\ne \bot$).  A \emph{path} between two vertices $v$ and $w$ is a sequence of $n$ vertices $v = v_1,
+v_2, \ldots, v_n = w$ such that for each $m \in \{ 1 \ldots n - 1 \}$, $e(v_m, v_{m + 1}) \ne \bot$.
+A graph is \emph{connected} if a path exists between each distinct pair of vertices.
 
-Given two graphs $G_1$ and $G_2$, we say two pairs of vertices $(v_1, w_1) \in \operatorname{V}(G_1)
-\times \operatorname{V}(G_1)$ and $(v_2, w_2) \in \operatorname{V}(G_2) \times
-\operatorname{V}(G_2)$ are \emph{compatible} if both $v_1$ and $w_1$ and $v_2$ and $w_2$ are either
-non-adjacent or adjacent with the same label, and if the same holds for $(w_1, v_1)$ and $(w_2,
-v_2)$.  We say two vertices $v \in \operatorname{V}(G_1)$ and $w \in \operatorname{V}(G_2)$ are
-\emph{compatible} if they share the same label, and $(v, v)$ is compatible with $(w, w)$.
+Given two graphs $G_1 = (V_1, \ell_1, e_1)$ and $G_2 = (V_2, \ell_2, e_2)$, we say two pairs of
+vertices $(v_1, w_1) \in \operatorname{V}(G_1) \times \operatorname{V}(G_1)$ and $(v_2, w_2) \in
+\operatorname{V}(G_2) \times \operatorname{V}(G_2)$ are \emph{compatible}, written $(v_1, w_1)
+\simeq (v_2, w_2)$, if both $e_1(v_1, w_1) = e_2(v_2, w_2)$ and $e_1(w_1, v_1) = e_2(w_2, v_2)$. We
+say two vertices $v \in \operatorname{V}(G_1)$ and $w \in \operatorname{V}(G_2)$ are
+\emph{compatible}, written $v \simeq w$, if $\ell_1(v) = \ell_2(w)$ and $(v, v) \simeq (w, w)$.
 
-?? Get edge vs vertex in early.
+An \emph{induced subgraph isomorphism} from a graph $G$ to a graph $H$ is an injective function $i :
+\operatorname{V}(G) \rightarrow \operatorname{V}(H)$ such that for every vertex $v \in
+\operatorname{V}(G)$, $v \simeq i(v)$, and for every pair of vertices $(v, w) \in
+\operatorname{V}(G) \times \operatorname{V}(G)$, $(v, w) \simeq (i(v), i(w))$. A \emph{common
+induced subgraph isomorphism} between two graphs $G_1$ and $G_2$ is a graph $G$, together with a
+pair of induced subgraph isomorphisms $i_1 : G \rightarrow G_1$ and $i_2 : G \rightarrow G_2$. A
+\emph{common induced subgraph} of $G_1$ and $G_2$ is a graph $G$ which has a common subgraph
+isomorphism to $G_1$ and $G_2$. A \emph{maximum common (connected) induced subgraph} is a common
+(connected) induced subgraph with the largest possible number of vertices.  (The distinction between
+a common subgraph and a common subgraph isomorphism is relevant when counting distinct solutions,
+which we do not consider in this paper; in \cref{figure:mcsexample} on the left, there is only one
+maximum common subgraph, but four different maximum common subgraph isomorphisms are possible.)
+
+There is also a non-induced version of these problems, which is commonly known as the \emph{maximum
+common partial subgraph} problem: here, if $e(v, w) = \bot$, then $e_1(i_1(v), i_1(w))$ and
+$e_2(i_2(v), i_2(w))$ may take any value, and we must maximise the number of non-$\bot$ vertex pairs
+(i.e.\ edges) in $G$ instead (it is not entirely clear what the objective should be in directed
+graphs, or when loops are present). We restrict ourselves to the induced version in this paper (??
+we could do a journal version, because the clique side is rather involved\ldots).
 
 \subsection{Existing Approaches}
 
@@ -193,14 +215,16 @@ One approach to maximum common subgraph problems is via constraint programming
 injective mapping from the vertices of one graph (typically the smaller) to the other, in a similar
 manner to subgraph isomorphism algorithms
 \cite{DBLP:journals/ai/Solnon10,DBLP:conf/cp/AudemardLMGP14,DBLP:conf/cp/McCreeshP15}. However, to
-allow for a partial mapping, a special $\bot$ value is added to each domain. The objective is then
-to minimise the number of variables given the $\bot$ value---for best results, a special propagator
-for the injectivity condition is used, which simultaneously enforces that all variables taking
-non-$\bot$ are different, and restricts the number of $\bot$ values which may be used based upon the
-objective \cite{DBLP:conf/cp/PetitRB01}.  Unfortunately, the addition of $\bot$ also invalidates
-many of the invariants used for subgraph isomorphism---we may no longer reason using the degree of
-vertices, or the distances between them, for example, and so maximum common subgraph problems can be
-much more challenging in practice.
+allow for a partial mapping, a special $\bot$ value is added to each domain (and so we are
+constructing a maximum common subgraph isomorphism, where the common subgraph is implicitly the
+subgraph of the first graph given by taking the vertices which are not assigned to $\bot$, and the
+first subgraph isomorphism is the inclusion map). The objective is then to minimise the number of
+variables given the $\bot$ value---for best results, a special propagator for the injectivity
+condition is used, which simultaneously enforces that all variables taking non-$\bot$ are different,
+and restricts the number of $\bot$ values which may be used based upon the objective
+\cite{DBLP:conf/cp/PetitRB01}.  Unfortunately, the addition of $\bot$ also invalidates many of the
+invariants used for subgraph isomorphism---we may no longer reason using the degree of vertices, for
+example, and so maximum common subgraph problems can be much more challenging in practice.
 
 Another widely studied approach is to reduce the problem to finding a maximum clique (or sometimes,
 equivalently, an independent set or a vertex cover) in an association graph (which we describe
@@ -255,6 +279,8 @@ Explain association graph. ?? cite history, connections to microstructure
 Discuss how edge labels, vertex labels, directed edges, etc, are handled. Note that we can generally
 only handle very local side constraints, or injectivity (which is decomposable).
 
+?? Discuss the partial version briefly, cite the reduction.
+
 \subsection{Experimental Evaluation}
 
 \cref{figure:unconnected-33}
@@ -263,7 +289,7 @@ only handle very local side constraints, or injectivity (which is decomposable).
 
 \begin{figure}[p]
     \centering
-    \input{gen-graph-unconnected-33}
+    % \input{gen-graph-unconnected-33}
     \caption{Clique versus constraint programming, 33\% labelled. On the top, the cumulative
     number of instances solved by each approach, in under a certain time. On the bottom, an
     instance-by-instance comparison of the two approaches: the colour at a point indicates the
@@ -272,7 +298,7 @@ only handle very local side constraints, or injectivity (which is decomposable).
 
 \begin{figure}[p]
     \centering
-    \input{gen-graph-unconnected-plain}
+    % \input{gen-graph-unconnected-plain}
     \caption{Clique versus constraint programming, undirected, unlabelled. On the top, the cumulative
     number of instances solved by each approach, in under a certain time. On the bottom, an
         instance-by-instance comparison of the two approaches: the colour at a point indicates the
@@ -300,13 +326,232 @@ Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
 
 \subsection{Connectedness via Restricted Branching}
 
-The key idea is that whenever we branch (except for the first choice we make), we select only from
-variables which correspond to vertices which are adjacent to at least one other variable which has
-been instantiated to a value other than $\bot$. If no such variables remain, the subgraph we are building
-cannot grow any further, and all remaining variables must be instantiated to $\bot$.
+\begin{figure}[tb]
+    \newcounter{stepcounter}
+    \centering
+    \begin{tikzpicture}[scale=0.33]%{{{
+        \definecolor{uofgcobalt}{rgb}{0, 0.615686, 0.92549}
+        \definecolor{uofgsunshine}{rgb}{1.0, 0.862745, 0.211765}
+        \definecolor{uofgthistle}{rgb}{0.584314, 0.070588, 0.447059}
+        \definecolor{uofgsandstone}{rgb}{0.321569, 0.278431, 0.231373}
+        \begin{scope}
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
 
-?? We only need to work off whichever input gives us the variables. But the constraint programming approach seems to
-look at both?
+            \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
+            \node [left = 0 of Mb, font=\small] { \vphantom{0}b };
+            \node [right = 0 of Mc, font=\small] { \vphantom{0}c };
+            \node [left = 0 of Md, font=\small] { \vphantom{0}d };
+            \node [right = 0 of Me, font=\small] { \vphantom{0}e };
+
+            \draw (Ma) -- (Mb);
+            \draw (Ma) -- (Mc);
+            \draw (Mb) -- (Mc);
+            \draw (Mb) -- (Md);
+            \draw (Mc) -- (Me);
+
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
+
+            \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of M2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of M3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of M4, font=\small] { \vphantom{0}4 };
+            \node [left = 0 of M5, font=\small] { \vphantom{0}5 };
+
+            \draw [color=uofgsandstone!40] (M1) -- (M2);
+            \draw [color=uofgsandstone!40] (M1) -- (M3);
+            \draw [color=uofgsandstone!40] (M2) -- (M4);
+            \draw [color=uofgsandstone!40] (M3) -- (M4);
+
+            \node [anchor=base, yshift=-2.2cm] at ($(Ma)!0.5!(M2)$) {
+                \stepcounter{stepcounter}\roman{stepcounter}) Initial problem };
+        \end{scope}
+
+        \begin{scope}[xshift=13cm]
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
+            \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
+
+            \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
+            \node [left = 0 of Mb, font=\small] { \vphantom{0}b };
+            \node [right = 0 of Mc, font=\small] { \vphantom{0}c };
+            \node [left = 0 of Md, font=\small] { \vphantom{0}d };
+            \node [right = 0 of Me, font=\small] { \vphantom{0}e };
+
+            \draw (Ma) -- (Mb);
+            \draw (Ma) -- (Mc);
+            \draw (Mb) -- (Mc);
+            \draw [dotted] (Mb) -- (Md);
+            \draw [dotted] (Mc) -- (Me);
+
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
+
+            \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of M2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of M3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of M4, font=\small] { \vphantom{0}4 };
+            \node [left = 0 of M5, font=\small] { \vphantom{0}5 };
+
+            \draw [color=uofgsandstone!40] (M1) -- (M2);
+            \draw [color=uofgsandstone!40] (M1) -- (M3);
+            \draw [color=uofgsandstone!40] (M2) -- (M4);
+            \draw [color=uofgsandstone!40] (M3) -- (M4);
+
+            \node [anchor=base, yshift=-2.2cm] at ($(Ma)!0.5!(M2)$) {
+                \stepcounter{stepcounter}\roman{stepcounter}) Try $a \mapsto 1$ };
+        \end{scope}
+
+        \begin{scope}[xshift=26cm]
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
+
+            \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
+            \node [left = 0 of Mb, font=\small] { \vphantom{0}b };
+            \node [right = 0 of Mc, font=\small] { \vphantom{0}c };
+            \node [left = 0 of Md, font=\small] { \vphantom{0}d };
+            \node [right = 0 of Me, font=\small] { \vphantom{0}e };
+
+            \draw [very thick] (Ma) -- (Mb);
+            \draw [color=uofgsandstone!40] (Ma) -- (Mc);
+            \draw [color=uofgsandstone!40] (Mb) -- (Mc);
+            \draw (Mb) -- (Md);
+            \draw [color=uofgsandstone!40] (Mc) -- (Me);
+
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
+
+            \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of M2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of M3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of M4, font=\small] { \vphantom{0}4 };
+            \node [left = 0 of M5, font=\small] { \vphantom{0}5 };
+
+            \draw [very thick] (M1) -- (M2);
+            \draw [color=uofgsandstone!40] (M1) -- (M3);
+            \draw [color=uofgsandstone!40] (M2) -- (M4);
+            \draw [color=uofgsandstone!40] (M3) -- (M4);
+
+            \node [anchor=base, yshift=-2.2cm] at ($(Ma)!0.5!(M2)$) {
+                \stepcounter{stepcounter}\roman{stepcounter}) Try $b \mapsto 2$ };
+        \end{scope}
+
+        \begin{scope}[yshift=-9cm]
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
+            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
+
+            \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
+            \node [left = 0 of Mb, font=\small] { \vphantom{0}b };
+            \node [right = 0 of Mc, font=\small] { \vphantom{0}c };
+            \node [left = 0 of Md, font=\small] { \vphantom{0}d };
+            \node [right = 0 of Me, font=\small] { \vphantom{0}e };
+
+            \draw [very thick] (Ma) -- (Mb);
+            \draw [color=uofgsandstone!40] (Ma) -- (Mc);
+            \draw [color=uofgsandstone!40] (Mb) -- (Mc);
+            \draw [very thick] (Mb) -- (Md);
+            \draw [color=uofgsandstone!40] (Mc) -- (Me);
+
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
+
+            \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of M2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of M3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of M4, font=\small] { \vphantom{0}4 };
+            \node [left = 0 of M5, font=\small] { \vphantom{0}5 };
+
+            \draw [very thick] (M1) -- (M2);
+            \draw [color=uofgsandstone!40] (M1) -- (M3);
+            \draw [very thick] (M2) -- (M4);
+            \draw [color=uofgsandstone!40] (M3) -- (M4);
+
+            \node [anchor=base, yshift=-2.2cm] at ($(Ma)!0.5!(M2)$) {
+                \stepcounter{stepcounter}\roman{stepcounter}) Try $d \mapsto 4$ };
+        \end{scope}
+
+        \begin{scope}[xshift=13cm, yshift=-9cm]
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
+            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
+
+            \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
+            \node [left = 0 of Mb, font=\small] { \vphantom{0}b };
+            \node [right = 0 of Mc, font=\small] { \vphantom{0}c };
+            \node [left = 0 of Md, font=\small] { \vphantom{0}d };
+            \node [right = 0 of Me, font=\small] { \vphantom{0}e };
+
+            \draw [very thick] (Ma) -- (Mb);
+            \draw [color=uofgsandstone!40] (Ma) -- (Mc);
+            \draw [color=uofgsandstone!40] (Mb) -- (Mc);
+            \draw [very thick] (Mb) -- (Md);
+            \draw [color=uofgsandstone!40] (Mc) -- (Me);
+
+            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
+
+            \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of M2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of M3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of M4, font=\small] { \vphantom{0}4 };
+            \node [left = 0 of M5, font=\small] { \vphantom{0}5 };
+
+            \draw [very thick] (M1) -- (M2);
+            \draw [color=uofgsandstone!40] (M1) -- (M3);
+            \draw [very thick] (M2) -- (M4);
+            \draw [color=uofgsandstone!40] (M3) -- (M4);
+
+            \node [anchor=base, yshift=-2.2cm] at ($(Ma)!0.5!(M2)$) {
+                \stepcounter{stepcounter}\roman{stepcounter}) Forced $e \mapsto \bot$ };
+        \end{scope}
+    \end{tikzpicture}
+
+    \caption{Suppose we are looking for a connected common subgraph, using the graph on the left
+        for variables and the graph on the right (which has an isolated vertex) for values. We
+        initially consider $a \mapsto 1$. Our restricted branching rule requires us to select either variable
+        $b$ or variable $c$ subsequently, not $d$ or $e$. We try $b \mapsto 2$, which adds $d$
+        to the branchable variables, and forces $c \mapsto \bot$. We may now only branch on $d$, and
+        we try $d \mapsto 4$. Now the only remaining variable is unbranchable, and so $e = \bot$ is forced, even
+        though $5$ remains in its domain.}\label{figure:restricted}
+\end{figure}
+
+\cref{figure:restricted} The key idea is that whenever we branch (except for the first choice we
+make), we select only from variables which correspond to vertices which are adjacent to at least one
+other variable which has been instantiated to a value other than $\bot$. If no such variables
+remain, the subgraph we are building cannot grow any further, and all remaining variables must be
+instantiated to $\bot$.
+
+?? We only need to work off whichever input gives us the variables. But the constraint programming
+approach seems to look at both?
 
 ?? Patrick reckons this reminds him of Prim's algorithm for minimum spanning trees.
 
@@ -322,7 +567,7 @@ look at both?
     \nl $\FuncSty{search}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \label{firstsearch} \;
     \nl $\KwSty{return} ~ \mathit{incumbent}$ \;
 }
-\vspace{1ex}
+\vspace{0.9ex}
 \nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{branchable}$, Set $\mathit{remaining}$) \;
 \nl \Begin{
     \nl $\mathit{colourClasses} \gets \FuncSty{concatenate}($ \label{makecolours} \;
@@ -345,7 +590,7 @@ look at both?
          \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
      }
 }
-\vspace{1ex}
+\vspace{0.9ex}
 \nl $\FuncSty{colour}$ :: (Graph $G$, Set $\mathit{uncoloured}$) $\rightarrow$ List of List of Vertex \;
 \nl \Begin{
     \nl $\mathit{result} \gets []$ \;
@@ -363,20 +608,19 @@ look at both?
     }
     \nl $\KwSty{return} ~ \mathit{result}$ \;
 }
-\vspace{1ex}
+\vspace{0.9ex}
 \nl $\FuncSty{connected}$ :: (Graph $G$, Vertex $v$) $\rightarrow$ Set \;
 \nl \Begin{
     \nl $\KwSty{return} ~ \{ w \in G : \FuncSty{first}(w) \in \operatorname{N}(G, \FuncSty{first}(v)) \}$ \;
 }
-\vspace{1ex}
+\vspace{0.9ex}
 \nl $\FuncSty{associationGraph}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Graph \;
 \nl \Begin{
-    \nl $V \gets \{ (v_1, v_2) \in G_1 \times G_2 : \FuncSty{compatible}(v_1, v_2) \}$ \;
-    \nl $E \gets \{ ((v_1, v_2), (w_1, w_2)) \in V \times V : \FuncSty{compatible}((v_1, w_1), (v_2,
-    w_2)) \}$ \;
-    \nl $\KwSty{return} ~ (V, E)$ \;
+    \nl $V \gets \{ (v_1, v_2) \in G_1 \times G_2 : v_1 \simeq v_2 \}$ \;
+    \nl $E \gets \{ ((v_1, v_2), (w_1, w_2)) \in V \times V : (v_1, w_1) \simeq (v_2, w_2) \}$ \;
+    \nl $\KwSty{return} ~ (V, v \mapsto 1, (v, w) \mapsto 1~\KwSty{if}~(v, w) \in E~\KwSty{otherwise}~\bot )$ \;
 }
-\caption{An algorithm for MCCIS via an association graph.}
+\caption{An algorithm for a maximum common connected induced subgraph isomorphism via an association graph.}
 \label{algorithm:mccis}
 \end{algorithm}
 
@@ -395,7 +639,8 @@ viewed as variables \cite{DBLP:conf/cp/McCreeshP14}), if we were to select only 
 branching at each stage inside a clique algorithm, we would lose completeness. Thus we must adapt
 the bound to take into account restricted branching.
 
-In \cref{algorithm:mccis} we present a clique-inspired algorithm which finds an MCCIS via an
+In \cref{algorithm:mccis} we present a clique-inspired algorithm which finds a maximum common
+connected induced subgraph isomorphism via an
 association graph. If the additional
 branching restrictions are removed, the core of the algorithm is what Prosser
 \cite{DBLP:journals/algorithms/Prosser12} calls the ``MCSa1'' variant of a series of algorithms due
@@ -494,7 +739,7 @@ difficulties, and result sizes?
 
 \begin{figure}[p]
     \centering
-    \input{gen-graph-connected-undir33}
+    % \input{gen-graph-connected-undir33}
     \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, up to 100 vertices. On the top,
         the cumulative number of instances solved by each approach, in under a certain time. On the
         bottom, the association graph approach compared to the constraint programming approach with
@@ -503,7 +748,7 @@ difficulties, and result sizes?
 
 \begin{figure}[p]
     \centering
-    \input{gen-graph-connected-plain}
+    % \input{gen-graph-connected-plain}
     \caption{Clique versus constraint programming, connected, undirected, unlabelled, up to 35 vertices. On the top, the
         cumulative number of instances solved by each approach, in under a certain time. On the
         bottom, the association graph approach compared to the constraint programming approach
@@ -525,8 +770,6 @@ We haven't discussed partial subgraphs, or connected directed.
 Possibly portfolios.
 
 Better instances.
-
-\FloatBarrier
 
 \bibliographystyle{splncs}
 \bibliography{paper}
