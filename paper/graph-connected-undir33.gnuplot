@@ -25,7 +25,7 @@ unset format y
 
 set rmargin 10
 
-set label 1 center at graph 0.5, graph 0.9 "Still running, done up to 80 vertices so far"
+set label 1 center at graph 0.5, graph 0.9 "Still running, done up to 90 vertices so far"
 
 set key Left at graph 0.9, graph 0.245
 
