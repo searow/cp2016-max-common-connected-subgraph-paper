@@ -28,10 +28,10 @@ set rmargin 10
 set key Left at graph 0.9, graph 0.245
 
 plot \
-    "connected-undir33.data" u ($4*1000):($4*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Both" lc rgb '#CCEBC5' dt "_", \
-    "connected-undir33.data" u ($3*1000):($3*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Branching" lc rgb '#4EB3D3' dt "-", \
-    "connected-undir33.data" u ($2*1000):($2*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Filtering" lc rgb '#08589E' dt ".", \
-    "connected-undir33.data" u ($5):($5>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#7A0177'
+    "connected-undir33.data" u (sprintf("%.1e",$4*1000)+0):($4*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Both" lc rgb '#CCEBC5' dt "_", \
+    "connected-undir33.data" u (sprintf("%.1e",$3*1000)+0):($3*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Branching" lc rgb '#4EB3D3' dt "-", \
+    "connected-undir33.data" u (sprintf("%.1e",$2*1000)+0):($2*1000>=3600e3?1e-10:1) smooth cumulative ti "CP Filtering" lc rgb '#08589E' dt ".", \
+    "connected-undir33.data" u (sprintf("%.1e",$5)+0):($5>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#7A0177'
 
 set border 3
 

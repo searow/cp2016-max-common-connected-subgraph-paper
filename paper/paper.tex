@@ -420,11 +420,25 @@ only handle very local side constraints, or injectivity (which is decomposable).
 
 \begin{figure}[p]
     \centering
+    \input{gen-graph-unconnected-33-breakdown}
+    \caption{Clique versus constraint programming, 33\% labelled, broken down by family.}
+        \label{figure:unconnected-33-breakdown}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
     \input{gen-graph-unconnected-plain}
     \caption{Clique versus constraint programming, undirected, unlabelled. On the top, the cumulative
     number of instances solved by each approach, in under a certain time. On the bottom, an
         instance-by-instance comparison of the two approaches: the colour at a point indicates the
     number of instances with these runtimes.} \label{figure:unconnected-plain}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-unconnected-plain-breakdown}
+    \caption{Clique versus constraint programming, undirected, unlabelled, broken down by family.}
+        \label{figure:unconnected-plain-breakdown}
 \end{figure}
 
 \subsection{Filtering from Edge Labels}
@@ -1009,12 +1023,26 @@ difficulties, and result sizes?
 
 \begin{figure}[p]
     \centering
+    \input{gen-graph-connected-undir33-breakdown}
+    \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, broken down by family.}
+        \label{figure:connected-undir33-breakdown}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
     \input{gen-graph-connected-plain}
     \caption{Clique versus constraint programming, connected, undirected, unlabelled, up to 35 vertices. On the top, the
         cumulative number of instances solved by each approach, in under a certain time. On the
         bottom, the association graph approach compared to the constraint programming approach
     with both branching and filtering.}
 \label{figure:connected-plain}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-connected-plain-breakdown}
+    \caption{Clique versus constraint programming, connected, undirected, unlabelled, broken down by family.}
+        \label{figure:connected-plain-breakdown}
 \end{figure}
 
 \subsection{Parallel Search}
