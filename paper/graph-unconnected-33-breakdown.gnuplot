@@ -18,6 +18,7 @@ set xrange [1:3600e3]
 set format x '$10^{%T}$'
 unset format y
 
+set ytics nomirror
 # set ytics nomirror add ('' 80000) ('81400' 81400)
 # set yrange [1:81400]
 

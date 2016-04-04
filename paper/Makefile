@@ -23,8 +23,11 @@ gen-graph-%.tex : graph-%.gnuplot $(DATA)
 	gnuplot $<
 	sed -i -e '5s/^\(\\path.*\)/\% \1/' $@ # epic haxx
 
-connected-%-heatmap.data : connected-%.data heatmapify.rb
-	ruby heatmapify.rb connected-$*.data 1 4 > connected-$*-heatmap.data
+connected-undir33-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 3 7 > connected-undir33-heatmap.data
+
+connected-plain-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 3 7 > connected-plain-heatmap.data
 
 unconnected-%-heatmap.data : unconnected-%.data heatmapify.rb
 	ruby heatmapify.rb unconnected-$*.data 1 2 > unconnected-$*-heatmap.data
