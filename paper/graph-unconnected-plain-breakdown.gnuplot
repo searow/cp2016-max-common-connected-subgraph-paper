@@ -12,7 +12,7 @@ set nokey
 
 set logscale x
 unset logscale y
-set xtics nomirror add ('1' 1) add ('1h' 3600e3)
+set xtics nomirror add ('1' 1) add ('10' 10) add ('1h' 3600e3)
 set grid
 set xrange [1:3600e3]
 set format x '$10^{%T}$'

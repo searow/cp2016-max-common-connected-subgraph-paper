@@ -15,6 +15,7 @@
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
 \usepackage{cite}                      % automatically sort mass cites
 \usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
+\usepackage{placeins}
 
 \usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing,
     patterns, matrix}
@@ -61,7 +62,8 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
 \begin{abstract}
     The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
     This problem can be solved either by constraint-based search, or by reduction to the maximum
-    clique problem. We evaluate these two approaches using modern algorithms. We also investigate a
+    clique problem. We evaluate these two approaches using modern algorithms, and see that the best
+    choice depends mainly upon whether the graphs have labelled edges. We also investigate a
     restricted branching approach for the connected version of the problem, show how to implement
     this in constraint-based and clique-inspired algorithms, and compare it to conventional
     propagation.
@@ -183,13 +185,13 @@ single definition throughout: we define a \emph{graph} $G = (V, \ell, e)$ to be 
 $V$, a vertex labelling function $\ell : V \rightarrow \mathbb{N}$, and an edge labelling function
 $e : V \times V \rightarrow \mathbb{N} \cup \{ \bot \}$. To represent graphs without vertex (or
 edge) labels, we just pick our favourite number and give it to every vertex (or edge). We also use a
-distinct label $\bot$ to represent the \emph{lack of} an edge between two vertices.  We write
+distinct label $\bot$ to represent the \emph{lack of} an edge between two vertices; vertices $v$ and
+$w$ are said to be \emph{adjacent} if $e(v, w) \ne \bot$ or $e(w, v) \ne \bot$. We write
 $\operatorname{V}(G)$ for $V$, and $\operatorname{N}(G, v)$ for the \emph{undirected neighbourhood}
-of a vertex $v$ (that is, the set of vertices $w$ such that either $e(v, w) \ne \bot$ or $e(w, v)
-\ne \bot$); a vertex is \emph{isolated} if its neighbourhood is empty. A \emph{path} between two
-vertices $v$ and $w$ is a sequence of $n$ vertices $v = v_1, v_2, \ldots, v_n = w$ such that for
-each $m \in \{ 1 \ldots n - 1 \}$, $e(v_m, v_{m + 1}) \ne \bot$.  A graph is \emph{connected} if a
-path exists between each distinct pair of vertices.
+of a vertex $v$ (that is, the set of vertices adjacent to $v$); a vertex is \emph{isolated} if its
+neighbourhood is empty. A \emph{path} between two vertices $v$ and $w$ is a sequence of $n$ vertices
+$v = v_1, v_2, \ldots, v_n = w$ such that for each $m \in \{ 1 \ldots n - 1 \}$, $v_m$ is adjacent
+to $v_{m + 1}$. A graph is \emph{connected} if a path exists between each distinct pair of vertices.
 
 Given two graphs $G_1 = (V_1, \ell_1, e_1)$ and $G_2 = (V_2, \ell_2, e_2)$, we say two pairs of
 vertices $(v_1, w_1) \in \operatorname{V}(G_1) \times \operatorname{V}(G_1)$ and $(v_2, w_2) \in
@@ -237,7 +239,7 @@ invariants used for subgraph isomorphism---we may no longer reason using the deg
 example, and so maximum common subgraph problems can be much more challenging in practice.
 
 Another widely studied approach is to reduce the problem to finding a maximum clique (or sometimes,
-equivalently, an independent set or a vertex cover) in an association graph (which we describe
+equivalently, an independent set or a vertex cover ?? cite) in an association graph (which we describe
 below). Conventional wisdom is that this approach is less effective in practice, but previous
 experimental evaluations have used weak clique algorithms, or even maximal clique enumeration
 algorithms. Maximum clique algorithms are an active research area
@@ -245,9 +247,9 @@ algorithms. Maximum clique algorithms are an active research area
 and so the first half of this paper re-evaluates the association graph approach using a modern
 algorithm.
 
-(Other approaches have been tried, including mixed integer programming
-\cite{DBLP:journals/anor/PivaS12}; SAT encodings seem to struggle even for subgraph isomorphism??
-cite IJCAI if it's not rejected?.)
+(Other approaches have been tried, including dedicated algorithms ?? cite, mixed integer programming
+\cite{DBLP:journals/anor/PivaS12}, and heuristics ?? cite; SAT encodings seem to struggle even for
+subgraph isomorphism??  cite IJCAI.)
 
 An interesting variant of the maximum common subgraph problem requires the selected subgraph to be
 connected
@@ -982,17 +984,23 @@ produce two greedy sequential colourings, first considering the non-branching ve
 $\mathit{remaining} \setminus \mathit{connected}$, followed by the branching vertices, and
 concatenate them (\lineref{makecolours}). This produces a valid colouring, since we do not merge any
 colour classes between the two stages, although it may use more colours than a single colouring
-would.
+would\footnote{What if we did not guarantee that vertices in $\mathit{remaining} \cap
+    \mathit{connected}$ came last, and just used a conventional colouring with the branching rule?
+    Suppose we had four vertices in $\mathit{remaining}$, and produced a colouring $[[v_1, v_2],
+    [v_3], [v_4]]$, and suppose that extending $\mathit{solution}$ with $\{ v_1, v_3, v_4 \}$ gives
+an optimal solution. If $v_4$ was not $\mathit{connected}$ yet, we would not branch on that subtree,
+and the bound could eliminate branching on $v_3$ and $v_1$, so we would miss the solution. Thus we
+cannot simply add the branching rule without also adapting the combined bound / ordering heuristic.}.
 
 Our $\FuncSty{colour}$ procedure is the same as the bit-parallel algorithm introduced by San Segundo
 \textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}. While we have remaining vertices to colour
 (\lineref{whileuncoloured}), we start a new colour class (\lineref{newcolourclass}), and then
 repeatedly pick a legal vertex to add to that colour class (\lineref{addtocolourclass}).  The
 selection of the next vertex to colour (\lineref{selectvtocolour}) may be performed efficiently in
-hardware if the association graph is permuted to be in degree order at the top of search. (Other
+hardware if the association graph is permuted to be in degree order at the top of search. Other
 initial vertex orderings have been considered on general clique problems
 \cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}; it is possible that special
-properties of the association graph could be exploited in this step.)
+properties of the association graph could be exploited in this step.
 
 \subsection{Experimental Evaluation}
 
@@ -1025,11 +1033,20 @@ difficulties, and result sizes?
         both branching and filtering.} \label{figure:connected-undir33}
 \end{figure}
 
-\begin{figure}[p]
+% \begin{figure}[p]
+%     \centering
+%     \input{gen-graph-connected-undir33-breakdown}
+%     \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, broken down by family.}
+%         \label{figure:connected-undir33-breakdown}
+% \end{figure}
+
+\begin{figure}[tb]
     \centering
-    \input{gen-graph-connected-undir33-breakdown}
-    \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, broken down by family.}
-        \label{figure:connected-undir33-breakdown}
+    \input{gen-graph-connected-cp-undir33.tex}
+    \caption{A pairwise comparison of different CP techniques for the connected, undirected, 33\%
+        labelled variant with graphs of up to 80 vertices. The colour at a point indicates the
+        number of instances with these runtimes, with darker colours representing more instances.}
+        \label{figure:connected-cp-undir33}
 \end{figure}
 
 \begin{figure}[p]
@@ -1042,11 +1059,18 @@ difficulties, and result sizes?
 \label{figure:connected-plain}
 \end{figure}
 
-\begin{figure}[p]
+% \begin{figure}[p]
+%     \centering
+%     \input{gen-graph-connected-plain-breakdown}
+%     \caption{Clique versus constraint programming, connected, undirected, unlabelled, broken down by family.}
+%         \label{figure:connected-plain-breakdown}
+% \end{figure}
+
+\begin{figure}[tb]
     \centering
-    \input{gen-graph-connected-plain-breakdown}
-    \caption{Clique versus constraint programming, connected, undirected, unlabelled, broken down by family.}
-        \label{figure:connected-plain-breakdown}
+    \input{gen-graph-connected-cp-plain.tex}
+    \caption{Different CP techniques, connected, undirected, unlabelled, up to 35 vertices.}
+        \label{figure:connected-cp-plain}
 \end{figure}
 
 \subsection{Parallel Search}
@@ -1064,6 +1088,7 @@ Possibly portfolios.
 
 Better instances.
 
+\FloatBarrier
 \bibliographystyle{splncs}
 \bibliography{paper}
 

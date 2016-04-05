@@ -1,7 +1,7 @@
 # vim: set et ft=gnuplot sw=4 :
 
 set terminal tikz color size 4.6in,6.6in font '\scriptsize'
-load "gnbu.pal"
+load "chromajs.pal"
 
 set output "gen-graph-connected-plain.tex"
 
@@ -16,7 +16,7 @@ set ylabel "Cumulative Number of Instances Solved"
 set logscale x
 unset logscale y
 unset logscale cb
-set xtics nomirror add ('1' 1) add ('1h' 3600e3)
+set xtics nomirror add ('1' 1) add ('10' 10) ('1h' 3600e3)
 set ytics nomirror add ('27500' 27500)
 set grid
 set xrange [1:3600e3]
@@ -51,9 +51,9 @@ set logscale x
 set logscale y
 set logscale cb
 set cbrange [1:1000]
-set xtics nomirror add ('1' 1) add ('1h' 3600e3)
+set xtics nomirror add ('1' 1) add ('10' 10) add ('1h' 3600e3)
 unset ytics
-set ytics nomirror add ('1' 1) add ('1h' 3600e3)
+set ytics nomirror add ('1' 1) add ('10' 10) add ('1h' 3600e3)
 set cbtics 0 add ('0' 1) ('1' 2) ('10' 10) ('$10^2$' 1e2) ('$\ge10^3$' 1e3)
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'

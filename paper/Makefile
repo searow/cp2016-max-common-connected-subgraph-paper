@@ -8,12 +8,26 @@ GRAPHS = gen-graph-connected-undir33.tex gen-graph-connected-plain.tex \
 	 gen-graph-unconnected-33-breakdown.tex \
 	 gen-graph-unconnected-plain-breakdown.tex \
 	 gen-graph-connected-undir33-breakdown.tex \
-	 gen-graph-connected-plain-breakdown.tex
+	 gen-graph-connected-plain-breakdown.tex \
+	 gen-graph-connected-cp-plain.tex \
+	 gen-graph-connected-cp-undir33.tex
 
 DATA = connected-undir33.data connected-undir33-heatmap.data \
        connected-plain.data connected-plain-heatmap.data \
        unconnected-33.data unconnected-33-heatmap.data \
-       unconnected-plain.data unconnected-plain-heatmap.data
+       unconnected-plain.data unconnected-plain-heatmap.data \
+       connected-cp-plain-fc-branch-fc-filter-heatmap.data \
+       connected-cp-plain-fc-branch-fc-both-heatmap.data \
+       connected-cp-plain-fc-filter-fc-both-heatmap.data \
+       connected-cp-plain-mac-branch-mac-filter-heatmap.data \
+       connected-cp-plain-mac-branch-mac-both-heatmap.data \
+       connected-cp-plain-mac-filter-mac-both-heatmap.data \
+       connected-cp-undir33-fc-branch-fc-filter-heatmap.data \
+       connected-cp-undir33-fc-branch-fc-both-heatmap.data \
+       connected-cp-undir33-fc-filter-fc-both-heatmap.data \
+       connected-cp-undir33-mac-branch-mac-filter-heatmap.data \
+       connected-cp-undir33-mac-branch-mac-both-heatmap.data \
+       connected-cp-undir33-mac-filter-mac-both-heatmap.data
 
 tables : $(TABLES)
 
@@ -24,11 +38,47 @@ gen-graph-%.tex : graph-%.gnuplot $(DATA)
 	sed -i -e '5s/^\(\\path.*\)/\% \1/' $@ # epic haxx
 
 connected-undir33-heatmap.data : connected-undir33.data heatmapify.rb
-	ruby heatmapify.rb connected-undir33.data 3 7 > connected-undir33-heatmap.data
+	ruby heatmapify.rb connected-undir33.data 3 7 1000 1 > $@
 
 connected-plain-heatmap.data : connected-plain.data heatmapify.rb
-	ruby heatmapify.rb connected-plain.data 3 7 > connected-plain-heatmap.data
+	ruby heatmapify.rb connected-plain.data 3 7 1000 1 > $@
 
 unconnected-%-heatmap.data : unconnected-%.data heatmapify.rb
-	ruby heatmapify.rb unconnected-$*.data 1 2 > unconnected-$*-heatmap.data
+	ruby heatmapify.rb unconnected-$*.data 1 2 1000 1 > $@
+
+connected-cp-plain-fc-branch-fc-filter-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 5 4 1000 1000 > $@
+
+connected-cp-plain-fc-branch-fc-both-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 5 6 1000 1000 > $@
+
+connected-cp-plain-fc-filter-fc-both-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 4 6 1000 1000 > $@
+
+connected-cp-plain-mac-branch-mac-filter-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 2 1 1000 1000 > $@
+
+connected-cp-plain-mac-branch-mac-both-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 2 3 1000 1000 > $@
+
+connected-cp-plain-mac-filter-mac-both-heatmap.data : connected-plain.data heatmapify.rb
+	ruby heatmapify.rb connected-plain.data 1 3 1000 1000 > $@
+
+connected-cp-undir33-fc-branch-fc-filter-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 5 4 1000 1000 > $@
+
+connected-cp-undir33-fc-branch-fc-both-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 5 6 1000 1000 > $@
+
+connected-cp-undir33-fc-filter-fc-both-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 4 6 1000 1000 > $@
+
+connected-cp-undir33-mac-branch-mac-filter-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 2 1 1000 1000 > $@
+
+connected-cp-undir33-mac-branch-mac-both-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 2 3 1000 1000 > $@
+
+connected-cp-undir33-mac-filter-mac-both-heatmap.data : connected-undir33.data heatmapify.rb
+	ruby heatmapify.rb connected-undir33.data 1 3 1000 1000 > $@
 
