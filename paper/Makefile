@@ -3,14 +3,12 @@ all : tables graphs
 
 TABLES =
 
-GRAPHS = gen-graph-connected-undir33.tex gen-graph-connected-plain.tex \
-	 gen-graph-unconnected-33.tex gen-graph-unconnected-plain.tex \
-	 gen-graph-unconnected-33-breakdown.tex \
-	 gen-graph-unconnected-plain-breakdown.tex \
-	 gen-graph-connected-undir33-breakdown.tex \
-	 gen-graph-connected-plain-breakdown.tex \
-	 gen-graph-connected-cp-plain.tex \
-	 gen-graph-connected-cp-undir33.tex
+GRAPHS = \
+	 gen-graph-unconnected-cumulative.tex \
+	 gen-graph-unconnected-heatmap.tex \
+	 gen-graph-connected-cumulative.tex \
+	 gen-graph-connected-heatmap.tex \
+	 gen-graph-connected-cp.tex
 
 DATA = connected-undir33.data connected-undir33-heatmap.data \
        connected-plain.data connected-plain-heatmap.data \

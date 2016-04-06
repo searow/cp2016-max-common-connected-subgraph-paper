@@ -2,7 +2,7 @@
 
 \documentclass{llncs}
 
-% \usepackage{showframe}
+\usepackage{showframe}
 
 \usepackage{microtype}                 % typographic perfection
 \usepackage{complexity}                % \P, \NP etc
@@ -417,43 +417,21 @@ only handle very local side constraints, or injectivity (which is decomposable).
 
 \subsection{Experimental Evaluation}
 
-\cref{figure:unconnected-33}
-
-\cref{figure:unconnected-plain}
-
 ?? Break this down more by family, size, etc.
 
 \begin{figure}[p]
     \centering
-    \input{gen-graph-unconnected-33}
-    \caption{Clique versus constraint programming, 33\% labelled. On the top, the cumulative
-    number of instances solved by each approach, in under a certain time. On the bottom, an
-    instance-by-instance comparison of the two approaches: the colour at a point indicates the
-    number of instances with these runtimes.} \label{figure:unconnected-33}
-\end{figure}
+    \input{gen-graph-unconnected-cumulative}
+    \vspace*{1em}
 
-% \begin{figure}[p]
-%     \centering
-%     \input{gen-graph-unconnected-33-breakdown}
-%     \caption{Clique versus constraint programming, 33\% labelled, broken down by family.}
-%         \label{figure:unconnected-33-breakdown}
-% \end{figure}
-
-\begin{figure}[p]
     \centering
-    \input{gen-graph-unconnected-plain}
-    \caption{Clique versus constraint programming, undirected, unlabelled. On the top, the cumulative
-    number of instances solved by each approach, in under a certain time. On the bottom, an
-        instance-by-instance comparison of the two approaches: the colour at a point indicates the
-    number of instances with these runtimes.} \label{figure:unconnected-plain}
+    \input{gen-graph-unconnected-heatmap}
+    \caption{The cumulative number of instances solved in under a certain time: on the top, 33\%
+        labelled graphs with up to 100 vertices, and in the middle, unlabelled and undirected graphs
+        with up to 35 vertices. On the bottom row, an instance-by-instance comparison of the two
+        approaches, with 33\% labelled graphs on the left, and unlabelled and undirected graphs on
+        the right.} \label{figure:unconnected-cumulative}
 \end{figure}
-
-% \begin{figure}[p]
-%     \centering
-%     \input{gen-graph-unconnected-plain-breakdown}
-%     \caption{Clique versus constraint programming, undirected, unlabelled, broken down by family.}
-%         \label{figure:unconnected-plain-breakdown}
-% \end{figure}
 
 \subsection{Filtering from Edge Labels}
 
@@ -1012,15 +990,9 @@ properties of the association graph could be exploited in this step.
 
 \subsection{Experimental Evaluation}
 
-\paragraph{Connected, Undirected, 33\% Labelled} \cref{figure:connected-undir33} Above two seconds,
-    the clique approach dominates except for three instances, and there is only one instance which
-    the constraint programming model can solve but the clique model cannot (?? is this an EHP and does parallel get rid
-    of it?). The clique model is unable to solve only ??  instances within one hour, ?? all of which
-    have 90 or 100 vertices.  On the other hand, for trivial instances, the clique approach is often
-    expensive due to the association graph construction.
+\paragraph{Connected, Undirected, 33\% Labelled}
 
-\paragraph{Connected, Undirected, Unlabelled} \cref{figure:connected-plain}, looks like the clique
-approach doesn't do so well\ldots
+\paragraph{Connected, Undirected, Unlabelled}
 
 ?? My gut feeling is that if we have edge labels, the clique model wins, and if we don't, it's
 likely to lose. So maybe I should run some experiments with vertex labels but not edge labels to
@@ -1031,54 +1003,26 @@ test this.
 \paragraph{Does connected make instances easier or harder?} We could plot connected vs not connected
 difficulties, and result sizes?
 
-
 \begin{figure}[p]
     \centering
-    \input{gen-graph-connected-undir33}
-    \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, up to 100 vertices. On the top,
-        the cumulative number of instances solved by each approach, in under a certain time. On the
-        bottom, the association graph approach compared to the constraint programming approach with
-        both branching and filtering.} \label{figure:connected-undir33}
-\end{figure}
+    \input{gen-graph-connected-cumulative}
+    \vspace*{1em}
 
-% \begin{figure}[p]
-%     \centering
-%     \input{gen-graph-connected-undir33-breakdown}
-%     \caption{Clique versus constraint programming, connected, undirected, 33\% labelled, broken down by family.}
-%         \label{figure:connected-undir33-breakdown}
-% \end{figure}
+    \centering
+    \input{gen-graph-connected-heatmap}
+    \caption{The cumulative number of connected instances solved in under a certain time: on the
+        top, 33\% undirected labelled graphs with up to 100 vertices, and in the middle, unlabelled
+        and undirected graphs with up to 35 vertices. On the bottom row, an instance-by-instance
+        comparison of the association and MAC both approaches, with 33\% labelled graphs on the
+        left, and unlabelled and undirected graphs on the right.} \label{figure:connected-cumulative}
+\end{figure}
 
 \begin{figure}[tb]
     \centering
-    \input{gen-graph-connected-cp-undir33.tex}
-    \caption{A pairwise comparison of different CP techniques for the connected, undirected, 33\%
-        labelled variant with graphs of up to 80 vertices. The colour at a point indicates the
-        number of instances with these runtimes, with darker colours representing more instances.}
-        \label{figure:connected-cp-undir33}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \input{gen-graph-connected-plain}
-    \caption{Clique versus constraint programming, connected, undirected, unlabelled, up to 35 vertices. On the top, the
-        cumulative number of instances solved by each approach, in under a certain time. On the
-        bottom, the association graph approach compared to the constraint programming approach
-    with both branching and filtering.}
-\label{figure:connected-plain}
-\end{figure}
-
-% \begin{figure}[p]
-%     \centering
-%     \input{gen-graph-connected-plain-breakdown}
-%     \caption{Clique versus constraint programming, connected, undirected, unlabelled, broken down by family.}
-%         \label{figure:connected-plain-breakdown}
-% \end{figure}
-
-\begin{figure}[tb]
-    \centering
-    \input{gen-graph-connected-cp-plain.tex}
-    \caption{Different CP techniques, connected, undirected, unlabelled, up to 35 vertices.}
-        \label{figure:connected-cp-plain}
+    \input{gen-graph-connected-cp.tex}
+    \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
+    number of instances with these runtimes, with darker colours representing more instances.}
+        \label{figure:connected-cp}
 \end{figure}
 
 \subsection{Parallel Search}
