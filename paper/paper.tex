@@ -1005,6 +1005,16 @@ difficulties, and result sizes?
 
 \begin{figure}[p]
     \centering
+    \input{gen-graph-connected-cp.tex}
+    \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
+    number of instances with these runtimes, with darker colours representing more instances. The
+    top two rows are for 33\% labelled undirected graphs with up to 100 vertices, and the bottom two
+    rows are for unlabelled and undirected graphs with up to 35 vertices.}
+        \label{figure:connected-cp}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
     \input{gen-graph-connected-cumulative}
     \vspace*{1em}
 
@@ -1015,16 +1025,6 @@ difficulties, and result sizes?
         and undirected graphs with up to 35 vertices. On the bottom row, an instance-by-instance
         comparison of the association and ``MAC both'' approaches, with 33\% labelled graphs on the
         left, and unlabelled and undirected graphs on the right.} \label{figure:connected-cumulative}
-\end{figure}
-
-\begin{figure}[p]
-    \centering
-    \input{gen-graph-connected-cp.tex}
-    \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
-    number of instances with these runtimes, with darker colours representing more instances. The
-    top two rows are for 33\% labelled undirected graphs with up to 100 vertices, and the bottom two
-    rows are for unlabelled and undirected graphs with up to 35 vertices.}
-        \label{figure:connected-cp}
 \end{figure}
 
 \subsection{Parallel Search}

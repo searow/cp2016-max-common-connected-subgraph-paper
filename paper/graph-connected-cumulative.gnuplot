@@ -30,12 +30,13 @@ set label 1 at graph 0.5, graph 0.95 center "Unlabelled" front
 
 plot \
     "connected-undir33.data" u (sprintf("%.1e",$4*1000)+0):($4>=3600?1e-10:1) smooth cumulative ti "MAC Both" lc rgb '#7a0177' dt 2, \
-    "connected-undir33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "MAC Branching" lc rgb '#AE017E' dt 3, \
-    "connected-undir33.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1) smooth cumulative ti "MAC Filtering" lc rgb '#DD3497' dt 4, \
     "connected-undir33.data" u (sprintf("%.1e",$7*1000)+0):($7>=3600?1e-10:1) smooth cumulative ti "FC Both" lc rgb '#238443' dt 5, \
-    "connected-undir33.data" u (sprintf("%.1e",$6*1000)+0):($6>=3600?1e-10:1) smooth cumulative ti "FC Branching" lc rgb '#41AB5D' dt 6, \
-    "connected-undir33.data" u (sprintf("%.1e",$5*1000)+0):($5>=3600?1e-10:1) smooth cumulative ti "FC Filtering" lc rgb '#78C679' dt 7, \
     "connected-undir33.data" u (sprintf("%.1e",$8)+0):($8>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#4393C3'
+
+#    "connected-undir33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "MAC Branching" lc rgb '#AE017E' dt 3, \
+#    "connected-undir33.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1) smooth cumulative ti "MAC Filtering" lc rgb '#DD3497' dt 4, \
+#    "connected-undir33.data" u (sprintf("%.1e",$6*1000)+0):($6>=3600?1e-10:1) smooth cumulative ti "FC Branching" lc rgb '#41AB5D' dt 6, \
+#    "connected-undir33.data" u (sprintf("%.1e",$5*1000)+0):($5>=3600?1e-10:1) smooth cumulative ti "FC Filtering" lc rgb '#78C679' dt 7, \
 
 set xlabel "Runtime (ms)"
 set ylabel "Number of Instances Solved"
@@ -56,10 +57,11 @@ set label 1 at graph 0.5, graph 0.95 center '33\% Labelled' front
 
 plot \
     "connected-plain.data" u (sprintf("%.1e",$4*1000)+0):($4>=3600?1e-10:1) smooth cumulative ti "MAC Both" lc rgb '#7a0177' dt 2, \
-    "connected-plain.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "MAC Branching" lc rgb '#AE017E' dt 3, \
-    "connected-plain.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1) smooth cumulative ti "MAC Filtering" lc rgb '#DD3497' dt 4, \
     "connected-plain.data" u (sprintf("%.1e",$7*1000)+0):($7>=3600?1e-10:1) smooth cumulative ti "FC Both" lc rgb '#238443' dt 5, \
-    "connected-plain.data" u (sprintf("%.1e",$6*1000)+0):($6>=3600?1e-10:1) smooth cumulative ti "FC Branching" lc rgb '#41AB5D' dt 6, \
-    "connected-plain.data" u (sprintf("%.1e",$5*1000)+0):($5>=3600?1e-10:1) smooth cumulative ti "FC Filtering" lc rgb '#78C679' dt 7, \
     "connected-plain.data" u (sprintf("%.1e",$8)+0):($8>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#4393C3'
+
+#    "connected-plain.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "MAC Branching" lc rgb '#AE017E' dt 3, \
+#    "connected-plain.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1) smooth cumulative ti "MAC Filtering" lc rgb '#DD3497' dt 4, \
+#    "connected-plain.data" u (sprintf("%.1e",$6*1000)+0):($6>=3600?1e-10:1) smooth cumulative ti "FC Branching" lc rgb '#41AB5D' dt 6, \
+#    "connected-plain.data" u (sprintf("%.1e",$5*1000)+0):($5>=3600?1e-10:1) smooth cumulative ti "FC Filtering" lc rgb '#78C679' dt 7, \
 
