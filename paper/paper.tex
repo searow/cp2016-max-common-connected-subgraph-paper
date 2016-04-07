@@ -2,7 +2,7 @@
 
 \documentclass{llncs}
 
-\usepackage{showframe}
+% \usepackage{showframe}
 
 \usepackage{microtype}                 % typographic perfection
 \usepackage{complexity}                % \P, \NP etc
@@ -62,9 +62,9 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
 \begin{abstract}
     The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
     This problem can be solved either by constraint-based search, or by reduction to the maximum
-    clique problem. We evaluate these two approaches using modern algorithms, and see that the best
+    clique problem. We evaluate these two models using modern algorithms, and see that the best
     choice depends mainly upon whether the graphs have labelled edges. We also investigate a
-    restricted branching approach for the connected version of the problem, show how to implement
+    restricted branching technique for the connected version of the problem, show how to implement
     this in constraint-based and clique-inspired algorithms, and compare it to conventional
     propagation.
 \end{abstract}
@@ -242,11 +242,11 @@ example, and so maximum common subgraph problems can be much more challenging in
 
 Another widely studied approach ?? cite is to reduce the problem to finding a maximum clique (or sometimes,
 equivalently, an independent set or a vertex cover ?? cite) in an association graph \cite{LeviG}; we describe
-this below. Conventional wisdom is that this approach is less effective in practice, but previous
+this below. Conventional wisdom is that this model is less effective in practice, but previous
 experimental evaluations have used weak clique algorithms, or even maximal clique enumeration
 algorithms. Maximum clique algorithms are an active research area
 \cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10,DBLP:journals/cor/SegundoRJ11,DBLP:journals/algorithms/Prosser12,DBLP:journals/ol/SegundoMRH13,DBLP:conf/ictai/LiFX13,DBLP:journals/cor/SegundoT14,DBLP:conf/lion/SegundoLB14,DBLP:conf/cp/McCreeshP14,DBLP:journals/jco/BatsynGMP14,DBLP:journals/cor/SegundoNB15,DBLP:conf/lion/NikolaevBS15,DBLP:conf/lion/LiJX15,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16},
-and so the first half of this paper re-evaluates the association graph approach using a modern
+and so the first half of this paper re-evaluates the association graph model using a modern
 algorithm.
 
 (Other approaches have been tried, including dedicated algorithms ?? cite, mixed integer programming
@@ -262,17 +262,17 @@ including outerplanar graphs of bounded degree \cite{DBLP:journals/algorithms/Ak
 this paper looks at this variant on arbitrary graphs. In principle, for a constraint programming
 approach, we may simply add a ``forms a connected graph'' global constraint
 \cite{Brown:2005,DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05} to the model. Alternatively, we
-could use a special branching rule to maintain connectedness during search ?? cite. Neither approach
-seems directly viable with an association graph encoding---however, we show that it is possible to
-adapt the combined branching and bounding rule used by modern clique algorithms to preserve
-connectedness during search.
+could use a special branching rule to maintain connectedness during search ?? cite. Neither
+technique seems directly viable with an association graph encoding---however, we show that it is
+possible to adapt the combined branching and bounding rule used by modern clique algorithms to
+preserve connectedness during search.
 
-Our experiments suggest that each approach gives broadly similar performance, although the
-association graph works better when graphs have edge labels (and we can explain why), and the
-constraint programming approach is better when edges are unlabelled. For the constraint programming
-model, using both a global constraint \emph{and} the branching rule in conjunction seems to be the
-safest option---although it is not always fastest, it is very rarely substantially worse than just
-using one or the other, and is often substantially better.
+Our experiments suggest that each model and technique gives broadly similar performance, although
+the association graph works better when graphs have edge labels (and we discuss why), and constraint
+programming models are better when edges are unlabelled. For the constraint programming model, using
+both a global constraint \emph{and} the branching rule in conjunction seems to be the safest
+option---although it is not always fastest, it is very rarely substantially worse than just using
+one or the other, and is often substantially better.
 
 \subsection{Datasets}
 
@@ -429,7 +429,7 @@ only handle very local side constraints, or injectivity (which is decomposable).
     \caption{The cumulative number of instances solved in under a certain time: on the top, 33\%
         labelled graphs with up to 100 vertices, and in the middle, unlabelled and undirected graphs
         with up to 35 vertices. On the bottom row, an instance-by-instance comparison of the two
-        approaches, with 33\% labelled graphs on the left, and unlabelled and undirected graphs on
+        models, with 33\% labelled graphs on the left, and unlabelled and undirected graphs on
         the right.} \label{figure:unconnected-cumulative}
 \end{figure}
 
@@ -910,7 +910,7 @@ branching restrictions are removed, the core of the algorithm is what Prosser
 \cite{DBLP:journals/algorithms/Prosser12} calls the ``MCSa1'' variant of a series of algorithms due
 to Tomita \textit{et al.}\
 \cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10}, using a
-bitset encoding approach due to San Segundo \textit{et al.}\
+bitset encoding due to San Segundo \textit{et al.}\
 \cite{DBLP:journals/cor/SegundoRJ11,DBLP:journals/ol/SegundoMRH13} (and we refer the reader to these
 papers for implementation details on how to use bitsets and other data structures to implement the
 colouring stage with very low constant factors).
@@ -1011,17 +1011,19 @@ difficulties, and result sizes?
     \centering
     \input{gen-graph-connected-heatmap}
     \caption{The cumulative number of connected instances solved in under a certain time: on the
-        top, 33\% undirected labelled graphs with up to 100 vertices, and in the middle, unlabelled
+        top, 33\% labelled undirected graphs with up to 100 vertices, and in the middle, unlabelled
         and undirected graphs with up to 35 vertices. On the bottom row, an instance-by-instance
-        comparison of the association and MAC both approaches, with 33\% labelled graphs on the
+        comparison of the association and ``MAC both'' approaches, with 33\% labelled graphs on the
         left, and unlabelled and undirected graphs on the right.} \label{figure:connected-cumulative}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[p]
     \centering
     \input{gen-graph-connected-cp.tex}
     \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
-    number of instances with these runtimes, with darker colours representing more instances.}
+    number of instances with these runtimes, with darker colours representing more instances. The
+    top two rows are for 33\% labelled undirected graphs with up to 100 vertices, and the bottom two
+    rows are for unlabelled and undirected graphs with up to 35 vertices.}
         \label{figure:connected-cp}
 \end{figure}
 
