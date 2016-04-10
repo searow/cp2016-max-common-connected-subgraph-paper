@@ -272,14 +272,13 @@ Say which clique algorithm we're using.
 
 \subsection{Datasets}
 
-\cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}
+We consider a randomly generated database described in \cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}. 
+The dataset contains different classes of graphs: Randomly connected graphs with connectivity $\eta\in\{0.05,0.2\}$ (r005 and r02); 2D, 3D, and 4D regular meshes (m2D, m3D, m4D); 2D, 3D, and 4D irregular meshes with $\rho=0.6$ (m2Dr, m3Dr, and m4Dr); regular bounded valence graphs with $V\in\{3,9\}$ (b03 and b09) and irregular bounded valence graphs with $V\in\{3,9\}$ (b03m and b09m). Each class contains XXX pairs of graphs: YYY for each of the 5 possible sizes of the MCIS ({\em i.e.}, 10\%, 30\%, 50\%, 70\% and 90\% of the number of nodes of the original graphs). 
 
-?? More? Can we scale to some of the SIP graphs?
+For each pair of graphs, there are 3 different labelings such that the number of different labels is equal to 33\%, 50\% or 75\% of the number of nodes. In this paper, we report experiments with non labelled graphs (labels are ignored), and with 33\% labellings.
 
 
 \subsection{Experimental Evaluation}
-
-?? Break this down more by family, size, etc.
 
 \begin{figure}[p]
     \centering
@@ -295,7 +294,8 @@ Say which clique algorithm we're using.
         the right.} \label{figure:unconnected-cumulative}
 \end{figure}
 
-\subsection{Filtering from Edge Labels}
+Fig. \ref{figure:unconnected-cumulative} displays the cumulative number of instances solved with respect to time. 
+When graphs are labelled (top plot), the clique-based approach clearly outperforms CP. ...develop...
 
 \subsection{Parallel Search}
 
@@ -305,16 +305,54 @@ Say which clique algorithm we're using.
 
 \section{Find Maximum Common Connected Subgraphs}\label{mccs}
 
-Connectedness is not hereditary, but can be built up one vertex at a time. Alternatively,
-connectedness is a constraint.
+In many applications, the common subgraph must be connected. As illustrated in Fig. \ref{figure:mcsexample}, the MCCS cannot be deduced from the MCS: We need to ensure connectedness during the search. In Section \ref{mccs-cp}, we show that this may be done in two different ways that may be combined, and we show in Section \ref{mccs-cp-eval} that the best results are obtained when combining them. In Section \ref{mccs-clique}, we introduce a new way for ensuring connectedness in a clique-based approach. Finally, we compare CP and our clique-based approach in Section \ref{mccs-eval}.
 
-\subsection{Connectedness as a Constraint}
+\subsection{Ensuring Connectedness in CP}\label{mccs-cp}
 
-Connectedness \cite{Brown:2005}
+\paragraph{Ensuring connectedness with a specific branching rule.}
+In \cite{DBLP:conf/mco/VismaraV08}, the connectedness constraint is ensured by using a specific branching rule, used to select the next variable to be assigned. Let $CComp$ be the set of variables already assigned to values different from $\bot$. The next variable to be assigned is chosen within the set of non assigned variables which are neighbor of at least one vertex of $CComp$. When this set is empty, all remaining non assigned variables are assigned to $\bot$.
 
-Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}
+\paragraph{Ensuring connectedness with a specific filtering.}
+Another way to ensure connectedness is to filter domains to ensure connectedness consistency. Let us consider two graphs $G$ and $G'$, and let $D$ be the current domains (we suppose that $D(x_u)$ is a singleton when $x_u$ is assigned). Let $C$ (resp. $C'$) be the set of nodes of $G$ (resp. $G'$) which may belong to the common subgraph, {\em i.e.}, $C=\{ u\in N_{G}, D(x_u)\neq\{\bot\}\}$ (resp. $C' = \{u'\in N_{G'}, \exists u\in N_G, u'\in D(x_u)\}$). Let $G_{\downarrow C}$ (resp. $G'_{\downarrow C'}$) be the subgraph of $G$ induced by $C$ (resp. the subgraph of $G'$ induced by $C'$).
+The connectedness consistency ensures that both $G_{\downarrow C}$ and $G'_{\downarrow C'}$ are connected graphs.
 
-\subsection{Connectedness via Restricted Branching}
+Connectedness consistency is not ensured at the root node of the search. It is ensured only once a first variable has been assigned. Let $x_u$ be the first assigned variable and $u'$ the value assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp. $G'$), starting from $u$ (resp. $u'$), and we initialize $C$ (resp. $C'$) with all visited nodes. Then, for each node $v\in N_G\setminus C$ (resp. $v'\in N_{G'}\setminus C'$), we assign $x_v$ to $\bot$ (resp., we remove $v'$ from all domains it belongs to).
+
+During the search, each time a variable is assigned to $\bot$, we remove the corresponding node from $C$ and perform a new traversal of $G_{\downarrow C}$ starting from the initial node $u$. For each node $v\in C$ that is not visited by the traversal, we remove $v$ from $C$ and assign $x_v$ to $\bot$. Also, each time a value is removed from a domain so that this value no longer belongs to any domain, we remove it from $C'$, and perform a new traversal of $G'_{\downarrow C'}$ starting from the initial node $u'$. For each node $v'$ that is not visited by the traversal, we remove $v'$ from $C'$, and remove $v'$ from all domains it belong to.
+
+\christine{We have to relate this basic filtering with existing work: Connectedness \cite{Brown:2005} Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}. 
+
+Samba and I have tried to find more clever ways for doing this filtering (in an incremental way). But we failed in finding something cheaper than performing a traversal each time a set of values are removed. In particular, we tried to adapt ideas from the paper of Patrick, but the problem is that we have to maintain counters on edges, and these counters must be restored when backtracking, and this is as expensive as performing a traversal (?). Any brilliant idea to share with us on this point?}
+
+\paragraph{Combining both approaches.} The two approaches for ensuring connectedness (branching and filtering) are complementary and may be combined: At each step of the search, we select the next variable to be assigned within the neighbors of $CComp$, and each time a node of $G'$ is removed from a domain we filter domains to ensure connectedness consistency.
+
+
+\subsection{ Experimental comparison of CP models}\label{mccs-cp-eval}
+
+
+\begin{figure}[p]
+    \centering
+    \input{gen-graph-connected-cp.tex}
+    \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
+    number of instances with these runtimes, with darker colours representing more instances. The
+    top two rows are for 33\% labelled undirected graphs with up to 100 vertices, and the bottom two
+    rows are for unlabelled and undirected graphs with up to 35 vertices.}
+        \label{figure:connected-cp}
+\end{figure}
+
+\christine{I propose that we report results only for the FC variant (or only for the MAC variant) as the conclusion is the same in both cases?}
+
+Fig. \ref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by specific branching (Branch), by specific filtering (Filter), or by combining specific branching and filtering (Both). We only report results obtained with the "FC+Bound" combination as the effect of the three approaches are very similar when combining them with "MAC+Bound".
+
+On labelled graphs, we observe that Branch often outperforms Filter, and that combining both Branch and Filter is rarely much worse than just doing one or the other, and is often much better, even if on average it's slightly slower.
+
+On unlabelled graphs, we observe that the three variants have rather similar performance.
+
+\christine{Could we have the number of instances solved within 1 hour for each approach, and also the average solving time (for instances that are solved by the three approaches), so that we can give an idea of how much faster an approach is?}
+
+\subsection{Ensuring Connectedness in a clique-based approach}\label{mccs-clique}
+
+\christine{The approach should be compared with the approach proposed in \cite{DBLP:conf/mco/VismaraV08}.}
 
 \begin{figure}[tb]
     \newcounter{stepcounter}
@@ -537,8 +575,6 @@ remain, the subgraph we are building cannot grow any further, and all remaining 
 instantiated to $\bot$.
 
 ?? Patrick reckons this reminds him of Prim's algorithm for minimum spanning trees.
-
-\subsection{Connectedness in an Association Graph Algorithm}
 
 \begin{algorithm}[p] \DontPrintSemicolon
 \nl $\FuncSty{associationMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
@@ -850,7 +886,9 @@ initial vertex orderings have been considered on general clique problems
 \cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}; it is possible that special
 properties of the association graph could be exploited in this step.
 
-\subsection{Experimental Evaluation}
+
+\subsection{Experimental comparison of CP with the Clique-based Approach}\label{mccs-eval}
+
 
 \paragraph{Connected, Undirected, 33\% Labelled}
 
@@ -864,16 +902,6 @@ test this.
 
 \paragraph{Does connected make instances easier or harder?} We could plot connected vs not connected
 difficulties, and result sizes?
-
-\begin{figure}[p]
-    \centering
-    \input{gen-graph-connected-cp.tex}
-    \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
-    number of instances with these runtimes, with darker colours representing more instances. The
-    top two rows are for 33\% labelled undirected graphs with up to 100 vertices, and the bottom two
-    rows are for unlabelled and undirected graphs with up to 35 vertices.}
-        \label{figure:connected-cp}
-\end{figure}
 
 \begin{figure}[p]
     \centering
