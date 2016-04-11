@@ -46,7 +46,7 @@ set colorbox user origin 1, graph 0 size 0.02, graph 1
 
 unset rmargin
 set size square
-set xlabel "MAC Runtime (ms)"
+set xlabel "FC Runtime (ms)"
 set ylabel "Clique Runtime (ms)"
 set x2range [0:100]
 set y2range [0:100]

@@ -41,8 +41,11 @@ connected-undir33-heatmap.data : connected-undir33.data heatmapify.rb
 connected-plain-heatmap.data : connected-plain.data heatmapify.rb
 	ruby heatmapify.rb connected-plain.data 3 7 1000 1 > $@
 
-unconnected-%-heatmap.data : unconnected-%.data heatmapify.rb
-	ruby heatmapify.rb unconnected-$*.data 1 2 1000 1 > $@
+unconnected-33-heatmap.data : unconnected-33.data heatmapify.rb
+	ruby heatmapify.rb unconnected-33.data 1 2 1000 1 > $@
+
+unconnected-plain-heatmap.data : unconnected-plain.data heatmapify.rb
+	ruby heatmapify.rb unconnected-plain.data 1 3 1000 1 > $@
 
 connected-cp-plain-fc-branch-fc-filter-heatmap.data : connected-plain.data heatmapify.rb
 	ruby heatmapify.rb connected-plain.data 5 4 1000 1000 > $@
