@@ -73,30 +73,7 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
 
 \section{Introduction}
 
-
-Maximum common subgraph problems arise in biology and chemistry
-\cite{DBLP:journals/jcamd/RaymondW02a,Ehrlich:2011}, in computer vision
-\cite{DBLP:journals/jair/CookH94}, in the analysis of source code
-\cite{DBLP:journals/tkde/DjokoCH97}, binary programs \cite{DBLP:conf/icics/GaoRS08}, and circuit
-designs \cite{DBLP:journals/jair/CookH94}, in character recognition problems \cite{SIWEILU1991617},
-and in many other domains \cite{Shasha:2002:AAT:543613.543620}, both directly and as a way of
-measuring the similarity or difference between two graphs
-\cite{DBLP:journals/prl/Bunke97,DBLP:journals/prl/FernandezV01,KriegeThesis}. 
-
-\paragraph{Definition of the Maximum Common (Connected) Subgraph Problem.}
-We introduce definitions and algorithms on undirected and unlabelled graphs. The extension to directed or labelled graphs is straightforward and discussed in Section \ref{extension}. An undirected graph $G$ is defined by a finite set of nodes $N_G$ and a set of edges $E_G\subseteq N_G\times N_G$ such that each edge is an undirected pair of nodes.
-
-Given a graph $G$, two nodes $n_s, n_e \in N_G$ are connected by a path in $G$ if there exists a sequence of nodes $<n_0,\ldots n_k>$ such that $n_0=n_s$, $n_k=n_e$ and each couple of successive nodes is connected by an edge, {\em i.e.}, $\forall i\in [1,k], \{n_{i-1},n_i\}\in E_G$. A graph $G$ is \emph{connected} if every pair of nodes is connected by a path.
-
-A graph $G$ is \emph{isomorphic} to another graph $G'$ if there exists a bijective function $f:N_G\rightarrow N_{G'}$ which preserves edges, \emph{i.e.}, $\forall (u,v)\in N_G\times N_G, \{u,v\}\in E_G\Leftrightarrow \{f(u),f(v)\}\in E_{G'}$.
-
-A {\em subgraph} is obtained by removing nodes, and all their incident edges, {\em i.e.}, $G'$ is a \emph{subgraph} of $G$ if $N_{G'}\subseteq N_G$ and $E_{G'}=E_G\cap(N_{G'}\times N_{G'})$.
-In this definition, we only remove edges incident to removed nodes. This is usually called induced subgraph in the litterature. We may also allow to remove edges which are not incident to removed nodes, thus leading to partial subgraphs. In this paper, we only consider induced subgraphs. However, all algorithms may be extended to the partial case, as explained in \cite{DBLP:conf/cp/NdiayeS11}.
-
-A \emph{common subgraph} of two graphs $G$ and $G'$ is a graph isomorphic to subgraphs of $G$ and $G'$. A \emph{common connected subgraph} is a common subgraph which is connected.
-A \emph{Maximum Common Subgraph} (MCS) (resp. \emph{Maximum Common Connected Subgraph} (MCCS) is a common subgraph (resp. common connected subgraph) which has a maximum number of nodes. Examples of MCS and MCCS are given in Fig. \ref{figure:mcsexample}.
-
-\begin{figure}[t] % first page if possible
+\begin{figure}[b] % first page if possible
     \centering
     \begin{tikzpicture}[scale=0.33]%{{{
         \begin{scope}[rotate=90]
@@ -196,6 +173,28 @@ However, if we require the common subgraph to be connected, only seven vertices 
 selected---one way to do this is shown in the third and fourth graphs.}\label{figure:mcsexample}
 \end{figure}
 
+Maximum common subgraph problems arise in biology and chemistry
+\cite{DBLP:journals/jcamd/RaymondW02a,Ehrlich:2011}, in computer vision
+\cite{DBLP:journals/jair/CookH94}, in the analysis of source code
+\cite{DBLP:journals/tkde/DjokoCH97}, binary programs \cite{DBLP:conf/icics/GaoRS08}, and circuit
+designs \cite{DBLP:journals/jair/CookH94}, in character recognition problems \cite{SIWEILU1991617},
+and in many other domains \cite{Shasha:2002:AAT:543613.543620}, both directly and as a way of
+measuring the similarity or difference between two graphs
+\cite{DBLP:journals/prl/Bunke97,DBLP:journals/prl/FernandezV01,KriegeThesis}.
+
+
+\paragraph{Definition of the Maximum Common (Connected) Subgraph Problem.}
+We introduce definitions and algorithms on undirected and unlabelled graphs. The extension to directed or labelled graphs is straightforward and discussed in Section \ref{extension}. An undirected graph $G$ is defined by a finite set of nodes $N_G$ and a set of edges $E_G\subseteq N_G\times N_G$ such that each edge is an undirected pair of nodes.
+
+Given a graph $G$, two nodes $n_s, n_e \in N_G$ are connected by a path in $G$ if there exists a sequence of nodes $<n_0,\ldots n_k>$ such that $n_0=n_s$, $n_k=n_e$ and each couple of successive nodes is connected by an edge, {\em i.e.}, $\forall i\in [1,k], \{n_{i-1},n_i\}\in E_G$. A graph $G$ is \emph{connected} if every pair of nodes is connected by a path.
+
+A graph $G$ is \emph{isomorphic} to another graph $G'$ if there exists a bijective function $f:N_G\rightarrow N_{G'}$ which preserves edges, \emph{i.e.}, $\forall (u,v)\in N_G\times N_G, \{u,v\}\in E_G\Leftrightarrow \{f(u),f(v)\}\in E_{G'}$.
+
+A {\em subgraph} is obtained by removing nodes, and all their incident edges, {\em i.e.}, $G'$ is a \emph{subgraph} of $G$ if $N_{G'}\subseteq N_G$ and $E_{G'}=E_G\cap(N_{G'}\times N_{G'})$.
+In this definition, we only remove edges incident to removed nodes. This is usually called induced subgraph in the litterature. We may also allow to remove edges which are not incident to removed nodes, thus leading to partial subgraphs. In this paper, we only consider induced subgraphs. However, all algorithms may be extended to the partial case, as explained in \cite{DBLP:conf/cp/NdiayeS11}.
+
+A \emph{common subgraph} of two graphs $G$ and $G'$ is a graph isomorphic to subgraphs of $G$ and $G'$. A \emph{common connected subgraph} is a common subgraph which is connected.
+A \emph{Maximum Common Subgraph} (MCS) (resp. \emph{Maximum Common Connected Subgraph} (MCCS) is a common subgraph (resp. common connected subgraph) which has a maximum number of nodes. Examples of MCS and MCCS are given in Fig. \ref{figure:mcsexample}.
 
 \paragraph{Overview of the paper.} In Section \ref{existing}, we review existing approaches for solving the MCS problem, with a specific focus on Constraint Programming (CP)-based approaches and on clique-based approaches that reduce the problem to finding a maximum clique in an association graph. 
 
