@@ -26,8 +26,9 @@ set format x '$10^{%T}$'
 unset format y
 
 plot \
-    "unconnected-33.data" u (sprintf("%.1e",$3)+0):($3 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" lc rgb '#4393C3', \
-    "unconnected-33.data" u (sprintf("%.1e",$2 * 1000)+0):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "MAC" lc rgb '#7a0177' dt 2
+    "unconnected-33.data" u (sprintf("%.1e",$4)+0):($4 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" lc rgb '#4393C3', \
+    "unconnected-33.data" u (sprintf("%.1e",$2 * 1000)+0):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "MAC" lc rgb '#7a0177' dt 2, \
+    "unconnected-33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "FC" lc rgb '#238443' dt 5
 
 set label 1 at graph 0.5, graph 0.95 center "Unlabelled" front
 
