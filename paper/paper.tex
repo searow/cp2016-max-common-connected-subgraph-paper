@@ -312,16 +312,38 @@ In many applications, the common subgraph must be connected. As illustrated in F
 In \cite{DBLP:conf/mco/VismaraV08}, the connectedness constraint is ensured by using a specific branching rule, used to select the next variable to be assigned. Let $CComp$ be the set of variables already assigned to values different from $\bot$. The next variable to be assigned is chosen within the set of non assigned variables which are neighbor of at least one vertex of $CComp$. When this set is empty, all remaining non assigned variables are assigned to $\bot$.
 
 \paragraph{Ensuring connectedness with a specific filtering.}
-Another way to ensure connectedness is to filter domains to ensure connectedness consistency. Let us consider two graphs $G$ and $G'$, and let $D$ be the current domains (we suppose that $D(x_u)$ is a singleton when $x_u$ is assigned). Let $C$ (resp. $C'$) be the set of nodes of $G$ (resp. $G'$) which may belong to the common subgraph, {\em i.e.}, $C=\{ u\in N_{G}, D(x_u)\neq\{\bot\}\}$ (resp. $C' = \{u'\in N_{G'}, \exists u\in N_G, u'\in D(x_u)\}$). Let $G_{\downarrow C}$ (resp. $G'_{\downarrow C'}$) be the subgraph of $G$ induced by $C$ (resp. the subgraph of $G'$ induced by $C'$).
-The connectedness consistency ensures that both $G_{\downarrow C}$ and $G'_{\downarrow C'}$ are connected graphs.
+
+CP(Graph) \cite{DBLP:conf/cp/DoomsDD05} introduces graph domain variables and enforces connectivity via the
+\emph{reachable} constraint, ensuring that there is a path from a specified vertex to a specified
+set of vertices. One such constraint is then posted for each of the vertices in the graph and
+encodes the transitive closure of the graph. Brown et al.\ \cite{Brown:2005} explored the use of
+constraint programming in the generation of connected graphs with specified degree sequences.  Two
+constraints were combined, i.e.\ the graphical constraint (a backtrackable implementation of the
+Havel-Hakimi algorithm) with a connectivity constraint implemented using sets of vertices, where
+vertex sets $A$ and $B$ are combined when there exists a pair of vertices $v \in A$ and $w \in B$
+and an edge $(v,w) \in E$. Residual degree counts are maintained on components and vertices to
+enforce graphicality and connectivity. In \cite{DBLP:conf/ecai/ProsserU06} a connectivity constraint was proposed for
+connected graph generation where decision variables are edges (the search process accepts and
+rejects edges). The constraint employed depth first search to maintain the set of tree edges and
+back edges, associating path counters on these edges. The counters were then used to detect the
+existence of cut-edges and protects these by forcing edges. The complexity of this constraint is
+cubic in the number of vertices.
+
+In all these previous works, the goal is to ensure that a given set of vertices is connected. For
+MCCS, the problem is slightly different: we have to ensure that the number of connected vertices
+that may be matched (in both graphs) is greater than the size of the largest common subgraph
+previously found. Therefore, we introduce a new filtering algorithm to ensure connectedness
+consistency for MCCS.  Let us consider two graphs $G$ and $G'$, and let $D$ be the current domains
+(we suppose that $D(x_u)$ is a singleton when $x_u$ is assigned). Let $C$ (resp. $C'$) be the set of
+nodes of $G$ (resp. $G'$) which may belong to the common subgraph, {\em i.e.}, $C=\{ u\in N_{G},
+D(x_u)\neq\{\bot\}\}$ (resp. $C' = \{u'\in N_{G'}, \exists u\in N_G, u'\in D(x_u)\}$). Let
+$G_{\downarrow C}$ (resp. $G'_{\downarrow C'}$) be the subgraph of $G$ induced by $C$ (resp. the
+subgraph of $G'$ induced by $C'$).  The connectedness consistency ensures that both $G_{\downarrow
+C}$ and $G'_{\downarrow C'}$ are connected graphs.
 
 Connectedness consistency is not ensured at the root node of the search. It is ensured only once a first variable has been assigned. Let $x_u$ be the first assigned variable and $u'$ the value assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp. $G'$), starting from $u$ (resp. $u'$), and we initialize $C$ (resp. $C'$) with all visited nodes. Then, for each node $v\in N_G\setminus C$ (resp. $v'\in N_{G'}\setminus C'$), we assign $x_v$ to $\bot$ (resp., we remove $v'$ from all domains it belongs to).
 
 During the search, each time a variable is assigned to $\bot$, we remove the corresponding node from $C$ and perform a new traversal of $G_{\downarrow C}$ starting from the initial node $u$. For each node $v\in C$ that is not visited by the traversal, we remove $v$ from $C$ and assign $x_v$ to $\bot$. Also, each time a value is removed from a domain so that this value no longer belongs to any domain, we remove it from $C'$, and perform a new traversal of $G'_{\downarrow C'}$ starting from the initial node $u'$. For each node $v'$ that is not visited by the traversal, we remove $v'$ from $C'$, and remove $v'$ from all domains it belong to.
-
-\christine{We have to relate this basic filtering with existing work: Connectedness \cite{Brown:2005} Reachability \cite{DBLP:conf/cp/DoomsDD05,DBLP:conf/cp/QuesadaRD05}. 
-
-Samba and I have tried to find more clever ways for doing this filtering (in an incremental way). But we failed in finding something cheaper than performing a traversal each time a set of values are removed. In particular, we tried to adapt ideas from the paper of Patrick, but the problem is that we have to maintain counters on edges, and these counters must be restored when backtracking, and this is as expensive as performing a traversal (?). Any brilliant idea to share with us on this point?}
 
 \paragraph{Combining both approaches.} The two approaches for ensuring connectedness (branching and filtering) are complementary and may be combined: At each step of the search, we select the next variable to be assigned within the neighbors of $CComp$, and each time a node of $G'$ is removed from a domain we filter domains to ensure connectedness consistency.
 
