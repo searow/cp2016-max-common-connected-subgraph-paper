@@ -17,6 +17,10 @@
 \usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
 \usepackage{placeins}
 
+\usepackage{refcheck}
+
+\makeatletter\@ifpackageloaded{refcheck}{\newcommand{\citesforrefcheck}{\nocite{*}}}{\newcommand{\citesforrefcheck}{}}\makeatother
+
 \usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing,
     patterns, matrix}
 
@@ -953,7 +957,8 @@ Possibly portfolios.
 
 Better instances.
 
-\FloatBarrier
+\citesforrefcheck
+
 \bibliographystyle{splncs}
 \bibliography{paper}
 
