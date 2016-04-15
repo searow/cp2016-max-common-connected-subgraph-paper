@@ -188,79 +188,164 @@ measuring the similarity or difference between two graphs
 
 
 \paragraph{Definition of the Maximum Common (Connected) Subgraph Problem.}
-We introduce definitions and algorithms on undirected and unlabelled graphs. The extension to directed or labelled graphs is straightforward and discussed in Section \ref{extension}. An undirected graph $G$ is defined by a finite set of nodes $N_G$ and a set of edges $E_G\subseteq N_G\times N_G$ such that each edge is an undirected pair of nodes.
+We introduce definitions and algorithms on undirected and unlabelled graphs. The extension to
+directed or labelled graphs is straightforward and discussed in Section \ref{extension}. An
+undirected graph $G$ is defined by a finite set of nodes $N_G$ and a set of edges $E_G\subseteq
+N_G\times N_G$ such that each edge is an undirected pair of nodes.
 
-Given a graph $G$, two nodes $n_s, n_e \in N_G$ are connected by a path in $G$ if there exists a sequence of nodes $<n_0,\ldots n_k>$ such that $n_0=n_s$, $n_k=n_e$ and each couple of successive nodes is connected by an edge, {\em i.e.}, $\forall i\in [1,k], \{n_{i-1},n_i\}\in E_G$. A graph $G$ is \emph{connected} if every pair of nodes is connected by a path.
+Given a graph $G$, two nodes $n_s, n_e \in N_G$ are connected by a path in $G$ if there exists a
+sequence of nodes $<n_0,\ldots n_k>$ such that $n_0=n_s$, $n_k=n_e$ and each couple of successive
+nodes is connected by an edge, {\em i.e.}, $\forall i\in [1,k], \{n_{i-1},n_i\}\in E_G$. A graph $G$
+is \emph{connected} if every pair of nodes is connected by a path.
 
-A graph $G$ is \emph{isomorphic} to another graph $G'$ if there exists a bijective function $f:N_G\rightarrow N_{G'}$ which preserves edges, \emph{i.e.}, $\forall (u,v)\in N_G\times N_G, \{u,v\}\in E_G\Leftrightarrow \{f(u),f(v)\}\in E_{G'}$.
+A graph $G$ is \emph{isomorphic} to another graph $G'$ if there exists a bijective function
+$f:N_G\rightarrow N_{G'}$ which preserves edges, \emph{i.e.}, $\forall (u,v)\in N_G\times N_G,
+\{u,v\}\in E_G\Leftrightarrow \{f(u),f(v)\}\in E_{G'}$.
 
-A {\em subgraph} is obtained by removing nodes, and all their incident edges, {\em i.e.}, $G'$ is a \emph{subgraph} of $G$ if $N_{G'}\subseteq N_G$ and $E_{G'}=E_G\cap(N_{G'}\times N_{G'})$.
-In this definition, we only remove edges incident to removed nodes. This is usually called induced subgraph in the litterature. We may also allow to remove edges which are not incident to removed nodes, thus leading to partial subgraphs. In this paper, we only consider induced subgraphs. However, all algorithms may be extended to the partial case, as explained in \cite{DBLP:conf/cp/NdiayeS11}.
+A {\em subgraph} is obtained by removing nodes, and all their incident edges, {\em i.e.}, $G'$ is a
+\emph{subgraph} of $G$ if $N_{G'}\subseteq N_G$ and $E_{G'}=E_G\cap(N_{G'}\times N_{G'})$.
+In this definition, we only remove edges incident to removed nodes. This is usually called induced
+subgraph in the litterature. We may also allow to remove edges which are not incident to removed
+nodes, thus leading to partial subgraphs. In this paper, we only consider induced subgraphs.
+However, all algorithms may be extended to the partial case, as explained in
+\cite{DBLP:conf/cp/NdiayeS11}.
 
-A \emph{common subgraph} of two graphs $G$ and $G'$ is a graph isomorphic to subgraphs of $G$ and $G'$. A \emph{common connected subgraph} is a common subgraph which is connected.
-A \emph{Maximum Common Subgraph} (MCS) (resp. \emph{Maximum Common Connected Subgraph} (MCCS) is a common subgraph (resp. common connected subgraph) which has a maximum number of nodes. Examples of MCS and MCCS are given in Fig. \ref{figure:mcsexample}.
+A \emph{common subgraph} of two graphs $G$ and $G'$ is a graph isomorphic to subgraphs of $G$ and
+$G'$. A \emph{common connected subgraph} is a common subgraph which is connected.
+A \emph{Maximum Common Subgraph} (MCS) (resp. \emph{Maximum Common Connected Subgraph} (MCCS) is a
+common subgraph (resp. common connected subgraph) which has a maximum number of nodes. Examples of
+MCS and MCCS are given in Fig. \ref{figure:mcsexample}.
 
-\paragraph{Overview of the paper.} In Section \ref{existing}, we review existing approaches for solving the MCS problem, with a specific focus on Constraint Programming (CP)-based approaches and on clique-based approaches that reduce the problem to finding a maximum clique in an association graph. 
+\paragraph{Overview of the paper.} In Section \ref{existing}, we review existing approaches for
+solving the MCS problem, with a specific focus on Constraint Programming (CP)-based approaches and
+on clique-based approaches that reduce the problem to finding a maximum clique in an association
+graph.
 
-Conventional wisdom is that clique-based approaches are less effective in practice, but previous experimental evaluations have used weak clique algorithms, or even maximal clique enumeration algorithms. 
-Therefore, in Section \ref{eval1}, we  re-evaluate the clique-based approach using a modern algorithm, and we show that it outperforms CP on labelled graphs, and that it is competitive with CP on non labelled graphs. 
+Conventional wisdom is that clique-based approaches are less effective in practice, but previous
+experimental evaluations have used weak clique algorithms, or even maximal clique enumeration
+algorithms.  Therefore, in Section \ref{eval1}, we  re-evaluate the clique-based approach using a
+modern algorithm, and we show that it outperforms CP on labelled graphs, and that it is competitive
+with CP on non labelled graphs.
 
-Then, in Section \ref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global connectedness constraint to the model. Alternatively, we may use a special branching rule to grow connected subgraphs only, as proposed in \cite{DBLP:conf/mco/VismaraV08}. These two techniques may be combined, and we experimentally show that the best results are obtained when combining them. 
-When solving the MCCS problem with a clique-based approach, neither technique seems directly viable with an association graph encoding.
-However, we show that it is possible to adapt the combined branching and bounding rule used by modern clique algorithms to preserve connectedness during search.
-We compare the clique-based approach with the best CP variant for the MCCS, and we show that it outperforms CP on non labelled graphs, whereas it is outperformed by CP on labelled graphs.
+Then, in Section \ref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global
+connectedness constraint to the model. Alternatively, we may use a special branching rule to grow
+connected subgraphs only, as proposed in \cite{DBLP:conf/mco/VismaraV08}. These two techniques may
+be combined, and we experimentally show that the best results are obtained when combining them.
+When solving the MCCS problem with a clique-based approach, neither technique seems directly viable
+with an association graph encoding.  However, we show that it is possible to adapt the combined
+branching and bounding rule used by modern clique algorithms to preserve connectedness during
+search.  We compare the clique-based approach with the best CP variant for the MCCS, and we show
+that it outperforms CP on non labelled graphs, whereas it is outperformed by CP on labelled graphs.
 
 
 \section{Existing Complete Approaches for MCS}\label{existing}
 
 
-There exist two main approaches for solving MCS: The first approach (described in \ref{CP}) is based on CP; The second approach (described in \ref{clique}) is based on a reformulation of MCS into a maximum clique problem. Both approaches are described for non directed and non labelled graphs. Their extension to directed or labelled graphs is discussed in Section \ref{extension}
+There exist two main approaches for solving MCS: The first approach (described in \ref{CP}) is based
+on CP; The second approach (described in \ref{clique}) is based on a reformulation of MCS into a
+maximum clique problem. Both approaches are described for non directed and non labelled graphs.
+Their extension to directed or labelled graphs is discussed in Section \ref{extension}
 
 \subsection{CP model for MCS}
 \label{CP}
 
-McGregor \cite{McGreg82} proposed a Branch \& Bound approach: Each branch of the search tree corresponds to the matching of two nodes, and a  bounding function evaluates the number of nodes that still may be matched so that the current branch is pruned as soon as this bound becomes lower than the size of the largest known common subgraph. CP approaches may be viewed as enhancements of this Branch \& Bound approach. 
+McGregor \cite{McGreg82} proposed a Branch \& Bound approach: Each branch of the search tree
+corresponds to the matching of two nodes, and a  bounding function evaluates the number of nodes
+that still may be matched so that the current branch is pruned as soon as this bound becomes lower
+than the size of the largest known common subgraph. CP approaches may be viewed as enhancements of
+this Branch \& Bound approach.
 
-Vismara and Valery  \cite{DBLP:conf/mco/VismaraV08} introduced a first CP model. Given two graphs $G$ and $G'$, this model associates a variable $x_u$ with every node $u$ of $G$, and the domain of this variable contains all nodes of $G'$, plus an additional value $\bot$: variable $x_u$ is assigned to $\bot$ if node $u$ is not matched to any node of $G'$; otherwise $x_u$ is assigned to the node of $G'$ it is matched with. Edge constraints are introduced in order to ensure that variable assignments preserve edges between matched nodes, {\em i.e.}, 
-$\forall \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee (\{u,v\}\in E_G\Leftrightarrow \{x_u,x_v\}\in E_{G'})$. Difference constraints are introduced in order to ensure that each node of $G'$ is assigned to at most one variable, {\em i.e.}, $\forall \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee (x_u\neq x_v)$.
+Vismara and Valery  \cite{DBLP:conf/mco/VismaraV08} introduced a first CP model. Given two graphs
+$G$ and $G'$, this model associates a variable $x_u$ with every node $u$ of $G$, and the domain of
+this variable contains all nodes of $G'$, plus an additional value $\bot$: variable $x_u$ is
+assigned to $\bot$ if node $u$ is not matched to any node of $G'$; otherwise $x_u$ is assigned to
+the node of $G'$ it is matched with. Edge constraints are introduced in order to ensure that
+variable assignments preserve edges between matched nodes, {\em i.e.}, $\forall \{u,v\}\subseteq
+N_G, (x_u=\bot)\vee (x_v=\bot) \vee (\{u,v\}\in E_G\Leftrightarrow \{x_u,x_v\}\in E_{G'})$.
+Difference constraints are introduced in order to ensure that each node of $G'$ is assigned to at
+most one variable, {\em i.e.}, $\forall \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee
+(x_u\neq x_v)$.
 
-This CP model is improved in \cite{DBLP:conf/cp/NdiayeS11} by replacing binary difference constraints with a soft global allDifferent constraint which maximizes the number of $x_u$ variables that are assigned to values different from $\bot$, while ensuring they are all different when they are not assigned to $\bot$.
-Different constraint propagation techniques are compared in \cite{DBLP:conf/cp/NdiayeS11}. The combination ``MAC+Bound'' (resp. ``FC+Bound'') obtains the best results on labelled (resp. non labelled) graphs and outperforms the approach of \cite{McGreg82} and the CP model of \cite{DBLP:conf/mco/VismaraV08}. The combination ``MAC+Bound'' maintains arc consistency~\cite{sabi94} of edge constraints, whereas the conbination ``FC+Bound'' simply performs forward-checking on these constraints. In both combinations, the ``Bound'' filtering checks whether it is possible to assign distinct values to enough $x_u$ variables to surpass the best cost found so far (it is a weaker version of GAC(\emph{softAllDiff}) \cite{peti01} which computes the maximum number of variables that can be assigned distinct values).
+This CP model is improved in \cite{DBLP:conf/cp/NdiayeS11} by replacing binary difference
+constraints with a soft global allDifferent constraint which maximizes the number of $x_u$ variables
+that are assigned to values different from $\bot$, while ensuring they are all different when they
+are not assigned to $\bot$.  Different constraint propagation techniques are compared in
+\cite{DBLP:conf/cp/NdiayeS11}. The combination ``MAC+Bound'' (resp. ``FC+Bound'') obtains the best
+results on labelled (resp. non labelled) graphs and outperforms the approach of \cite{McGreg82} and
+the CP model of \cite{DBLP:conf/mco/VismaraV08}. The combination ``MAC+Bound'' maintains arc
+consistency~\cite{sabi94} of edge constraints, whereas the conbination ``FC+Bound'' simply performs
+forward-checking on these constraints. In both combinations, the ``Bound'' filtering checks whether
+it is possible to assign distinct values to enough $x_u$ variables to surpass the best cost found so
+far (it is a weaker version of GAC(\emph{softAllDiff}) \cite{peti01} which computes the maximum
+number of variables that can be assigned distinct values).
 
 
 
 \subsection{Reformulation of MCS as a maximum clique problem}
 \label{clique}
 
-We may solve MCS by introducing an association graph and searching for a maximum clique in it \cite{bala86,dura99,DBLP:journals/jcamd/RaymondW02a}.
+We may solve MCS by introducing an association graph and searching for a maximum clique in it
+\cite{bala86,dura99,DBLP:journals/jcamd/RaymondW02a}.
 
-An association graph of two graphs $G$ and $G'$ is an undirected graph $A_{G,G'}$ whose set of nodes is $N_{A_{G,G'}} = N_G \times N_{G'}$. To avoid confusing nodes of $A_{G,G'}$ with initial graph nodes, nodes of $A_{G,G'}$ are called matching nodes, as each node $(u,u')$ of $A_{G,G'}$ denotes the matching of $u$ with $u'$. Edges of $A_{G,G'}$ connect matching nodes which are compatible, {\em i.e.}, $E_{A_{G,G'}} = \big\{\{(u,u'),(v,v')\}\subseteq N_{A_{G,G'}}$, $(u,u')$ and $(v,v')$ are compatible$\big\}$, where two matching nodes $(u,u')$ and $(v,v')$ of $N_{A_{G,G'}}$ are compatible if $u \neq v$ and $u' \neq v'$, and if they preserve edges (\emph{i.e.}, $\{u,v\} \in E_G \Leftrightarrow \{u',v'\} \in E_{G'}$).
+An association graph of two graphs $G$ and $G'$ is an undirected graph $A_{G,G'}$ whose set of nodes
+is $N_{A_{G,G'}} = N_G \times N_{G'}$. To avoid confusing nodes of $A_{G,G'}$ with initial graph
+nodes, nodes of $A_{G,G'}$ are called matching nodes, as each node $(u,u')$ of $A_{G,G'}$ denotes
+the matching of $u$ with $u'$. Edges of $A_{G,G'}$ connect matching nodes which are compatible, {\em
+i.e.}, $E_{A_{G,G'}} = \big\{\{(u,u'),(v,v')\}\subseteq N_{A_{G,G'}}$, $(u,u')$ and $(v,v')$ are
+compatible$\big\}$, where two matching nodes $(u,u')$ and $(v,v')$ of $N_{A_{G,G'}}$ are compatible
+if $u \neq v$ and $u' \neq v'$, and if they preserve edges (\emph{i.e.}, $\{u,v\} \in E_G
+\Leftrightarrow \{u',v'\} \in E_{G'}$).
 
-A \emph{clique} is a subgraph whose nodes are all linked pairwise.
-A clique is \emph{maximal} if it is not strictly included in any other clique, and it is \emph{maximum} if it is the largest clique of a given graph, with respect to the number of nodes.
+A \emph{clique} is a subgraph whose nodes are all linked pairwise.  A clique is \emph{maximal} if it
+is not strictly included in any other clique, and it is \emph{maximum} if it is the largest clique
+of a given graph, with respect to the number of nodes.
 
-A clique in $A_{G,G'}$ corresponds to a set of compatible matchings. Therefore, such a clique corresponds to a common subgraph, and a maximum clique of $A_{G,G'}$ is a MCS of $G$ and $G'$.
-It follows that any method able to find a maximum clique in a graph can be used to solve the MCS problem. 
+A clique in $A_{G,G'}$ corresponds to a set of compatible matchings. Therefore, such a clique
+corresponds to a common subgraph, and a maximum clique of $A_{G,G'}$ is a MCS of $G$ and $G'$.  It
+follows that any method able to find a maximum clique in a graph can be used to solve the MCS
+problem.
 
-Note that the association graph is a partial subgraph of the microstructure \cite{DBLP:conf/aaai/Jegou93a} associated with the CP model of  \cite{DBLP:conf/mco/VismaraV08}: The microstructure has more matching nodes than the association graph because it has a matching node $(u,\bot)$ for each node $u$ of $G$. Each clique of size $|N_G|$ in the microstructure corresponds to a common subgraph the size of which is defined by the number of nodes that do not contain $\bot$.
+Note that the association graph is a partial subgraph of the microstructure
+\cite{DBLP:conf/aaai/Jegou93a} associated with the CP model of  \cite{DBLP:conf/mco/VismaraV08}: The
+microstructure has more matching nodes than the association graph because it has a matching node
+$(u,\bot)$ for each node $u$ of $G$. Each clique of size $|N_G|$ in the microstructure corresponds
+to a common subgraph the size of which is defined by the number of nodes that do not contain $\bot$.
 
 
 \subsection{Extension to Labeled or Directed Graphs}\label{extension}
 
-In some applications, nodes and edges are associated with labels. We note $\lambda(u)$ and $\lambda(\{u,v\})$ the label of a node $u$ and an edge $\{u,v\}$, respectively. In this case, the common  subgraph must match components the labels of which are compatible, and we note $\simeq$ the compatibility relationship, {\em i.e.}, labels $\lambda_1$ and $\lambda_2$ are compatible if $\lambda_1\simeq\lambda_2$. This kind of label compatibility constraint is handled in a straightforward way in both CP and clique-based approaches:
+In some applications, nodes and edges are associated with labels. We note $\lambda(u)$ and
+$\lambda(\{u,v\})$ the label of a node $u$ and an edge $\{u,v\}$, respectively. In this case, the
+common  subgraph must match components the labels of which are compatible, and we note $\simeq$ the
+compatibility relationship, {\em i.e.}, labels $\lambda_1$ and $\lambda_2$ are compatible if
+$\lambda_1\simeq\lambda_2$. This kind of label compatibility constraint is handled in a
+straightforward way in both CP and clique-based approaches:
+
 \begin{itemize}
-\item For CP, we restrict the domain of every variable $x_u$ to nodes with compatible labels, {\em i.e.}, $\forall u\in N_G, D(x_u) = \{\bot\}\cup \{u'\in N_{G'}, \lambda(u)\simeq\lambda(u')\}$. We also have to ensure that edge labels are preserved in edge constraints, {\em i.e.}, $\forall \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee ((\{u,v\}\in E_G\Leftrightarrow \{x_u,x_v\}\in E_{G'}) \wedge (\lambda(\{u,v\}) \simeq \lambda(\{x_u,x_v\})))$.
+\item For CP, we restrict the domain of every variable $x_u$ to nodes with compatible labels, {\em
+    i.e.}, $\forall u\in N_G, D(x_u) = \{\bot\}\cup \{u'\in N_{G'}, \lambda(u)\simeq\lambda(u')\}$.
+    We also have to ensure that edge labels are preserved in edge constraints, {\em i.e.}, $\forall
+    \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee ((\{u,v\}\in E_G\Leftrightarrow
+    \{x_u,x_v\}\in E_{G'}) \wedge (\lambda(\{u,v\}) \simeq \lambda(\{x_u,x_v\})))$.
 
-\item For clique-based approaches, label compatibility is handled through the definition of the association graph, by restricting the set of matching nodes to pairs of nodes with compatible labels, {\em i.e.}, $N_{G_C} = \{(u,u')\in N_G\times N_{G'}, \lambda(u)\simeq\lambda(u')\}$. Also, edges of the association graph are restricted to pairs $\{(u,u'),(v,v')\}$ such that $\lambda(\{u,v\}) \simeq \lambda(\{u',v')\}$.
-\end{itemize} 
-Labels usually simplify the solution process, both for CP and clique-based approaches: Node labels reduce domain sizes for CP, and the number of matching nodes in the association graphs; Edge labels tighten edge constraints for CP, and make the association graph sparser for clique-based approaches. 
+\item For clique-based approaches, label compatibility is handled through the definition of the
+    association graph, by restricting the set of matching nodes to pairs of nodes with compatible
+    labels, {\em i.e.}, $N_{G_C} = \{(u,u')\in N_G\times N_{G'}, \lambda(u)\simeq\lambda(u')\}$.
+    Also, edges of the association graph are restricted to pairs $\{(u,u'),(v,v')\}$ such that
+    $\lambda(\{u,v\}) \simeq \lambda(\{u',v')\}$.
+\end{itemize}
 
-The extension of MCS algorithms to directed graphs is straightforward: For CP, edge orientation is handled in edge constraints; for clique-based approaches, it is handled in the definition of the association graph edges. In both cases, adding orientations to edges usually simplifies the problem: It tightens edge constraints for CP, and it makes the association graph sparser for  clique-based approaches.
+Labels usually simplify the solution process, both for CP and clique-based approaches: Node labels
+reduce domain sizes for CP, and the number of matching nodes in the association graphs; Edge labels
+tighten edge constraints for CP, and make the association graph sparser for clique-based approaches.
 
+The extension of MCS algorithms to directed graphs is straightforward: For CP, edge orientation is
+handled in edge constraints; for clique-based approaches, it is handled in the definition of the
+association graph edges. In both cases, adding orientations to edges usually simplifies the problem:
+It tightens edge constraints for CP, and it makes the association graph sparser for  clique-based
+approaches.
 
 \section{Re-Evaluating the Clique Model}\label{eval1}
-
-
 
 Previous experimental work has used a maximal clique enumeration algorithm, even for the
 maximisation problem. ?? check this! I recall someone using a bad max clique algorithm too.
@@ -275,10 +360,18 @@ Say which clique algorithm we're using.
 
 \subsection{Datasets}
 
-We consider a randomly generated database described in \cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}. 
-The dataset contains different classes of graphs: Randomly connected graphs with connectivity $\eta\in\{0.05,0.2\}$ (r005 and r02); 2D, 3D, and 4D regular meshes (m2D, m3D, m4D); 2D, 3D, and 4D irregular meshes with $\rho=0.6$ (m2Dr, m3Dr, and m4Dr); regular bounded valence graphs with $V\in\{3,9\}$ (b03 and b09) and irregular bounded valence graphs with $V\in\{3,9\}$ (b03m and b09m). Each class contains XXX pairs of graphs: YYY for each of the 5 possible sizes of the MCIS ({\em i.e.}, 10\%, 30\%, 50\%, 70\% and 90\% of the number of nodes of the original graphs). 
+We consider a randomly generated database described in
+\cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}.
+The dataset contains different classes of graphs: Randomly connected graphs with connectivity
+$\eta\in\{0.05,0.2\}$ (r005 and r02); 2D, 3D, and 4D regular meshes (m2D, m3D, m4D); 2D, 3D, and 4D
+irregular meshes with $\rho=0.6$ (m2Dr, m3Dr, and m4Dr); regular bounded valence graphs with
+$V\in\{3,9\}$ (b03 and b09) and irregular bounded valence graphs with $V\in\{3,9\}$ (b03m and b09m).
+Each class contains XXX pairs of graphs: YYY for each of the 5 possible sizes of the MCIS ({\em
+i.e.}, 10\%, 30\%, 50\%, 70\% and 90\% of the number of nodes of the original graphs).
 
-For each pair of graphs, there are 3 different labelings such that the number of different labels is equal to 33\%, 50\% or 75\% of the number of nodes. In this paper, we report experiments with non labelled graphs (labels are ignored), and with 33\% labellings.
+For each pair of graphs, there are 3 different labelings such that the number of different labels is
+equal to 33\%, 50\% or 75\% of the number of nodes. In this paper, we report experiments with non
+labelled graphs (labels are ignored), and with 33\% labellings.
 
 
 \subsection{Experimental Evaluation}
@@ -297,7 +390,7 @@ For each pair of graphs, there are 3 different labelings such that the number of
         unlabelled and undirected graphs (with FC) on the right.} \label{figure:unconnected-cumulative}
 \end{figure}
 
-Fig. \ref{figure:unconnected-cumulative} displays the cumulative number of instances solved with respect to time. 
+Fig. \ref{figure:unconnected-cumulative} displays the cumulative number of instances solved with respect to time.
 When graphs are labelled (top plot), the clique-based approach clearly outperforms CP. ...develop...
 
 \subsection{Parallel Search}
@@ -308,12 +401,22 @@ When graphs are labelled (top plot), the clique-based approach clearly outperfor
 
 \section{Find Maximum Common Connected Subgraphs}\label{mccs}
 
-In many applications, the common subgraph must be connected. As illustrated in Fig. \ref{figure:mcsexample}, the MCCS cannot be deduced from the MCS: We need to ensure connectedness during the search. In Section \ref{mccs-cp}, we show that this may be done in two different ways that may be combined, and we show in Section \ref{mccs-cp-eval} that the best results are obtained when combining them. In Section \ref{mccs-clique}, we introduce a new way for ensuring connectedness in a clique-based approach. Finally, we compare CP and our clique-based approach in Section \ref{mccs-eval}.
+In many applications, the common subgraph must be connected. As illustrated in Fig.
+\ref{figure:mcsexample}, the MCCS cannot be deduced from the MCS: We need to ensure connectedness
+during the search. In Section \ref{mccs-cp}, we show that this may be done in two different ways
+that may be combined, and we show in Section \ref{mccs-cp-eval} that the best results are obtained
+when combining them. In Section \ref{mccs-clique}, we introduce a new way for ensuring connectedness
+in a clique-based approach. Finally, we compare CP and our clique-based approach in Section
+\ref{mccs-eval}.
 
 \subsection{Ensuring Connectedness in CP}\label{mccs-cp}
 
-\paragraph{Ensuring connectedness with a specific branching rule.}
-In \cite{DBLP:conf/mco/VismaraV08}, the connectedness constraint is ensured by using a specific branching rule, used to select the next variable to be assigned. Let $CComp$ be the set of variables already assigned to values different from $\bot$. The next variable to be assigned is chosen within the set of non assigned variables which are neighbor of at least one vertex of $CComp$. When this set is empty, all remaining non assigned variables are assigned to $\bot$.
+\paragraph{Ensuring connectedness with a specific branching rule.} In
+\cite{DBLP:conf/mco/VismaraV08}, the connectedness constraint is ensured by using a specific
+branching rule, used to select the next variable to be assigned. Let $CComp$ be the set of variables
+already assigned to values different from $\bot$. The next variable to be assigned is chosen within
+the set of non assigned variables which are neighbor of at least one vertex of $CComp$. When this
+set is empty, all remaining non assigned variables are assigned to $\bot$.
 
 \paragraph{Ensuring connectedness with a specific filtering.}
 
@@ -345,11 +448,25 @@ $G_{\downarrow C}$ (resp. $G'_{\downarrow C'}$) be the subgraph of $G$ induced b
 subgraph of $G'$ induced by $C'$).  The connectedness consistency ensures that both $G_{\downarrow
 C}$ and $G'_{\downarrow C'}$ are connected graphs.
 
-Connectedness consistency is not ensured at the root node of the search. It is ensured only once a first variable has been assigned. Let $x_u$ be the first assigned variable and $u'$ the value assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp. $G'$), starting from $u$ (resp. $u'$), and we initialize $C$ (resp. $C'$) with all visited nodes. Then, for each node $v\in N_G\setminus C$ (resp. $v'\in N_{G'}\setminus C'$), we assign $x_v$ to $\bot$ (resp., we remove $v'$ from all domains it belongs to).
+Connectedness consistency is not ensured at the root node of the search. It is ensured only once a
+first variable has been assigned. Let $x_u$ be the first assigned variable and $u'$ the value
+assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp. $G'$),
+starting from $u$ (resp. $u'$), and we initialize $C$ (resp. $C'$) with all visited nodes. Then, for
+each node $v\in N_G\setminus C$ (resp. $v'\in N_{G'}\setminus C'$), we assign $x_v$ to $\bot$
+(resp., we remove $v'$ from all domains it belongs to).
 
-During the search, each time a variable is assigned to $\bot$, we remove the corresponding node from $C$ and perform a new traversal of $G_{\downarrow C}$ starting from the initial node $u$. For each node $v\in C$ that is not visited by the traversal, we remove $v$ from $C$ and assign $x_v$ to $\bot$. Also, each time a value is removed from a domain so that this value no longer belongs to any domain, we remove it from $C'$, and perform a new traversal of $G'_{\downarrow C'}$ starting from the initial node $u'$. For each node $v'$ that is not visited by the traversal, we remove $v'$ from $C'$, and remove $v'$ from all domains it belong to.
+During the search, each time a variable is assigned to $\bot$, we remove the corresponding node from
+$C$ and perform a new traversal of $G_{\downarrow C}$ starting from the initial node $u$. For each
+node $v\in C$ that is not visited by the traversal, we remove $v$ from $C$ and assign $x_v$ to
+$\bot$. Also, each time a value is removed from a domain so that this value no longer belongs to any
+domain, we remove it from $C'$, and perform a new traversal of $G'_{\downarrow C'}$ starting from
+the initial node $u'$. For each node $v'$ that is not visited by the traversal, we remove $v'$ from
+$C'$, and remove $v'$ from all domains it belong to.
 
-\paragraph{Combining both approaches.} The two approaches for ensuring connectedness (branching and filtering) are complementary and may be combined: At each step of the search, we select the next variable to be assigned within the neighbors of $CComp$, and each time a node of $G'$ is removed from a domain we filter domains to ensure connectedness consistency.
+\paragraph{Combining both approaches.} The two approaches for ensuring connectedness (branching and
+filtering) are complementary and may be combined: At each step of the search, we select the next
+variable to be assigned within the neighbors of $CComp$, and each time a node of $G'$ is removed
+from a domain we filter domains to ensure connectedness consistency.
 
 
 \subsection{ Experimental comparison of CP models}\label{mccs-cp-eval}
@@ -365,15 +482,23 @@ During the search, each time a variable is assigned to $\bot$, we remove the cor
         \label{figure:connected-cp}
 \end{figure}
 
-\christine{I propose that we report results only for the FC variant (or only for the MAC variant) as the conclusion is the same in both cases?}
+\christine{I propose that we report results only for the FC variant (or only for the MAC variant) as
+the conclusion is the same in both cases?}
 
-Fig. \ref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by specific branching (Branch), by specific filtering (Filter), or by combining specific branching and filtering (Both). We only report results obtained with the "FC+Bound" combination as the effect of the three approaches are very similar when combining them with "MAC+Bound".
+Fig. \ref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by
+specific branching (Branch), by specific filtering (Filter), or by combining specific branching and
+filtering (Both). We only report results obtained with the "FC+Bound" combination as the effect of
+the three approaches are very similar when combining them with "MAC+Bound".
 
-On labelled graphs, we observe that Branch often outperforms Filter, and that combining both Branch and Filter is rarely much worse than just doing one or the other, and is often much better, even if on average it's slightly slower.
+On labelled graphs, we observe that Branch often outperforms Filter, and that combining both Branch
+and Filter is rarely much worse than just doing one or the other, and is often much better, even if
+on average it's slightly slower.
 
 On unlabelled graphs, we observe that the three variants have rather similar performance.
 
-\christine{Could we have the number of instances solved within 1 hour for each approach, and also the average solving time (for instances that are solved by the three approaches), so that we can give an idea of how much faster an approach is?}
+\christine{Could we have the number of instances solved within 1 hour for each approach, and also
+the average solving time (for instances that are solved by the three approaches), so that we can
+give an idea of how much faster an approach is?}
 
 \subsection{Ensuring Connectedness in a clique-based approach}\label{mccs-clique}
 
