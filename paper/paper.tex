@@ -69,10 +69,12 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
     The maximum common subgraph problem is to find the largest subgraph common to two given graphs.
     This problem can be solved either by constraint-based search, or by reduction to the maximum
     clique problem. We evaluate these two models using modern algorithms, and see that the best
-    choice depends mainly upon whether the graphs have labelled edges. We also investigate a
-    restricted branching technique for the connected version of the problem, show how to implement
-    this in constraint-based and clique-inspired algorithms, and compare it to conventional
-    propagation.
+    choice depends mainly upon whether the graphs have labelled edges. We also study a variant of
+    this problem where the subgraph is required to be connected. We introduce a filtering algorithm
+    for this property and show that it may be combined with a restricted branching technique for the
+    constraint-based approach. We show how to implement a similar branching technique in
+    clique-inspired algorithms.  Finally, we experimentally compare approaches for the connected
+    version, and see again that the best choice depends on whether graphs have labels.
 \end{abstract}
 
 \section{Introduction}
