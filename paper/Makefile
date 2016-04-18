@@ -8,7 +8,8 @@ GRAPHS = \
 	 gen-graph-unconnected-heatmap.tex \
 	 gen-graph-connected-cumulative.tex \
 	 gen-graph-connected-heatmap.tex \
-	 gen-graph-connected-cp.tex
+	 gen-graph-connected-cp.tex \
+	 gen-graph-connected-cumulative-cp.tex
 
 DATA = connected-undir33.data connected-undir33-heatmap.data \
        connected-plain.data connected-plain-heatmap.data \

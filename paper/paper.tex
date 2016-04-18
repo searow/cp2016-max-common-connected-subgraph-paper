@@ -3,21 +3,19 @@
 \documentclass{llncs}
 
 % \usepackage{showframe}
+% \usepackage{refcheck}
 
 \usepackage{microtype}                 % typographic perfection
 \usepackage{complexity}                % \P, \NP etc
 \usepackage{tikz}                      % For pretty pictures
 \usepackage{amsmath}                   % \operatorname
-\usepackage{amsfonts}                  % \mathbb
+\usepackage{amssymb}                   % \triangledown
 \usepackage{hyperref}                  % clicky links
 \usepackage{cleveref}                  % no need to type Figure etc
 \usepackage{gnuplot-lua-tikz}          % graphs
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
 \usepackage{cite}                      % automatically sort mass cites
 \usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
-\usepackage{placeins}
-
-\usepackage{refcheck}
 
 \makeatletter\@ifpackageloaded{refcheck}{\newcommand{\citesforrefcheck}{\nocite{*}}}{\newcommand{\citesforrefcheck}{}}\makeatother
 
@@ -46,11 +44,14 @@
 
 \newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
 
-\renewcommand{\floatpagefraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
 \renewcommand{\topfraction}{0.9}
 \renewcommand{\bottomfraction}{0.8}
+
 \newcommand{\christine}[1]{{\color{green} Christine:#1}}
 
+\newcommand{\modularproduct}{\operatorname{\triangledown}}
 
 \title{Clique and Constraint Models for Maximum Common (Connected) Subgraph Problems}
 
@@ -186,197 +187,184 @@ Maximum common subgraph problems arise in biology and chemistry
 designs \cite{DBLP:journals/jair/CookH94}, in character recognition problems \cite{SIWEILU1991617},
 and in many other domains \cite{Shasha:2002:AAT:543613.543620}, both directly and as a way of
 measuring the similarity or difference between two graphs
-\cite{DBLP:journals/prl/Bunke97,DBLP:journals/prl/FernandezV01,KriegeThesis}.
+\cite{DBLP:journals/prl/Bunke97,DBLP:journals/prl/FernandezV01,KriegeThesis}. We illustrate two
+variants of this problem in \cref{figure:mcsexample}.
 
+\subsection{Definitions and Notation}
 
-\paragraph{Definition of the Maximum Common (Connected) Subgraph Problem.}
-We introduce definitions and algorithms on undirected and unlabelled graphs. The extension to
-directed or labelled graphs is straightforward and discussed in Section \ref{extension}. An
-undirected graph $G$ is defined by a finite set of nodes $N_G$ and a set of edges $E_G\subseteq
-N_G\times N_G$ such that each edge is an undirected pair of nodes.
+We introduce definitions and algorithms on undirected and unlabelled graphs without loops; the
+extension to general graphs is straightforward and is discussed in \cref{extension}. An undirected
+graph $G$ is defined by a finite set of vertices $\operatorname{V}(G)$ and a set of undirected edges
+$\operatorname{E}(G) \subseteq \operatorname{V}(G) \times \operatorname{V}(G)$, where $(u, v) \in
+\operatorname{E}(G) \Rightarrow (v, u) \in \operatorname{E}(G) \wedge u \ne v$. The neighbourhood of
+a vertex $v$, written $\operatorname{N}(G, v)$, is the set of vertices to which it is adjacent.
+Given a graph $G$, two vertices $v_s, v_e \in \operatorname{V}(G)$ are connected by a path in $G$ if
+there exists a sequence of vertices $(v_0, v_1, \ldots, v_k)$ such that $v_0 = v_s$, $v_k = v_e$,
+and each pair of successive vertices is connected by an edge, i.e.\ $\forall i\in \{1 \ldots k \},
+\{v_{i-1},v_i\}\in \operatorname{E}(G)$. A graph $G$ is \emph{connected} if every pair of vertices
+is connected by a path.
 
-Given a graph $G$, two nodes $n_s, n_e \in N_G$ are connected by a path in $G$ if there exists a
-sequence of nodes $<n_0,\ldots n_k>$ such that $n_0=n_s$, $n_k=n_e$ and each couple of successive
-nodes is connected by an edge, {\em i.e.}, $\forall i\in [1,k], \{n_{i-1},n_i\}\in E_G$. A graph $G$
-is \emph{connected} if every pair of nodes is connected by a path.
+The \emph{subgraph} of a graph $G$ \emph{induced by} a set $H \subseteq \operatorname{V}(G)$,
+written $G[H]$, is the graph with vertex set $H$, and with every edge in $G$ which has both
+endpoints in $G$, i.e.\ $\operatorname{E}(H) = \operatorname{E}(G) \cap (\operatorname{V}(H) \times
+\operatorname{V}(H))$. We will consider only subgraphs which are induced by some set. It is also
+possible to permit removing edges which are not incident to removed vertices, thus leading to
+partial subgraphs---we do not consider this possibility in this paper, although everything we
+discuss may be extended to the partial case \cite{DBLP:conf/cp/NdiayeS11}.
 
-A graph $G$ is \emph{isomorphic} to another graph $G'$ if there exists a bijective function
-$f:N_G\rightarrow N_{G'}$ which preserves edges, \emph{i.e.}, $\forall (u,v)\in N_G\times N_G,
-\{u,v\}\in E_G\Leftrightarrow \{f(u),f(v)\}\in E_{G'}$.
+A graph $G$ is \emph{isomorphic} to another graph $H$ if there exists a bijective function $f :
+\operatorname{V}(G) \rightarrow \operatorname{V}(H)$ which preserves edges and non-edges, i.e.\
+$\forall (u, v) \in \operatorname{V}(G) \times \operatorname{V}(G), (u, v) \in \operatorname{E}(G)
+\Leftrightarrow (f(u),f(v)) \in \operatorname{E}(H)$.  A \emph{common subgraph} of two graphs $G$
+and $H$ is a graph isomorphic to subgraphs of $G$ and $H$. A \emph{common connected subgraph} is a
+common subgraph which is connected.  A \emph{Maximum Common Subgraph} (MCS) (resp. \emph{Maximum
+Common Connected Subgraph} (MCCS) is a common subgraph (resp.\ common connected subgraph) which has
+a maximum number of vertices.
 
-A {\em subgraph} is obtained by removing nodes, and all their incident edges, {\em i.e.}, $G'$ is a
-\emph{subgraph} of $G$ if $N_{G'}\subseteq N_G$ and $E_{G'}=E_G\cap(N_{G'}\times N_{G'})$.
-In this definition, we only remove edges incident to removed nodes. This is usually called induced
-subgraph in the litterature. We may also allow to remove edges which are not incident to removed
-nodes, thus leading to partial subgraphs. In this paper, we only consider induced subgraphs.
-However, all algorithms may be extended to the partial case, as explained in
-\cite{DBLP:conf/cp/NdiayeS11}.
+\subsection{Overview}
 
-A \emph{common subgraph} of two graphs $G$ and $G'$ is a graph isomorphic to subgraphs of $G$ and
-$G'$. A \emph{common connected subgraph} is a common subgraph which is connected.
-A \emph{Maximum Common Subgraph} (MCS) (resp. \emph{Maximum Common Connected Subgraph} (MCCS) is a
-common subgraph (resp. common connected subgraph) which has a maximum number of nodes. Examples of
-MCS and MCCS are given in Fig. \ref{figure:mcsexample}.
-
-\paragraph{Overview of the paper.} In Section \ref{existing}, we review existing approaches for
-solving the MCS problem, with a specific focus on Constraint Programming (CP)-based approaches and
-on clique-based approaches that reduce the problem to finding a maximum clique in an association
-graph.
+In \cref{existing}, we review existing approaches for solving the MCS problem, with a specific focus
+on Constraint Programming (CP)-based approaches, and on approaches that reduce the problem to
+finding a maximum clique in an association graph.
 
 Conventional wisdom is that clique-based approaches are less effective in practice, but previous
 experimental evaluations have used weak clique algorithms, or even maximal clique enumeration
-algorithms.  Therefore, in Section \ref{eval1}, we  re-evaluate the clique-based approach using a
-modern algorithm, and we show that it outperforms CP on labelled graphs, and that it is competitive
-with CP on non labelled graphs.
+algorithms.  Therefore, in \cref{eval1}, we  re-evaluate the clique-based approach using a modern
+algorithm, and we show that it outperforms CP on labelled graphs, and that it is competitive with CP
+on unlabelled graphs.
 
-Then, in Section \ref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global
-connectedness constraint to the model. Alternatively, we may use a special branching rule to grow
-connected subgraphs only, as proposed in \cite{DBLP:conf/mco/VismaraV08}. These two techniques may
+Then, in \cref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global
+connectedness constraint to the model. Alternatively, we may use a special branching rule
+\cite{DBLP:conf/mco/VismaraV08} to grow connected subgraphs only. These two techniques may
 be combined, and we experimentally show that the best results are obtained when combining them.
 When solving the MCCS problem with a clique-based approach, neither technique seems directly viable
 with an association graph encoding.  However, we show that it is possible to adapt the combined
-branching and bounding rule used by modern clique algorithms to preserve connectedness during
+branching and bounding rule used by modern clique algorithms to maintain connectedness during
 search.  We compare the clique-based approach with the best CP variant for the MCCS, and we show
-that it outperforms CP on non labelled graphs, whereas it is outperformed by CP on labelled graphs.
-
+that it outperforms CP on labelled graphs, whereas it is outperformed by CP on unlabelled graphs.
 
 \section{Existing Complete Approaches for MCS}\label{existing}
 
+There are two main approaches for solving MCS. The first approach (described in \cref{CP}) is based
+on CP, whilst the second (described in \cref{clique}) is based on a reformulation of MCS into a
+maximum clique problem. Both approaches are described for non directed and non labelled graphs;
+their extension to directed or labelled graphs is discussed in \cref{extension}.
 
-There exist two main approaches for solving MCS: The first approach (described in \ref{CP}) is based
-on CP; The second approach (described in \ref{clique}) is based on a reformulation of MCS into a
-maximum clique problem. Both approaches are described for non directed and non labelled graphs.
-Their extension to directed or labelled graphs is discussed in Section \ref{extension}
+\subsection{Constraint Programming Models for MCS} \label{CP}
 
-\subsection{CP model for MCS}
-\label{CP}
+McGregor \cite{McGreg82} proposed a branch and bound approach: each branch of the search tree
+corresponds to the matching of two vertices, and a bounding function evaluates the number of
+vertices that still may be matched so that the current branch is pruned as soon as this bound
+becomes lower than the size of the largest known common subgraph. CP approaches may be viewed as
+enhancements of this branch and bound algorithm.
 
-McGregor \cite{McGreg82} proposed a Branch \& Bound approach: Each branch of the search tree
-corresponds to the matching of two nodes, and a  bounding function evaluates the number of nodes
-that still may be matched so that the current branch is pruned as soon as this bound becomes lower
-than the size of the largest known common subgraph. CP approaches may be viewed as enhancements of
-this Branch \& Bound approach.
+Vismara and Valery  \cite{DBLP:conf/mco/VismaraV08} introduced the first explicit CP model. Given
+two graphs $G$ and $H$, this model associates a variable $x_v$ with every vertex $v$ of $G$, and the
+domain of this variable contains all vertices of $H$, plus an additional value $\bot$: variable
+$x_v$ is assigned to $\bot$ if vertex $v$ is not matched to any vertex of $H$; otherwise $x_v$ is
+assigned to the vertex of $H$ to which it is matched. Edge constraints are introduced in order to
+ensure that variable assignments preserve edges and non-edges between matched vertices, i.e.\ $\forall u, v \in
+\operatorname{V}(G), (x_u = \bot) \vee (x_v = \bot) \vee ((u, v) \in \operatorname{E}(G)
+\Leftrightarrow (x_u, x_v) \in \operatorname{E}(H))$.  Difference constraints are introduced in
+order to ensure that each vertex of $H$ is assigned to at most one variable, i.e.\ $\forall u, v \in
+\operatorname{V}(G)~\textnormal{distinct,}~ (x_u = \bot) \vee (x_v = \bot) \vee (x_u \neq x_v)$.
 
-Vismara and Valery  \cite{DBLP:conf/mco/VismaraV08} introduced a first CP model. Given two graphs
-$G$ and $G'$, this model associates a variable $x_u$ with every node $u$ of $G$, and the domain of
-this variable contains all nodes of $G'$, plus an additional value $\bot$: variable $x_u$ is
-assigned to $\bot$ if node $u$ is not matched to any node of $G'$; otherwise $x_u$ is assigned to
-the node of $G'$ it is matched with. Edge constraints are introduced in order to ensure that
-variable assignments preserve edges between matched nodes, {\em i.e.}, $\forall \{u,v\}\subseteq
-N_G, (x_u=\bot)\vee (x_v=\bot) \vee (\{u,v\}\in E_G\Leftrightarrow \{x_u,x_v\}\in E_{G'})$.
-Difference constraints are introduced in order to ensure that each node of $G'$ is assigned to at
-most one variable, {\em i.e.}, $\forall \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee
-(x_u\neq x_v)$.
+This CP model is improved by Ndiaye and Solnon \cite{DBLP:conf/cp/NdiayeS11} by replacing binary
+difference constraints with a soft global allDifferent constraint which maximizes the number of
+$x_u$ variables that are assigned to values different from $\bot$, while ensuring they are all
+different when they are not assigned to $\bot$. They find that the combination ``MAC+Bound'' (resp.
+``FC+Bound'') obtains the best results on labelled (resp. non labelled) graphs and outperforms the
+two previous approaches. The combination ``MAC+Bound'' maintains arc consistency~\cite{sabi94} of
+edge constraints, whereas the combination ``FC+Bound'' simply performs forward-checking on these
+constraints. In both combinations, the ``Bound'' filtering checks whether it is possible to assign
+distinct values to enough $x_u$ variables to surpass the best cost found so far (it is a weaker
+version of GAC(\emph{softAllDiff}) \cite{peti01} which computes the maximum number of variables that
+can be assigned distinct values).
 
-This CP model is improved in \cite{DBLP:conf/cp/NdiayeS11} by replacing binary difference
-constraints with a soft global allDifferent constraint which maximizes the number of $x_u$ variables
-that are assigned to values different from $\bot$, while ensuring they are all different when they
-are not assigned to $\bot$.  Different constraint propagation techniques are compared in
-\cite{DBLP:conf/cp/NdiayeS11}. The combination ``MAC+Bound'' (resp. ``FC+Bound'') obtains the best
-results on labelled (resp. non labelled) graphs and outperforms the approach of \cite{McGreg82} and
-the CP model of \cite{DBLP:conf/mco/VismaraV08}. The combination ``MAC+Bound'' maintains arc
-consistency~\cite{sabi94} of edge constraints, whereas the conbination ``FC+Bound'' simply performs
-forward-checking on these constraints. In both combinations, the ``Bound'' filtering checks whether
-it is possible to assign distinct values to enough $x_u$ variables to surpass the best cost found so
-far (it is a weaker version of GAC(\emph{softAllDiff}) \cite{peti01} which computes the maximum
-number of variables that can be assigned distinct values).
+\subsection{Reformulation of MCS to a Maximum Clique Problem}\label{clique}
 
+An alternative approach to MCS is to reduce the problem to finding a maximum clique in an
+association graph \cite{LeviG,bala86,dura99,DBLP:journals/jcamd/RaymondW02a}.
+An association graph (or compatibility graph, or weak modular product) of two graphs $G$ and $H$ is
+an undirected graph $G \modularproduct H$ with vertex set $\operatorname{V}(G \modularproduct H) =
+\operatorname{V}(G) \times \operatorname{V}(G)$---to avoid confusing vertices of $G \modularproduct
+H$ with vertices of the two original graphs, we call vertices of $G \modularproduct H$
+\emph{matching nodes}, as each vertex $(u, v)$ of $G \modularproduct H$ denotes the matching of $u$
+with $v$. The edges of $G \modularproduct H$ connect matching nodes which denote compatible
+assignments, so two matching nodes $(u, u')$ and  $(v, v')$ are adjacent if $u \neq v$ and $u' \neq
+v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname{E}(G) \Leftrightarrow
+(u', v') \in \operatorname{E}(H)$.
 
-
-\subsection{Reformulation of MCS as a maximum clique problem}
-\label{clique}
-
-We may solve MCS by introducing an association graph and searching for a maximum clique in it
-\cite{bala86,dura99,DBLP:journals/jcamd/RaymondW02a}.
-
-An association graph of two graphs $G$ and $G'$ is an undirected graph $A_{G,G'}$ whose set of nodes
-is $N_{A_{G,G'}} = N_G \times N_{G'}$. To avoid confusing nodes of $A_{G,G'}$ with initial graph
-nodes, nodes of $A_{G,G'}$ are called matching nodes, as each node $(u,u')$ of $A_{G,G'}$ denotes
-the matching of $u$ with $u'$. Edges of $A_{G,G'}$ connect matching nodes which are compatible, {\em
-i.e.}, $E_{A_{G,G'}} = \big\{\{(u,u'),(v,v')\}\subseteq N_{A_{G,G'}}$, $(u,u')$ and $(v,v')$ are
-compatible$\big\}$, where two matching nodes $(u,u')$ and $(v,v')$ of $N_{A_{G,G'}}$ are compatible
-if $u \neq v$ and $u' \neq v'$, and if they preserve edges (\emph{i.e.}, $\{u,v\} \in E_G
-\Leftrightarrow \{u',v'\} \in E_{G'}$).
-
-A \emph{clique} is a subgraph whose nodes are all linked pairwise.  A clique is \emph{maximal} if it
-is not strictly included in any other clique, and it is \emph{maximum} if it is the largest clique
-of a given graph, with respect to the number of nodes.
-
-A clique in $A_{G,G'}$ corresponds to a set of compatible matchings. Therefore, such a clique
-corresponds to a common subgraph, and a maximum clique of $A_{G,G'}$ is a MCS of $G$ and $G'$.  It
-follows that any method able to find a maximum clique in a graph can be used to solve the MCS
-problem.
+A \emph{clique} is a subgraph whose vertices are all pairwise adjacent. A clique is \emph{maximal}
+if it is not strictly included in any other clique, and it is \emph{maximum} if it is a largest
+clique of a given graph, with respect to the number of vertices.  A clique in an association graph
+corresponds to a set of compatible matchings. Therefore, such a clique corresponds to a common
+subgraph, and a maximum clique of $G \modularproduct H$ is an MCS of $G$ and $H$.  It follows that
+any method able to find a maximum clique in a graph can be used to solve the MCS problem.
 
 Note that the association graph is a partial subgraph of the microstructure
-\cite{DBLP:conf/aaai/Jegou93a} associated with the CP model of  \cite{DBLP:conf/mco/VismaraV08}: The
-microstructure has more matching nodes than the association graph because it has a matching node
-$(u,\bot)$ for each node $u$ of $G$. Each clique of size $|N_G|$ in the microstructure corresponds
-to a common subgraph the size of which is defined by the number of nodes that do not contain $\bot$.
+\cite{DBLP:conf/aaai/Jegou93a} associated with the CP model of  Vismara and Valery
+\cite{DBLP:conf/mco/VismaraV08}: the microstructure has more matching nodes than the association
+graph because it has a matching node $(u,\bot)$ for each vertex $u$ of $G$. Each clique of size
+$\left|\operatorname{V}(G)\right|$ in the microstructure corresponds to a common subgraph, the size
+of which is defined by the number of matching nodes that do not contain $\bot$.
 
+\subsection{Extension to Labelled or Directed Graphs, and Loops}\label{extension}
 
-\subsection{Extension to Labeled or Directed Graphs}\label{extension}
+In some applications, labels may be associated with vertices or edges. We denote $\lambda(u)$ and
+$\lambda((u, v))$ the label of a vertex $u$ and an edge $(u, v)$, respectively. Where graphs are
+labelled, any isomorphism $f$ must additionally preserve labels, so we require $\lambda(f(v)) =
+\lambda(v)$ for any vertex $v$, and $\lambda((f(u), f(v))) = \lambda((u, v))$ for any edge $(u, v)$.
+This kind of label compatibility constraint is handled in a straightforward way in both CP and
+clique-based approaches to MCS.  For CP, we restrict the domain of every variable $x_u$ to vertices
+with compatible labels, and ensure that edge labels are preserved in edge constraints.
+For clique-based approaches, label compatibility is handled through the definition of the
+association graph, by restricting the set of matching nodes to pairs of vertices with compatible
+labels, and the set of matching edges to pairs of edges with compatible labels.
 
-In some applications, nodes and edges are associated with labels. We note $\lambda(u)$ and
-$\lambda(\{u,v\})$ the label of a node $u$ and an edge $\{u,v\}$, respectively. In this case, the
-common  subgraph must match components the labels of which are compatible, and we note $\simeq$ the
-compatibility relationship, {\em i.e.}, labels $\lambda_1$ and $\lambda_2$ are compatible if
-$\lambda_1\simeq\lambda_2$. This kind of label compatibility constraint is handled in a
-straightforward way in both CP and clique-based approaches:
+The extension of MCS algorithms to directed graphs, where isomorphisms must preserve directed edges,
+is similarly straightforward.
+Finally, some datasets contain loops (self-adjacent vertices). In this case vertices with loops must
+be mapped to vertices with loops (with the same labels, if appropriate), and vertices without loops
+may not be mapped to vertices with loops.
 
-\begin{itemize}
-\item For CP, we restrict the domain of every variable $x_u$ to nodes with compatible labels, {\em
-    i.e.}, $\forall u\in N_G, D(x_u) = \{\bot\}\cup \{u'\in N_{G'}, \lambda(u)\simeq\lambda(u')\}$.
-    We also have to ensure that edge labels are preserved in edge constraints, {\em i.e.}, $\forall
-    \{u,v\}\subseteq N_G, (x_u=\bot)\vee (x_v=\bot) \vee ((\{u,v\}\in E_G\Leftrightarrow
-    \{x_u,x_v\}\in E_{G'}) \wedge (\lambda(\{u,v\}) \simeq \lambda(\{x_u,x_v\})))$.
+Labels, directed edges and loops usually simplify the solution process, both for CP and clique-based
+approaches: vertex labels reduce domain sizes for CP, and the number of matching nodes in the
+association graphs; edge labels tighten edge constraints for CP, and make the association graph
+sparser for clique-based approaches.
 
-\item For clique-based approaches, label compatibility is handled through the definition of the
-    association graph, by restricting the set of matching nodes to pairs of nodes with compatible
-    labels, {\em i.e.}, $N_{G_C} = \{(u,u')\in N_G\times N_{G'}, \lambda(u)\simeq\lambda(u')\}$.
-    Also, edges of the association graph are restricted to pairs $\{(u,u'),(v,v')\}$ such that
-    $\lambda(\{u,v\}) \simeq \lambda(\{u',v')\}$.
-\end{itemize}
-
-Labels usually simplify the solution process, both for CP and clique-based approaches: Node labels
-reduce domain sizes for CP, and the number of matching nodes in the association graphs; Edge labels
-tighten edge constraints for CP, and make the association graph sparser for clique-based approaches.
-
-The extension of MCS algorithms to directed graphs is straightforward: For CP, edge orientation is
-handled in edge constraints; for clique-based approaches, it is handled in the definition of the
-association graph edges. In both cases, adding orientations to edges usually simplifies the problem:
-It tightens edge constraints for CP, and it makes the association graph sparser for  clique-based
-approaches.
+?? More on AC here? If we think carefully about the size of the domains of the objective variable:
+tightening the constraints doesn't really help unless you've made an assignment, right?
 
 \section{Re-Evaluating the Clique Model}\label{eval1}
 
-Previous experimental work has used a maximal clique enumeration algorithm, even for the
-maximisation problem. ?? check this! I recall someone using a bad max clique algorithm too.
-\cite{DBLP:conf/sspr/BunkeFGSV02,DBLP:journals/jgaa/ConteFV07}
+Previous experimental evaluations of the association graph model have used either maximal clique
+enumeration algorithms \cite{DBLP:journals/tcs/Koch01,DBLP:conf/mco/VismaraV08} (even when the
+maximisation problem was being considered), or very simple maximum clique algorithms
+\cite{DBLP:conf/sspr/BunkeFGSV02,DBLP:journals/jgaa/ConteFV07}. Thus we re-evaluate the approach
+using a modern maximum clique algorithm. Association graphs are dense, even if the input is sparse,
+so we will using (the single-threaded, bit-parallel version of) the maximum clique solver by
+McCreesh and Prosser \cite{DBLP:journals/topc/McCreeshP15}, which implements Prosser's
+\cite{DBLP:journals/algorithms/Prosser12} ``MCSa1'' variant of a series of algorithms due to Tomita
+\textit{et al.}\
+\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10}, using a
+bitset encoding due to San Segundo \textit{et al.}\
+\cite{DBLP:journals/cor/SegundoRJ11,DBLP:journals/ol/SegundoMRH13}. We compare this to the CP
+implementation of Ndiaye and Solnon \cite{DBLP:conf/cp/NdiayeS11}.  We perform our experiments on
+machines with Intel Xeon E5-2640 v2 CPUs and 64GBytes RAM; software was compiled using GCC 4.9, and
+a timeout of one hour was used.
 
-We instead use a maximum clique algorithm.
-
-Also sparse stuff, but association graphs aren't sparse enough.
-
-Say which clique algorithm we're using.
-
-
-\subsection{Datasets}
-
-We consider a randomly generated database described in
-\cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07}.
-The dataset contains different classes of graphs: Randomly connected graphs with connectivity
-$\eta\in\{0.05,0.2\}$ (r005 and r02); 2D, 3D, and 4D regular meshes (m2D, m3D, m4D); 2D, 3D, and 4D
-irregular meshes with $\rho=0.6$ (m2Dr, m3Dr, and m4Dr); regular bounded valence graphs with
-$V\in\{3,9\}$ (b03 and b09) and irregular bounded valence graphs with $V\in\{3,9\}$ (b03m and b09m).
-Each class contains XXX pairs of graphs: YYY for each of the 5 possible sizes of the MCIS ({\em
-i.e.}, 10\%, 30\%, 50\%, 70\% and 90\% of the number of nodes of the original graphs).
-
-For each pair of graphs, there are 3 different labelings such that the number of different labels is
-equal to 33\%, 50\% or 75\% of the number of nodes. In this paper, we report experiments with non
-labelled graphs (labels are ignored), and with 33\% labellings.
-
-
-\subsection{Experimental Evaluation}
+We consider a randomly generated database
+\cite{DBLP:journals/prl/SantoFSV03,DBLP:journals/jgaa/ConteFV07} commonly used for benchmarking
+maximum common subgraph problems.  The dataset contains different classes of graphs: randomly
+connected graphs with different densities; 2D, 3D, and 4D regular and irregular meshes; regular
+bounded valence graphs, and irregular bounded valence graphs.  For each pair of graphs, there are 3
+different labellings such that the number of different labels is equal to 33\%, 50\% or 75\% of the
+number of vertices. In this paper, we report experiments with unlabelled graphs (labels are
+ignored), and with 33\% labellings. For unlabelled graphs, we select the 27,500 graph pairs where the
+number of vertices in each graph is no more than 35; for labelled graphs, which we find less
+computationally challenging, we select all 81,400 graph pairs, to include graphs with up to 100
+vertices.
 
 \begin{figure}[p]
     \centering
@@ -386,125 +374,39 @@ labelled graphs (labels are ignored), and with 33\% labellings.
     \centering
     \input{gen-graph-unconnected-heatmap}
     \caption{The cumulative number of instances solved in under a certain time: on the top, 33\%
-        labelled graphs with up to 100 vertices, and in the middle, unlabelled and undirected graphs
-        with up to 35 vertices. On the bottom row, an instance-by-instance comparison of the clique
-        model with the best CP model, with 33\% labelled graphs (with MAC) on the left, and
-        unlabelled and undirected graphs (with FC) on the right.} \label{figure:unconnected-cumulative}
+        labelled graphs, and in the middle, unlabelled and undirected graphs. On the bottom row, an
+        instance-by-instance comparison of the clique model with the best CP model, with 33\%
+        labelled graphs (with MAC) on the left, and unlabelled and undirected graphs (with FC) on
+    the right.} \label{figure:unconnected-cumulative}
 \end{figure}
 
-Fig. \ref{figure:unconnected-cumulative} displays the cumulative number of instances solved with respect to time.
-When graphs are labelled (top plot), the clique-based approach clearly outperforms CP. ...develop...
+The top two plots of \cref{figure:unconnected-cumulative} display the cumulative number of instances
+solved with respect to time.  When graphs are labelled, the clique-based approach clearly
+outperforms either CP model, and MAC has a slight advantage over FC. For unlabelled graphs, the
+three approaches are broadly comparable, and ultimately FC beats MAC, which beats the clique
+approach. The bottom row gives a per-instance comparison of the best CP approach with the clique
+approach: the heatmaps are similar to scatter plots, but due to the large number of instances, we
+colour each point according to the density of solutions around that point. For labelled graphs, the
+clique approach comes close to dominating MAC on non-trivial instances (which suggests that there is
+unlikely to be scope for per-instance algorithm selection here). For unlabelled graphs, there is
+still a broad correlation between the runtimes; the clique approach rarely wins by more than one
+order of magnitude, but is sometimes much worse.
 
-\subsection{Parallel Search}
-
-\cite{DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16}
-
-?? Stuff on EHPs, how work stealing matters here too \cite{DBLP:journals/jco/BatsynGMP14}
+A closer inspection of the data suggests that the different randomness models have little effect on
+the runtimes for either approach. However, the relative size of the solution matters, particularly
+for the clique algorithm: if the solution is large (i.e.\ the two input graphs are very similar),
+the clique approach finds nearly every labelled instance trivial.
 
 \section{Find Maximum Common Connected Subgraphs}\label{mccs}
 
-In many applications, the common subgraph must be connected. As illustrated in Fig.
-\ref{figure:mcsexample}, the MCCS cannot be deduced from the MCS: We need to ensure connectedness
-during the search. In Section \ref{mccs-cp}, we show that this may be done in two different ways
-that may be combined, and we show in Section \ref{mccs-cp-eval} that the best results are obtained
-when combining them. In Section \ref{mccs-clique}, we introduce a new way for ensuring connectedness
-in a clique-based approach. Finally, we compare CP and our clique-based approach in Section
-\ref{mccs-eval}.
+In many applications, the common subgraph must be connected. As illustrated in
+\cref{figure:mcsexample}, the MCCS cannot be deduced from the MCS: we need to ensure connectedness
+during the search. In \cref{mccs-cp}, we show that in CP this may be done in two different ways that
+may be combined, and we show in \cref{mccs-cp-eval} that the best results are obtained when
+combining them. In \cref{mccs-clique}, we introduce a new way for ensuring connectedness in a
+clique-based approach. Finally, we compare CP and our clique-based approach in \cref{mccs-eval}.
 
 \subsection{Ensuring Connectedness in CP}\label{mccs-cp}
-
-\paragraph{Ensuring connectedness with a specific branching rule.} In
-\cite{DBLP:conf/mco/VismaraV08}, the connectedness constraint is ensured by using a specific
-branching rule, used to select the next variable to be assigned. Let $CComp$ be the set of variables
-already assigned to values different from $\bot$. The next variable to be assigned is chosen within
-the set of non assigned variables which are neighbor of at least one vertex of $CComp$. When this
-set is empty, all remaining non assigned variables are assigned to $\bot$.
-
-\paragraph{Ensuring connectedness with a specific filtering.}
-
-CP(Graph) \cite{DBLP:conf/cp/DoomsDD05} introduces graph domain variables and enforces connectivity via the
-\emph{reachable} constraint, ensuring that there is a path from a specified vertex to a specified
-set of vertices. One such constraint is then posted for each of the vertices in the graph and
-encodes the transitive closure of the graph. Brown et al.\ \cite{Brown:2005} explored the use of
-constraint programming in the generation of connected graphs with specified degree sequences.  Two
-constraints were combined, i.e.\ the graphical constraint (a backtrackable implementation of the
-Havel-Hakimi algorithm) with a connectivity constraint implemented using sets of vertices, where
-vertex sets $A$ and $B$ are combined when there exists a pair of vertices $v \in A$ and $w \in B$
-and an edge $(v,w) \in E$. Residual degree counts are maintained on components and vertices to
-enforce graphicality and connectivity. In \cite{DBLP:conf/ecai/ProsserU06} a connectivity constraint was proposed for
-connected graph generation where decision variables are edges (the search process accepts and
-rejects edges). The constraint employed depth first search to maintain the set of tree edges and
-back edges, associating path counters on these edges. The counters were then used to detect the
-existence of cut-edges and protects these by forcing edges. The complexity of this constraint is
-cubic in the number of vertices.
-
-In all these previous works, the goal is to ensure that a given set of vertices is connected. For
-MCCS, the problem is slightly different: we have to ensure that the number of connected vertices
-that may be matched (in both graphs) is greater than the size of the largest common subgraph
-previously found. Therefore, we introduce a new filtering algorithm to ensure connectedness
-consistency for MCCS.  Let us consider two graphs $G$ and $G'$, and let $D$ be the current domains
-(we suppose that $D(x_u)$ is a singleton when $x_u$ is assigned). Let $C$ (resp. $C'$) be the set of
-nodes of $G$ (resp. $G'$) which may belong to the common subgraph, {\em i.e.}, $C=\{ u\in N_{G},
-D(x_u)\neq\{\bot\}\}$ (resp. $C' = \{u'\in N_{G'}, \exists u\in N_G, u'\in D(x_u)\}$). Let
-$G_{\downarrow C}$ (resp. $G'_{\downarrow C'}$) be the subgraph of $G$ induced by $C$ (resp. the
-subgraph of $G'$ induced by $C'$).  The connectedness consistency ensures that both $G_{\downarrow
-C}$ and $G'_{\downarrow C'}$ are connected graphs.
-
-Connectedness consistency is not ensured at the root node of the search. It is ensured only once a
-first variable has been assigned. Let $x_u$ be the first assigned variable and $u'$ the value
-assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp. $G'$),
-starting from $u$ (resp. $u'$), and we initialize $C$ (resp. $C'$) with all visited nodes. Then, for
-each node $v\in N_G\setminus C$ (resp. $v'\in N_{G'}\setminus C'$), we assign $x_v$ to $\bot$
-(resp., we remove $v'$ from all domains it belongs to).
-
-During the search, each time a variable is assigned to $\bot$, we remove the corresponding node from
-$C$ and perform a new traversal of $G_{\downarrow C}$ starting from the initial node $u$. For each
-node $v\in C$ that is not visited by the traversal, we remove $v$ from $C$ and assign $x_v$ to
-$\bot$. Also, each time a value is removed from a domain so that this value no longer belongs to any
-domain, we remove it from $C'$, and perform a new traversal of $G'_{\downarrow C'}$ starting from
-the initial node $u'$. For each node $v'$ that is not visited by the traversal, we remove $v'$ from
-$C'$, and remove $v'$ from all domains it belong to.
-
-\paragraph{Combining both approaches.} The two approaches for ensuring connectedness (branching and
-filtering) are complementary and may be combined: At each step of the search, we select the next
-variable to be assigned within the neighbors of $CComp$, and each time a node of $G'$ is removed
-from a domain we filter domains to ensure connectedness consistency.
-
-
-\subsection{ Experimental comparison of CP models}\label{mccs-cp-eval}
-
-
-\begin{figure}[p]
-    \centering
-    \input{gen-graph-connected-cp.tex}
-    \caption{A pairwise comparison of different CP techniques. The colour at a point indicates the
-    number of instances with these runtimes, with darker colours representing more instances. The
-    top two rows are for 33\% labelled undirected graphs with up to 100 vertices, and the bottom two
-    rows are for unlabelled and undirected graphs with up to 35 vertices.}
-        \label{figure:connected-cp}
-\end{figure}
-
-\christine{I propose that we report results only for the FC variant (or only for the MAC variant) as
-the conclusion is the same in both cases?}
-
-Fig. \ref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by
-specific branching (Branch), by specific filtering (Filter), or by combining specific branching and
-filtering (Both). We only report results obtained with the "FC+Bound" combination as the effect of
-the three approaches are very similar when combining them with "MAC+Bound".
-
-On labelled graphs, we observe that Branch often outperforms Filter, and that combining both Branch
-and Filter is rarely much worse than just doing one or the other, and is often much better, even if
-on average it's slightly slower.
-
-On unlabelled graphs, we observe that the three variants have rather similar performance.
-
-\christine{Could we have the number of instances solved within 1 hour for each approach, and also
-the average solving time (for instances that are solved by the three approaches), so that we can
-give an idea of how much faster an approach is?}
-
-\subsection{Ensuring Connectedness in a clique-based approach}\label{mccs-clique}
-
-\christine{The approach should be compared with the approach proposed in \cite{DBLP:conf/mco/VismaraV08}.}
 
 \begin{figure}[tb]
     \newcounter{stepcounter}
@@ -550,7 +452,7 @@ give an idea of how much faster an approach is?}
                 \stepcounter{stepcounter}\roman{stepcounter}) Initial problem };
         \end{scope}
 
-        \begin{scope}[xshift=13cm]
+        \begin{scope}[xshift=12.8cm]
             \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
@@ -590,7 +492,7 @@ give an idea of how much faster an approach is?}
                 \stepcounter{stepcounter}\roman{stepcounter}) Trying $a \mapsto 1$ };
         \end{scope}
 
-        \begin{scope}[xshift=26cm]
+        \begin{scope}[xshift=25.6cm]
             \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
             \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
@@ -670,7 +572,7 @@ give an idea of how much faster an approach is?}
                 \stepcounter{stepcounter}\roman{stepcounter}) Trying $d \mapsto 4$ };
         \end{scope}
 
-        \begin{scope}[xshift=13cm, yshift=-9cm]
+        \begin{scope}[xshift=12.8cm, yshift=-9cm]
             \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
             \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
@@ -720,23 +622,96 @@ give an idea of how much faster an approach is?}
         though $5$ remains in its domain and does not violate any constraints.}\label{figure:restricted}
 \end{figure}
 
-\cref{figure:restricted} The key idea is that whenever we branch (except for the first choice we
-make), we select only from variables which correspond to vertices which are adjacent to at least one
-other variable which has been instantiated to a value other than $\bot$. If no such variables
-remain, the subgraph we are building cannot grow any further, and all remaining variables must be
-instantiated to $\bot$.
+Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} implement the connectedness constraint by using a
+specific branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
+set of variables already assigned to values different from $\bot$. The next variable to be assigned
+is chosen within the set of non assigned variables which are the neighbour of at least one vertex of
+$\mathit{CComp}$.  When this set is empty, all remaining non assigned variables are assigned to
+$\bot$. We illustrate this in \cref{figure:restricted}.
 
-?? Patrick reckons this reminds him of Prim's algorithm for minimum spanning trees.
+A more conventional CP approach would be to express connectedness as a conventional constraint. For
+example, CP(Graph) \cite{DBLP:conf/cp/DoomsDD05} introduces graph domain variables and enforces
+connectivity via the \emph{reachable} constraint, ensuring that there is a path from a specified
+vertex to a specified set of vertices. One such constraint is then posted for each of the vertices
+in the graph and encodes the transitive closure of the graph. Brown et al.\ \cite{Brown:2005}
+explored the use of constraint programming in the generation of connected graphs with specified
+degree sequences.  Two constraints were combined, i.e.\ the graphical constraint (a backtrackable
+implementation of the Havel-Hakimi algorithm) with a connectivity constraint implemented using sets
+of vertices, where vertex sets $A$ and $B$ are combined when there exists a pair of vertices $v \in
+A$ and $w \in B$ and an edge $(v,w) \in E$. Residual degree counts are maintained on components and
+vertices to enforce graphicality and connectivity. Prosser and Unsworth
+\cite{DBLP:conf/ecai/ProsserU06} proposed a connectivity constraint for connected graph generation
+where decision variables are edges (the search process accepts and rejects edges). The constraint
+employed depth first search to maintain the set of tree edges and back edges, associating path
+counters on these edges. The counters were then used to detect the existence of cut-edges and
+protects these by forcing edges; the complexity of this constraint is cubic in the number of
+vertices.
 
-\begin{algorithm}[p] \DontPrintSemicolon
+In all these previous works, the goal was to ensure that a given set of vertices is connected. For
+MCCS, the problem is slightly different: we have to ensure that the number of connected vertices
+that may be matched (in both graphs) is greater than the size of the largest common subgraph
+previously found. Therefore, we introduce a new filtering algorithm to ensure connectedness) (resp.
+consistency for MCCS.  Let us consider two graphs $G$ and $H$, and let $D$ be the current domains
+(we suppose that $D(x_u)$ is a singleton when $x_u$ is assigned). Let $S$ and $T$ be the sets of
+vertices of $G$ and $H$ respectively which may belong to the common subgraph, i.e.\ $S=\{ u\in
+\operatorname{V}(G) : D(x_u)\neq\{\bot\}\}$, and $T = \cup_{u\in \operatorname{V}(G)} D(x_u)
+\setminus \{ \bot \}$. Connectedness consistency ensures that both $G[S]$ and $H[T]$ are
+connected graphs.
+
+Connectedness consistency is not ensured at the root node of the search---it is ensured only once a
+first variable has been assigned. Let $x_u$ be the first assigned variable, and $v$ the value
+assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp.\ $H$),
+starting from $u$ (resp.\ $v$), and we initialize $S$ (resp.\ $T$) with all visited vertices. Then,
+for each vertex $v\in \operatorname{V}(G) \setminus S$, we set $x_v$ to $\bot$, and for each $w
+\in \operatorname{V}(H) \setminus T$, we remove $w$ from all domains to which it belongs.
+
+During the search, each time a variable is assigned to $\bot$, we remove the corresponding vertex
+from $S$ and perform a new traversal of $G[S]$ starting from the initial vertex $u$. For each vertex
+$w\in S$ that is not visited by the traversal, we remove $w$ from $S$ and assign $x_w$ to $\bot$.
+Also, each time a value is removed from a domain so that this value no longer belongs to any domain,
+we remove it from $T$, and perform a new traversal of $H[T]$ starting from the initial vertex $v$.
+For each vertex $w$ that is not visited by the traversal, we remove $w$ from $T$, and remove $w$
+from all domains to which it belongs.
+
+Finally, the two approaches for ensuring connectedness (branching and filtering) are complementary
+and may be combined: at each step of the search, we select the next variable to be assigned within
+the neighbors of $\mathit{CComp}$, and each time a vertex of $H$ is removed from a domain we filter
+domains to ensure connectedness consistency.
+
+\begin{figure}[tb]
+    \centering
+    \input{gen-graph-connected-cumulative-cp}
+
+    \vspace*{1em}
+    \centering
+    \input{gen-graph-connected-cp}
+    \caption{A pairwise comparison of different CP techniques. ?? This looks horrible! Make it look
+        better.} \label{figure:connected-cp}
+\end{figure}
+
+\subsection{Experimental Comparison of CP Models}\label{mccs-cp-eval}
+
+\Cref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by
+specific branching (Branching), by specific filtering (Filtering), or by combining specific
+branching and filtering (Both). We show only results using MAC for labelled graphs, and FC for
+unlabelled graphs, as the other results are very similar.  On labelled graphs, we observe that
+branching often outperforms filtering, and that combining both is rarely much worse than just doing
+one or the other, and is often much better, even if on average it is slightly slower.  On unlabelled
+graphs, we observe that the three variants have rather similar performance.
+
+\subsection{Ensuring Connectedness in a clique-based approach}\label{mccs-clique}
+
+\christine{The approach should be compared with the approach proposed in \cite{DBLP:conf/mco/VismaraV08}.}
+
+\begin{algorithm}[tb] \DontPrintSemicolon
 \nl $\FuncSty{associationMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
 \nl \Begin{
     \nl $\KwSty{global} ~ \mathit{incumbent} \gets \emptyset$ \label{incumbent} \;
-    \nl $G \gets \FuncSty{associationGraph}(G_1, G_2)$ \label{buildassoc} \;
+    \nl $G \gets G_1 \modularproduct G_2$ \label{buildassoc} \;
     \nl $\FuncSty{search}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \label{firstsearch} \;
     \nl $\KwSty{return} ~ \mathit{incumbent}$ \;
 }
-\vspace{0.9ex}
+\vspace{1ex}
 \nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{branchable}$, Set $\mathit{remaining}$) \;
 \nl \Begin{
     \nl $\mathit{colourClasses} \gets \FuncSty{concatenate}($ \label{makecolours} \;
@@ -751,7 +726,8 @@ instantiated to $\bot$.
             \nl $\mathit{solution}' \gets \mathit{solution} \cup \{ v \} \label{addv} \label{addvtosolution} $\;
             \nl \lIf{$|\mathit{solution}'| > |\mathit{incumbent}|$}{$\mathit{incumbent} \gets
             \mathit{solution}'$ \label{newincumbent}}
-            \nl $\mathit{branchable}' \gets \mathit{branchable} \cup \FuncSty{connected}(G, v)$ \label{addtobranchable} \;
+            \nl $\mathit{branchable}' \gets \mathit{branchable} \cup \{ w \in G : \FuncSty{first}(w)
+            \in \operatorname{N}(G, \FuncSty{first}(v)) \}$ \label{addtobranchable} \;
             \nl $\mathit{remaining}' \gets \mathit{remaining} \cap \operatorname{N}(G, v)$ \label{filterremaining} \;
             \nl \lIf{$\mathit{remaining}' \neq \emptyset$}{$\FuncSty{search}(G, \mathit{solution}',
             \mathit{branchable}', \mathit{remaining}')$\label{recursesearch}}
@@ -759,7 +735,7 @@ instantiated to $\bot$.
          \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
      }
 }
-\vspace{0.9ex}
+\vspace{0.5ex}
 \nl $\FuncSty{colour}$ :: (Graph $G$, Set $\mathit{uncoloured}$) $\rightarrow$ List of List of Vertex \;
 \nl \Begin{
     \nl $\mathit{result} \gets []$ \;
@@ -777,21 +753,74 @@ instantiated to $\bot$.
     }
     \nl $\KwSty{return} ~ \mathit{result}$ \;
 }
-\vspace{0.9ex}
-\nl $\FuncSty{connected}$ :: (Graph $G$, Vertex $v$) $\rightarrow$ Set \;
-\nl \Begin{
-    \nl $\KwSty{return} ~ \{ w \in G : \FuncSty{first}(w) \in \operatorname{N}(G, \FuncSty{first}(v)) \}$ \;
-}
-\vspace{0.9ex}
-\nl $\FuncSty{associationGraph}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Graph \;
-\nl \Begin{
-    \nl $V \gets \{ (v_1, v_2) \in G_1 \times G_2 : v_1 \simeq v_2 \}$ \;
-    \nl $E \gets \{ ((v_1, v_2), (w_1, w_2)) \in V \times V : (v_1, w_1) \simeq (v_2, w_2) \}$ \;
-    \nl $\KwSty{return} ~ (V, v \mapsto 1, (v, w) \mapsto 1~\KwSty{if}~(v, w) \in E~\KwSty{otherwise}~\bot )$ \;
-}
 \caption{An algorithm for a maximum common connected induced subgraph isomorphism via an association graph.}
 \label{algorithm:mccis}
 \end{algorithm}
+
+It is not possible to determine connectedness from a raw association graph. However, we can take a
+maximum clique algorithm and mimic the branching strategy if we have access to the underlying graphs
+and can determine the ``meaning'' of the association graph vertices.
+
+Most modern maximum clique algorithms for dense graphs use some variation of greedy graph colouring
+as a bound---the underlying observation is that each vertex in a clique must be given a different
+colour in a colouring, so if we can colour a subset of vertices using $k$ colours then a maximum
+clique in this subset has at most $k$ vertices. However, the colouring is also used as a branching
+heuristic: vertices are selected in reverse from their colour classes in turn, starting with the
+last colour class created. Because of this coupling of branching and the bound (which is important
+in practice because it mimics a ``smallest domain first'' branching heuristic if colour classes are
+viewed as variables \cite{DBLP:conf/cp/McCreeshP14}), if we were to select only a subset of vertices for
+branching at each stage inside a clique algorithm, we would lose completeness. Thus we must adapt
+the bound to take into account restricted branching.
+
+In \cref{algorithm:mccis} we present a clique-inspired algorithm which finds a maximum common
+connected induced subgraph isomorphism via an association graph. If the additional branching
+restrictions are removed, the core of the algorithm is the same as the ``MCSa1'' clique algorithm
+used in the previous section (and we refer the reader to the previously cited works for
+implementation details on how to use bitsets and other data structures to implement the colouring
+stage with very low constant factors).
+
+We begin by building the association graph (\lineref{buildassoc}). The main part of the algorithm
+then works by building up candidate cliques in the $\mathit{solution}$ variable, by recursive calls
+to the $\mathit{search}$ procedure---starting from the empty set (\lineref{firstsearch}), each
+recursive subcall adds one vertex to $\mathit{solution}$ (\lineref{addv}) in such a way that
+$\mathit{solution}$ is always a clique which corresponds to a connected common subgraph. The
+$\mathit{remaining}$ set contains the set of vertices which are adjacent to every vertex in
+$\mathit{solution}$, and which have not yet been accepted or rejected (and so initially it contains
+every vertex). The main loops in the $\FuncSty{search}$ procedure
+(\twolinesref{outerloop}{innerloop}) have the effect of iterating over each vertex in this set in a
+particular order---each vertex $v$ is selected in turn, and then a recursive call is made to
+consider the effects of including $v$ in $\mathit{solution}$ (\lineref{recursesearch}), followed by
+the next iteration where $v$ is instead rejected. When $v$ is accepted, we add it to the new
+$\mathit{solution'}$ (\lineref{addvtosolution}), and create a new $\mathit{remaining'}$ containing
+only the vertices in $\mathit{remaining}$ which are adjacent to $v$ (\lineref{filterremaining}).
+
+The $\mathit{branchable}$ set contains the set of association graph vertices which correspond to
+vertices adjacent to an already-accepted vertex in the first input graph---in constraint programming terms, it is the
+set of assignments which could be made next which maintain connectedness. (Using only one of the two
+input graphs is sufficient for correctness, and has the advantage that the $\FuncSty{connected}$
+function may be implemented as a simple lookup into a precomputed array which maps each vertex in
+the first input graph to a bitset.) At the top of search, this set is empty, and is not used (our
+first vertex selection is special, and does not care about connectedness). At subsequent depths, we
+may only accept vertices which are in this set, and if no such vertices remain then we return
+immediately (\lineref{acceptbranchable}). When recursing, we extend $\mathit{branchable}$ with the
+new vertices permitted by our acceptance of the branching $v$ (\lineref{addtobranchable}). Note that
+we are assuming that inside the main loops, we encounter every vertex in $\mathit{remaining} \cap
+\mathit{connected}$ before any vertex in $\mathit{remaining} \setminus \mathit{connected}$.
+
+As we proceed, we keep track of the best solution we have found so far---this is stored in the
+$\mathit{incumbent}$ variable (\twolinesref{incumbent}{newincumbent}). We use the incumbent,
+together with a colour bound, to prune portions of the search space which cannot contain a better
+solution. The colour bound operates as follows: at each entry to the $\FuncSty{search}$ procedure,
+we produce a greedy colouring of the vertices in $\mathit{remaining}$ (\lineref{makecolours}). This
+greedy colouring gives us a list of colour classes, each of which is a list of pairwise non-adjacent
+vertices. The two loops (\twolinesref{outerloop}{innerloop}) then iterate over each colour class,
+from last to first, and then over each vertex in that colour class, again from last to first.
+(Rather than actually using a list of lists and removing items, this process should be implemented
+using a pair of immutable flat arrays. This technique is described elsewhere
+\cite{DBLP:conf/cp/McCreeshP14}, so we do not discuss it here.) Finally, if at any point the number
+of remaining colour classes plus the number of vertices currently present in $\mathit{solution}$ is
+not strictly greater than the size of the incumbent, then we may backtrack immediately
+(\lineref{bound}).
 
 \begin{figure}[tb]
     \newcounter{stepcounter2}
@@ -850,10 +879,10 @@ instantiated to $\bot$.
             \\[0.1cm]
             \stepcounter{stepcounter2}\roman{stepcounter2}) Initial problem &
             \stepcounter{stepcounter2}\roman{stepcounter2}) Search variables after guessing $a \mapsto 1$
-            \\[0.4cm]
+            \\[0.2cm]
             \begin{tikzpicture}[scale=0.33]
-                    \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 3) {\phantom{0}};
-                    \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me5) at (3, 3) {\phantom{0}};
+                    \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 2) {\phantom{0}};
+                    \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me5) at (3, 2) {\phantom{0}};
                     \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mf4) at (0, 0) {\phantom{0}};
                     \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mf5) at (3, 0) {\phantom{0}};
 
@@ -867,8 +896,8 @@ instantiated to $\bot$.
             \end{tikzpicture}
             &
             \begin{tikzpicture}[scale=0.33]
-                    \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb2) at (3, 3) {\phantom{0}};
-                    \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb3) at (6, 3) {\phantom{0}};
+                    \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb2) at (3, 2) {\phantom{0}};
+                    \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb3) at (6, 2) {\phantom{0}};
                     \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Mc2) at (0, 0) {\phantom{0}};
                     \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Mc3) at (3, 0) {\phantom{0}};
                     \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md2) at (6, 0) {\phantom{0}};
@@ -891,7 +920,7 @@ instantiated to $\bot$.
             \stepcounter{stepcounter2}\roman{stepcounter2}) $\mathit{remaining} \cap \mathit{branchable}$
             \\
         };
-    \end{tikzpicture}\\[0.3cm]\begin{tikzpicture}[scale=0.33]
+    \end{tikzpicture}\\[0.1cm]\begin{tikzpicture}[scale=0.33]
         \matrix (m) [matrix of nodes] {
             \begin{tikzpicture}[scale=0.33]
                 \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 0) {\phantom{0}};
@@ -916,7 +945,7 @@ instantiated to $\bot$.
                 \node [above = 0 of Md2, font=\small] { \vphantom{0}(d, 2), };
                 \node [above = 0 of Md3, font=\small] { \vphantom{0}(d, 3)]]};
             \end{tikzpicture}
-            \\[0.1cm]
+            \\[0.05cm]
             \stepcounter{stepcounter2}\roman{stepcounter2}) The resulting $\mathit{colourClasses}$ variable.
             \\
         };
@@ -938,95 +967,26 @@ decreases by one, and if $f \mapsto 5$ were reached we would stop due to a lack 
 branchable vertices. }\label{figure:assocrestricted}
 \end{figure}
 
-It is not possible to determine connectedness from a raw association graph. However, we can take a
-maximum clique algorithm and mimic the branching strategy if we have access to the underlying graphs
-and can determine the ``meaning'' of the association graph vertices.
-
-Most modern maximum clique algorithms for dense graphs use some variation of greedy graph colouring
-as a bound---the underlying observation is that each vertex in a clique must be given a different
-colour in a colouring, so if we can colour a subset of vertices using $k$ colours then a maximum
-clique in this subset has at most $k$ vertices. However, the colouring is also used as a branching
-heuristic: vertices are selected in reverse from their colour classes in turn, starting with the
-last colour class created. Because of this coupling of branching and the bound (which is important
-in practice because it mimics a ``smallest domain first'' branching heuristic if colour classes are
-viewed as variables \cite{DBLP:conf/cp/McCreeshP14}), if we were to select only a subset of vertices for
-branching at each stage inside a clique algorithm, we would lose completeness. Thus we must adapt
-the bound to take into account restricted branching.
-
-In \cref{algorithm:mccis} we present a clique-inspired algorithm which finds a maximum common
-connected induced subgraph isomorphism via an
-association graph. If the additional
-branching restrictions are removed, the core of the algorithm is what Prosser
-\cite{DBLP:journals/algorithms/Prosser12} calls the ``MCSa1'' variant of a series of algorithms due
-to Tomita \textit{et al.}\
-\cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10}, using a
-bitset encoding due to San Segundo \textit{et al.}\
-\cite{DBLP:journals/cor/SegundoRJ11,DBLP:journals/ol/SegundoMRH13} (and we refer the reader to these
-papers for implementation details on how to use bitsets and other data structures to implement the
-colouring stage with very low constant factors).
-
-We begin by building the association graph (\lineref{buildassoc}). The main part of the algorithm
-then works by building up candidate cliques in the $\mathit{solution}$ variable, by recursive calls
-to the $\mathit{search}$ procedure---starting from the empty set (\lineref{firstsearch}), each
-recursive subcall adds one vertex to $\mathit{solution}$ (\lineref{addv}) in such a way that
-$\mathit{solution}$ is always a clique which corresponds to a connected common subgraph. The
-$\mathit{remaining}$ set contains the set of vertices which are adjacent to every vertex in
-$\mathit{solution}$, and which have not yet been accepted or rejected (and so initially it contains
-every vertex). The main loops in the $\FuncSty{search}$ procedure
-(\twolinesref{outerloop}{innerloop}) have the effect of iterating over each vertex in this set in a
-particular order---each vertex $v$ is selected in turn, and then a recursive call is made to
-consider the effects of including $v$ in $\mathit{solution}$ (\lineref{recursesearch}), followed by
-the next iteration where $v$ is instead rejected. When $v$ is accepted, we add it to the new
-$\mathit{solution'}$ (\lineref{addvtosolution}), and create a new $\mathit{remaining'}$ containing
-only the vertices in $\mathit{remaining}$ which are adjacent to $v$ (\lineref{filterremaining}).
-
-The $\mathit{branchable}$ set contains the set of association graph vertices which correspond to
-vertices adjacent to an already-accepted vertex in the first input graph---in constraint programming terms, it is the
-set of assignments which could be made next which preserve connectedness. (Using only one of the two
-input graphs is sufficient for correctness, and has the advantage that the $\FuncSty{connected}$
-function may be implemented as a simple lookup into a precomputed array which maps each vertex in
-the first input graph to a bitset.) At the top of search, this set is empty, and is not used (our
-first vertex selection is special, and does not care about connectedness). At subsequent depths, we
-may only accept vertices which are in this set, and if no such vertices remain then we return
-immediately (\lineref{acceptbranchable}). When recursing, we extend $\mathit{branchable}$ with the
-new vertices permitted by our acceptance of the branching $v$ (\lineref{addtobranchable}). Note that
-we are assuming that inside the main loops, we encounter every vertex in $\mathit{remaining} \cap
-\mathit{connected}$ before any vertex in $\mathit{remaining} \setminus \mathit{connected}$.
-
-As we proceed, we keep track of the best solution we have found so far---this is stored in the
-$\mathit{incumbent}$ variable (\twolinesref{incumbent}{newincumbent}). We use the incumbent,
-together with a colour bound, to prune portions of the search space which cannot contain a better
-solution. The colour bound operates as follows: at each entry to the $\FuncSty{search}$ procedure,
-we produce a greedy colouring of the vertices in $\mathit{remaining}$ (\lineref{makecolours}). This
-greedy colouring gives us a list of colour classes, each of which is a list of pairwise non-adjacent
-vertices. The two loops (\twolinesref{outerloop}{innerloop}) then iterate over each colour class,
-from last to first, and then over each vertex in that colour class, again from last to first.
-(Rather than actually using a list of lists and removing items, this process should be implemented
-using a pair of immutable flat arrays. This technique is described elsewhere
-\cite{DBLP:conf/cp/McCreeshP14}, so we do not discuss it here.) Finally, if at any point the number
-of remaining colour classes plus the number of vertices currently present in $\mathit{solution}$ is
-not strictly greater than the size of the incumbent, then we may backtrack immediately
-(\lineref{bound}).
-
-Finally, we describe the colouring process. In conventional clique algorithms, a simple greedy
-sequential colouring is used (possibly with the help of previous colourings to reduce the
-computational cost \cite{DBLP:conf/lion/NikolaevBS15}, and possibly with shortcuts taken for certain
-vertices \cite{DBLP:journals/cor/SegundoT14}, and possibly followed by a repair step to
-improve the colouring \cite{DBLP:conf/walcom/TomitaSHTW10}, or stronger bounding rules based upon
-MaxSAT inference \cite{DBLP:conf/ictai/LiFX13,DBLP:conf/lion/LiJX15,DBLP:journals/cor/SegundoNB15}).
-Such colourings will not give us the required property that vertices in $\mathit{remaining} \cap
-\mathit{connected}$ come last (so they are selected first by the reverse branching order). Thus we
-produce two greedy sequential colourings, first considering the non-branching vertices in
-$\mathit{remaining} \setminus \mathit{connected}$, followed by the branching vertices, and
-concatenate them (\lineref{makecolours}). This produces a valid colouring, since we do not merge any
-colour classes between the two stages, although it may use more colours than a single colouring
-would\footnote{What if we did not guarantee that vertices in $\mathit{remaining} \cap
-    \mathit{connected}$ came last, and just used a conventional colouring with the branching rule?
-    Suppose we had four vertices in $\mathit{remaining}$, and produced a colouring $[[v_1, v_2],
-    [v_3], [v_4]]$, and suppose that extending $\mathit{solution}$ with $\{ v_1, v_3, v_4 \}$ gives
-an optimal solution. If $v_4$ was not $\mathit{connected}$ yet, we would not branch on that subtree,
-and the bound could eliminate branching on $v_3$ and $v_1$, so we would miss the solution. Thus we
-cannot simply add the branching rule without also adapting the combined bound / ordering heuristic.}.
+Finally, we describe the colouring process---an example is shown in \cref{figure:assocrestricted}.
+In conventional clique algorithms, a simple greedy sequential colouring is used (possibly with the
+help of previous colourings to reduce the computational cost \cite{DBLP:conf/lion/NikolaevBS15}, and
+possibly with shortcuts taken for certain vertices \cite{DBLP:journals/cor/SegundoT14}, and possibly
+followed by a repair step to improve the colouring \cite{DBLP:conf/walcom/TomitaSHTW10}, or stronger
+bounding rules based upon MaxSAT inference
+\cite{DBLP:conf/ictai/LiFX13,DBLP:conf/lion/LiJX15,DBLP:journals/cor/SegundoNB15}).  Such colourings
+will not give us the required property that vertices in $\mathit{remaining} \cap \mathit{connected}$
+come last (so they are selected first by the reverse branching order). Thus we produce two greedy
+sequential colourings, first considering the non-branching vertices in $\mathit{remaining} \setminus
+\mathit{connected}$, followed by the branching vertices, and concatenate them
+(\lineref{makecolours}). This produces a valid colouring, since we do not merge any colour classes
+between the two stages, although it may use more colours than a single colouring would\footnote{What
+    if we did not guarantee that vertices in $\mathit{remaining} \cap \mathit{connected}$ came last,
+    and just used a conventional colouring with the branching rule?  Suppose we had four vertices in
+    $\mathit{remaining}$, and produced a colouring $[[v_1, v_2], [v_3], [v_4]]$, and suppose that
+    extending $\mathit{solution}$ with $\{ v_1, v_3, v_4 \}$ gives an optimal solution. If $v_4$ was
+    not $\mathit{connected}$ yet, we would not branch on that subtree, and the bound could eliminate
+    branching on $v_3$ and $v_1$, so we would miss the solution. Thus we cannot simply add the
+branching rule without also adapting the combined bound / ordering heuristic.}.
 
 Our $\FuncSty{colour}$ procedure is the same as the bit-parallel algorithm introduced by San Segundo
 \textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}. While we have remaining vertices to colour
@@ -1038,22 +998,7 @@ initial vertex orderings have been considered on general clique problems
 \cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}; it is possible that special
 properties of the association graph could be exploited in this step.
 
-
 \subsection{Experimental comparison of CP with the Clique-based Approach}\label{mccs-eval}
-
-
-\paragraph{Connected, Undirected, 33\% Labelled}
-
-\paragraph{Connected, Undirected, Unlabelled}
-
-?? My gut feeling is that if we have edge labels, the clique model wins, and if we don't, it's
-likely to lose. So maybe I should run some experiments with vertex labels but not edge labels to
-test this.
-
-\paragraph{By family} ?? Break this down more by family, size, etc.
-
-\paragraph{Does connected make instances easier or harder?} We could plot connected vs not connected
-difficulties, and result sizes?
 
 \begin{figure}[p]
     \centering
@@ -1069,20 +1014,25 @@ difficulties, and result sizes?
         left, and unlabelled and undirected graphs on the right.} \label{figure:connected-cumulative}
 \end{figure}
 
-\subsection{Parallel Search}
-
-\cite{DBLP:conf/ictai/MinotNS15}
+\cref{figure:connected-cumulative}
 
 \section{Conclusion}
 
 Some immoral perspectives on closely coupling branching with a particular constraint. Whether this
 is useful for other things, like ASP.
 
+SIP invariants when very similar graphs (except these are easy).
+
 We haven't discussed partial subgraphs, or connected directed.
 
 Possibly portfolios.
 
 Better instances.
+
+Parallel. ?? Stuff on EHPs, how work stealing matters here too \cite{DBLP:journals/jco/BatsynGMP14,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16}
+
+\cite{DBLP:conf/ictai/MinotNS15}
+
 
 \citesforrefcheck
 

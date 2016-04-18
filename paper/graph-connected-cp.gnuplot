@@ -1,11 +1,11 @@
 # vim: set et ft=gnuplot sw=4 :
 
-set terminal tikz color size 4.6in,6.5in font '\scriptsize'
+set terminal tikz color size 4.6in,3.3in font '\scriptsize'
 load "chromajs.pal"
 
 set output "gen-graph-connected-cp.tex"
 
-set multiplot layout 4,3
+set multiplot layout 2,3
 
 set border 3
 
@@ -37,24 +37,6 @@ set xlabel offset character 0, character 1.5
 set ylabel offset character 4.2, character 0
 
 set label 1 at graph 0.5, graph 0.965 center '33\% Labelled' front
-
-set xlabel "FC Branch"
-set ylabel "FC Filter"
-plot \
-    "connected-cp-undir33-fc-branch-fc-filter-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
-    x w l lc 'black' notitle axes x1y1
-
-set xlabel "FC Branch"
-set ylabel "FC Both"
-plot \
-    "connected-cp-undir33-fc-branch-fc-both-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
-    x w l lc 'black' notitle axes x1y1
-
-set xlabel "FC Filter"
-set ylabel "FC Both"
-plot \
-    "connected-cp-undir33-fc-filter-fc-both-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
-    x w l lc 'black' notitle axes x1y1
 
 set xlabel "MAC Branch"
 set ylabel "MAC Filter"
@@ -92,23 +74,5 @@ set xlabel "FC Filter"
 set ylabel "FC Both"
 plot \
     "connected-cp-plain-fc-filter-fc-both-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
-    x w l lc 'black' notitle axes x1y1
-
-set xlabel "MAC Branch"
-set ylabel "MAC Filter"
-plot \
-    "connected-cp-plain-mac-branch-mac-filter-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
-    x w l lc 'black' notitle axes x1y1
-
-set xlabel "MAC Branch"
-set ylabel "MAC Both"
-plot \
-    "connected-cp-plain-mac-branch-mac-both-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
-    x w l lc 'black' notitle axes x1y1
-
-set xlabel "MAC Filter"
-set ylabel "MAC Both"
-plot \
-    "connected-cp-plain-mac-filter-mac-both-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
     x w l lc 'black' notitle axes x1y1
 
