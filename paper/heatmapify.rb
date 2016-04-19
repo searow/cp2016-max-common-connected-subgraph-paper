@@ -7,7 +7,8 @@ granularity = 100
 xmul = ARGV[3].to_i
 ymul = ARGV[4].to_i
 
-IO.readlines(ARGV[0]).each do | line |
+IO.readlines(ARGV[0]).each_with_index do | line, index |
+    if index == 0 then next end
     words = line.split(' ')
 
     x = words[ARGV[1].to_i].sub('1e10', (3600 / xmul).to_s).to_f * xmul
