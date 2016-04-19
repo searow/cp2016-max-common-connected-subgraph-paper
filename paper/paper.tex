@@ -1040,23 +1040,28 @@ sentences of space.
 
 \section{Conclusion}
 
-Some immoral perspectives on closely coupling branching with a particular constraint. Whether this
-is useful for other things, like ASP.
+We have seen that a modern clique algorithm can perform competitively for maximum common subgraph
+problems, particularly when edge labels are involved.
 
-Adapting clique algorithms: specialised inference, association-aware bound function, .
+We believe there is further scope for tailoring clique algorithms for association graphs.
+Specialised inference, association-aware bound function. Treating the first branch specially, since
+it will eliminate so much of the search space \cite{DBLP:conf/cocoon/SutersAZSSL05}.
 
-SIP invariants when very similar graphs (except these are easy).
+For CP models for the connected version of the problem, we saw the benefits of combining
+conventional filtering with a special branching rule. Using a branching rule for correctness, rather
+than simply as an ordering heuristic, is unconventional and does not cleanly fit into the
+abstractions used by toolkits.
+
+We looked only at single-threaded versions of these algorithms. Maximum clique algorithms have been
+extended for thread-parallel search
+\cite{DBLP:journals/algorithms/McCreeshP13,DBLP:journals/jcisd/DepolliKRTJ13,DBLP:journals/cor/SegundoLP16}.
+In particular, EHPs \cite{DBLP:journals/topc/McCreeshP15}. On the CP side, decomposition \cite{DBLP:conf/ictai/MinotNS15}.
 
 We haven't discussed partial subgraphs, or connected directed.
 
+Symmetries. Dynamic.
+
 Better instances.
-
-Possibly portfolios.
-
-Parallel. ?? Stuff on EHPs, how work stealing matters here too \cite{DBLP:journals/jco/BatsynGMP14,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16}
-
-\cite{DBLP:conf/ictai/MinotNS15}
-
 
 \citesforrefcheck
 
