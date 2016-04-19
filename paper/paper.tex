@@ -416,7 +416,7 @@ clique-based approach. Finally, we compare CP and our clique-based approach in \
 \subsection{Ensuring Connectedness in CP}\label{mccs-cp}
 
 Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} implement the connectedness constraint by using a
-specific branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
+branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
 set of variables already assigned to values different from $\bot$. The next variable to be assigned
 is chosen within the set of non assigned variables which are the neighbour of at least one vertex of
 $\mathit{CComp}$.  When this set is empty, all remaining non assigned variables are assigned to
@@ -700,7 +700,7 @@ domains to ensure connectedness consistency.
 \subsection{Experimental Comparison of CP Connectedness Techniques}\label{mccs-cp-eval}
 
 \Cref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by
-specific branching (Branch), by specific filtering (Filter), or by combining specific branching and
+branching (Branch), by filtering (Filter), or by combining branching and
 filtering (Both). We show only results using the best variant for each class---that is, MAC for
 labelled graphs, and FC for unlabelled graphs (the other results are very similar).  On labelled
 graphs, we see many instances which are solved by branching but not filtering, and vice versa.
