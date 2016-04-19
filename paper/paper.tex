@@ -411,7 +411,10 @@ may be combined, and we show in \cref{mccs-cp-eval} that the best results are ob
 combining them. In \cref{mccs-clique}, we introduce a new way for ensuring connectedness in a
 clique-based approach. Finally, we compare CP and our clique-based approach in \cref{mccs-eval}.
 
-?? Connected, not strongly connected. No directed graphs.
+For MCCS we consider only undirected graphs (and so we treat directed edges in the inputs as being
+undirected). For directed graphs, there is more that one notion of connectivity, and it is not clear
+which should be selected---our approach extends easily to weakly connected directed graphs, but not
+to the strongly connected case.
 
 \subsection{Ensuring Connectedness in CP}\label{mccs-cp}
 
@@ -1057,7 +1060,7 @@ extended for thread-parallel search
 \cite{DBLP:journals/algorithms/McCreeshP13,DBLP:journals/jcisd/DepolliKRTJ13,DBLP:journals/cor/SegundoLP16}.
 In particular, EHPs \cite{DBLP:journals/topc/McCreeshP15}. On the CP side, decomposition \cite{DBLP:conf/ictai/MinotNS15}.
 
-We haven't discussed partial subgraphs, or connected directed.
+We haven't discussed partial or weighted subgraphs, or strongly connected directed.
 
 Symmetries. Dynamic.
 
