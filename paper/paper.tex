@@ -16,7 +16,6 @@
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
 \usepackage{cite}                      % automatically sort mass cites
 \usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
-\usepackage{placeins}                  % \FloatBarrier
 
 \makeatletter\@ifpackageloaded{refcheck}{\newcommand{\citesforrefcheck}{\nocite{*}}}{\newcommand{\citesforrefcheck}{}}\makeatother
 
@@ -1044,31 +1043,36 @@ sentences of space.
 \section{Conclusion}
 
 We have seen that a modern clique algorithm can perform competitively for maximum common subgraph
-problems, particularly when edge labels are involved.
+problems, particularly when edge labels are involved.  We believe there is further scope for
+tailoring clique algorithms for association graphs, including specialised inference, a bound
+function which is aware that it is working on an association graph, and better initial vertex
+orderings. Treating the first branch specially may also be beneficial, since the first branch has an
+unusually large effect on the search space with association graphs
+\cite{DBLP:conf/cocoon/SutersAZSSL05}.
 
-We believe there is further scope for tailoring clique algorithms for association graphs.
-Specialised inference, association-aware bound function. Treating the first branch specially, since
-it will eliminate so much of the search space \cite{DBLP:conf/cocoon/SutersAZSSL05}.
-
-For CP models for the connected version of the problem, we saw the benefits of combining
-conventional filtering with a special branching rule. Using a branching rule for correctness, rather
-than simply as an ordering heuristic, is unconventional and does not cleanly fit into the
-abstractions used by toolkits.
+For CP models, using a branching rule for correctness, rather than simply as an ordering heuristic,
+is unconventional and does not cleanly fit into the abstractions used by toolkits. However, we saw
+that combining conventional filtering and the special branching rule was beneficial.
 
 We looked only at single-threaded versions of these algorithms. Maximum clique algorithms have been
 extended for thread-parallel search
-\cite{DBLP:journals/algorithms/McCreeshP13,DBLP:journals/jcisd/DepolliKRTJ13,DBLP:journals/cor/SegundoLP16}.
-In particular, EHPs \cite{DBLP:journals/topc/McCreeshP15}. On the CP side, decomposition \cite{DBLP:conf/ictai/MinotNS15}.
+\cite{DBLP:journals/algorithms/McCreeshP13,DBLP:journals/jcisd/DepolliKRTJ13,DBLP:journals/cor/SegundoLP16},
+and in particular, work stealing strategies designed to eliminate exceptionally hard instances by
+forcing diversity at the top of search \cite{DBLP:journals/topc/McCreeshP15} could be beneficial in
+eliminating some of the rare cases where the clique algorithm is many orders of magnitude worse than
+the CP models. On the CP side, the focus for parallelism has been on decomposition
+\cite{DBLP:conf/ictai/MinotNS15}, rather than fully dynamic work stealing---it would be interesting
+to compare these approaches.
 
-We haven't discussed partial or weighted subgraphs, or strongly connected directed.
-
-Symmetries. Dynamic.
-
-Better instances.
+Finally, we intend to investigate larger and more diverse sets of instances, and other variants of
+the problem. We have yet to investigate partial or weighted graphs. Nor have we considered strongly
+connected common subgraphs---this would make the branching approach impossible, and filtering would
+be much more complicated. From the datasets we selected, there appears to be little scope for
+per-instance algorithm selection, but other families of input data could lead to a different
+conclusion.
 
 \citesforrefcheck
 
-\FloatBarrier % looks better this way...
 \bibliographystyle{splncs}
 \bibliography{paper}
 
