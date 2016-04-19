@@ -16,6 +16,7 @@
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
 \usepackage{cite}                      % automatically sort mass cites
 \usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
+\usepackage{placeins}                  % \FloatBarrier
 
 \makeatletter\@ifpackageloaded{refcheck}{\newcommand{\citesforrefcheck}{\nocite{*}}}{\newcommand{\citesforrefcheck}{}}\makeatother
 
@@ -377,7 +378,7 @@ vertices.
 
     \centering
     \input{gen-graph-unconnected-heatmap}
-    \caption{The cumulative number of instances solved in under a certain time: on the top, 33\%
+    \caption{The cumulative number of MCS instances solved in under a certain time: on the top, 33\%
         labelled graphs, and in the middle, unlabelled and undirected graphs. On the bottom row, an
         instance-by-instance comparison of the clique model with the best CP model, with 33\%
         labelled graphs (with MAC) on the left, and unlabelled and undirected graphs (with FC) on
@@ -410,7 +411,16 @@ may be combined, and we show in \cref{mccs-cp-eval} that the best results are ob
 combining them. In \cref{mccs-clique}, we introduce a new way for ensuring connectedness in a
 clique-based approach. Finally, we compare CP and our clique-based approach in \cref{mccs-eval}.
 
+?? Connected, not strongly connected. No directed graphs.
+
 \subsection{Ensuring Connectedness in CP}\label{mccs-cp}
+
+Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} implement the connectedness constraint by using a
+specific branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
+set of variables already assigned to values different from $\bot$. The next variable to be assigned
+is chosen within the set of non assigned variables which are the neighbour of at least one vertex of
+$\mathit{CComp}$.  When this set is empty, all remaining non assigned variables are assigned to
+$\bot$. We illustrate this in \cref{figure:restricted}.
 
 \begin{figure}[tb]
     \newcounter{stepcounter}
@@ -626,13 +636,6 @@ clique-based approach. Finally, we compare CP and our clique-based approach in \
         though $5$ remains in its domain and does not violate any constraints.}\label{figure:restricted}
 \end{figure}
 
-Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} implement the connectedness constraint by using a
-specific branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
-set of variables already assigned to values different from $\bot$. The next variable to be assigned
-is chosen within the set of non assigned variables which are the neighbour of at least one vertex of
-$\mathit{CComp}$.  When this set is empty, all remaining non assigned variables are assigned to
-$\bot$. We illustrate this in \cref{figure:restricted}.
-
 A more traditional CP approach would be to express connectedness as a conventional constraint. For
 example, CP(Graph) \cite{DBLP:conf/cp/DoomsDD05} introduces graph domain variables and enforces
 connectivity via the \emph{reachable} constraint, ensuring that there is a path from a specified
@@ -689,21 +692,23 @@ domains to ensure connectedness consistency.
     \vspace*{1em}
     \centering
     \input{gen-graph-connected-cp}
-    \caption{A pairwise comparison of different CP techniques. ?? This looks horrible! Make it look
-        better.} \label{figure:connected-cp}
+    \caption{On top, the cumulative number of MCCS instances solved in under a certain time using
+        different CP techniques. Below, instance-by-instance comparisons.}
+        \label{figure:connected-cp}
 \end{figure}
 
-\subsection{Experimental Comparison of CP Models}\label{mccs-cp-eval}
+\subsection{Experimental Comparison of CP Connectedness Techniques}\label{mccs-cp-eval}
 
 \Cref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by
 specific branching (Branch), by specific filtering (Filter), or by combining specific branching and
-filtering (Both). We show only results using the best variant for each class, i.e.\ MAC for labelled
-graphs, and FC for unlabelled graphs, as the other results are very similar.  On labelled graphs, we
-observe that branching often outperforms filtering, and that combining both is rarely much worse
-than just doing one or the other, and is often much better, even if on average it is slightly
-slower.  On unlabelled graphs, we observe that the three variants have rather similar performance.
+filtering (Both). We show only results using the best variant for each class---that is, MAC for
+labelled graphs, and FC for unlabelled graphs (the other results are very similar).  On labelled
+graphs, we see many instances which are solved by branching but not filtering, and vice versa.
+However, combining both is rarely much worse than just doing one or the other, and is often much
+better, even if on average it is slightly slower.  On unlabelled graphs, we observe that the three
+variants have rather similar performance.
 
-\subsection{Ensuring Connectedness in a clique-based approach}\label{mccs-clique}
+\subsection{Ensuring Connectedness in a Clique-Based Approach}\label{mccs-clique}
 
 \christine{The approach should be compared with the approach proposed in \cite{DBLP:conf/mco/VismaraV08}.}
 
@@ -984,14 +989,15 @@ come last (so they are selected first by the reverse branching order). Thus we p
 sequential colourings, first considering the non-branching vertices in $\mathit{remaining} \setminus
 \mathit{connected}$, followed by the branching vertices, and concatenate them
 (\lineref{makecolours}). This produces a valid colouring, since we do not merge any colour classes
-between the two stages, although it may use more colours than a single colouring would\footnote{What
-    if we did not guarantee that vertices in $\mathit{remaining} \cap \mathit{connected}$ came last,
-    and just used a conventional colouring with the branching rule?  Suppose we had four vertices in
-    $\mathit{remaining}$, and produced a colouring $[[v_1, v_2], [v_3], [v_4]]$, and suppose that
-    extending $\mathit{solution}$ with $\{ v_1, v_3, v_4 \}$ gives an optimal solution. If $v_4$ was
-    not $\mathit{connected}$ yet, we would not branch on that subtree, and the bound could eliminate
-    branching on $v_3$ and $v_1$, so we would miss the solution. Thus we cannot simply add the
-branching rule without also adapting the combined bound / ordering heuristic.}.
+between the two stages, although it may use more colours than a single colouring would.
+
+(What if we did not guarantee that vertices in $\mathit{remaining} \cap \mathit{connected}$ came
+last, and just used a conventional colouring with the branching rule?  Suppose we had four vertices
+in $\mathit{remaining}$, and produced a colouring $[[v_1, v_2], [v_3], [v_4]]$, and suppose that
+extending $\mathit{solution}$ with $\{ v_1, v_3, v_4 \}$ gives an optimal solution. If $v_4$ was not
+$\mathit{connected}$ yet, we would not branch on that subtree, and the bound could eliminate
+branching on $v_3$ and $v_1$, so we would miss the solution. Thus we cannot simply add the branching
+rule without also adapting the combined bound / ordering heuristic.)
 
 Our $\FuncSty{colour}$ procedure is the same as the bit-parallel algorithm introduced by San Segundo
 \textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}. While we have remaining vertices to colour
@@ -1003,7 +1009,7 @@ initial vertex orderings have been considered on general clique problems
 \cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}; it is possible that special
 properties of the association graph could be exploited in this step.
 
-\subsection{Experimental comparison of CP with the Clique-based Approach}\label{mccs-eval}
+\subsection{Experimental Comparison of the CP and Clique Approaches}\label{mccs-eval}
 
 \begin{figure}[p]
     \centering
@@ -1015,24 +1021,37 @@ properties of the association graph could be exploited in this step.
     \caption{The cumulative number of connected instances solved in under a certain time: on the
         top, 33\% labelled undirected graphs with up to 100 vertices, and in the middle, unlabelled
         and undirected graphs with up to 35 vertices. On the bottom row, an instance-by-instance
-        comparison of the association and ``MAC both'' approaches, with 33\% labelled graphs on the
+        comparison of the association and CP Both approaches, with 33\% labelled graphs on the
         left, and unlabelled and undirected graphs on the right.} \label{figure:connected-cumulative}
 \end{figure}
 
-\cref{figure:connected-cumulative}
+In \cref{figure:connected-cumulative} we compare the clique-based approach to the connected problem
+with both CP Both approaches. The trend is broadly similar to the unconnected problem: for labelled
+graphs, the clique-based approach is the clear winner, but for unlabelled graphs the clique approach
+lags somewhat.
+
+The heatmaps show a more detailed picture. As before, in the unlabelled case, the association
+approach is almost never more than an order of magnitude better, and is often much worse. In the
+labelled case, however, there are now many instances where the CP approach does much better than the
+association approach, despite the association approach remaining much better overall.
+
+?? Can we figure out why? Is it time-to-find or time-to-prove? Assume that this will take up a few
+sentences of space.
 
 \section{Conclusion}
 
 Some immoral perspectives on closely coupling branching with a particular constraint. Whether this
 is useful for other things, like ASP.
 
+Adapting clique algorithms: specialised inference, association-aware bound function, .
+
 SIP invariants when very similar graphs (except these are easy).
 
 We haven't discussed partial subgraphs, or connected directed.
 
-Possibly portfolios.
-
 Better instances.
+
+Possibly portfolios.
 
 Parallel. ?? Stuff on EHPs, how work stealing matters here too \cite{DBLP:journals/jco/BatsynGMP14,DBLP:journals/jcc/KoncDTRJ12,DBLP:journals/algorithms/McCreeshP13,DBLP:journals/topc/McCreeshP15,DBLP:journals/cor/SegundoLP16}
 
@@ -1041,6 +1060,7 @@ Parallel. ?? Stuff on EHPs, how work stealing matters here too \cite{DBLP:journa
 
 \citesforrefcheck
 
+\FloatBarrier % looks better this way...
 \bibliographystyle{splncs}
 \bibliography{paper}
 

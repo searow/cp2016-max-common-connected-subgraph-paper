@@ -14,7 +14,6 @@ set rmargin 2
 
 set nokey
 unset colorbox
-set grid
 set border 3
 unset rmargin
 set size square
@@ -36,7 +35,7 @@ set tics front
 set xlabel offset character 0, character 1.5
 set ylabel offset character 4.2, character 0
 
-set label 1 at graph 0.5, graph 0.965 center '33\% Labelled' front
+set label 1 at graph 0.5, graph 0.95 center '33\% Labelled' front
 
 set xlabel "MAC Branch"
 set ylabel "MAC Filter"
@@ -56,7 +55,7 @@ plot \
     "connected-cp-undir33-mac-filter-mac-both-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
     x w l lc 'black' notitle axes x1y1
 
-set label 1 at graph 0.5, graph 0.965 center "Unlabelled" front
+set label 1 at graph 0.5, graph 0.95 center "Unlabelled" front
 
 set xlabel "FC Branch"
 set ylabel "FC Filter"

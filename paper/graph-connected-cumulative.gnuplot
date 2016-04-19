@@ -26,7 +26,7 @@ set yrange [1:81400]
 set format x '$10^{%T}$'
 unset format y
 
-set key Left at graph 1, graph 0.55
+set key Left at graph 0.9, graph 0.35
 
 plot \
     "connected-undir33.data" u (sprintf("%.1e",$8)+0):($8>=3600e3?1e-10:1) smooth cumulative ti "Association" lc rgb '#4393C3', \
@@ -51,7 +51,7 @@ set yrange [0:27500]
 set format x '$10^{%T}$'
 unset format y
 
-set key Left at graph 1, graph 0.55
+set key Left at graph 0.9, graph 0.35
 
 set label 1 at graph 0.5, graph 0.95 center "Unlabelled" front
 
