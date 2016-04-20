@@ -855,25 +855,25 @@ take into account restricted branching.
     \nl $\KwSty{return} ~ \mathit{incumbent}$ \;
 }
 \vspace{1ex}
-\nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{branchable}$, Set $\mathit{remaining}$) \;
+\nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{connected}$, Set $\mathit{remaining}$) \;
 \nl \Begin{
     \nl $\mathit{colourClasses} \gets \FuncSty{concatenate}($ \label{makecolours} \;
-    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \setminus \mathit{branchable}),$ \;
-    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \cap \mathit{branchable}))$ \;
+    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \setminus \mathit{connected}),$ \;
+    $\hspace*{2em}\FuncSty{colour}(G, \mathit{remaining} \cap \mathit{connected}))$ \;
     \nl \While{$\FuncSty{length}(\mathit{colourClasses}) > 0$\label{outerloop}}{
         \nl \ForEach{$v \in \FuncSty{last}(\mathit{colourClasses}) \textnormal{~in reverse order}$\label{innerloop}}{
             \nl \lIf{$|\mathit{solution}| + \FuncSty{length}(\mathit{colourClasses}) \leq
             |\mathit{incumbent}|$}{\KwSty{return}\label{bound}}
-            \nl \lIf{$v \notin \mathit{branchable} ~ \KwSty{and} ~ \mathit{solution} \ne
+            \nl \lIf{$v \notin \mathit{connected} ~ \KwSty{and} ~ \mathit{solution} \ne
             \emptyset$}{\KwSty{return} \label{acceptbranchable}}
             \nl $\mathit{solution}' \gets \mathit{solution} \cup \{ v \} \label{addv} \label{addvtosolution} $\;
             \nl \lIf{$|\mathit{solution}'| > |\mathit{incumbent}|$}{$\mathit{incumbent} \gets
             \mathit{solution}'$ \label{newincumbent}}
-            \nl $\mathit{branchable}' \gets \mathit{branchable} \cup \{ w \in G : \FuncSty{first}(w)
+            \nl $\mathit{connected}' \gets \mathit{connected} \cup \{ w \in G : \FuncSty{first}(w)
             \in \operatorname{N}(G, \FuncSty{first}(v)) \}$ \label{addtobranchable} \;
             \nl $\mathit{remaining}' \gets \mathit{remaining} \cap \operatorname{N}(G, v)$ \label{filterremaining} \;
             \nl \lIf{$\mathit{remaining}' \neq \emptyset$}{$\FuncSty{search}(G, \mathit{solution}',
-            \mathit{branchable}', \mathit{remaining}')$\label{recursesearch}}
+            \mathit{connected}', \mathit{remaining}')$\label{recursesearch}}
          }
          \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
      }
@@ -915,7 +915,7 @@ the next iteration where $v$ is instead rejected. When $v$ is accepted, we add i
 $\mathit{solution'}$ (\lineref{addvtosolution}), and create a new $\mathit{remaining'}$ containing
 only the vertices in $\mathit{remaining}$ which are adjacent to $v$ (\lineref{filterremaining}).
 
-The $\mathit{branchable}$ set contains the set of association graph vertices which correspond to
+The $\mathit{connected}$ set contains the set of association graph vertices which correspond to
 vertices adjacent to an already-accepted vertex in the first input graph---in constraint programming terms, it is the
 set of assignments which could be made next which maintain connectedness. (Using only one of the two
 input graphs is sufficient for correctness, and has the advantage that the connectedness set
@@ -923,7 +923,7 @@ may be determined by a simple lookup into a precomputed array which maps each ve
 the first input graph to a bitset.) At the top of search, this set is empty, and is not used (our
 first vertex selection is special, and does not care about connectedness). At subsequent depths, we
 may only accept vertices which are in this set, and if no such vertices remain then we return
-immediately (\lineref{acceptbranchable}). When recursing, we extend $\mathit{branchable}$ with the
+immediately (\lineref{acceptbranchable}). When recursing, we extend $\mathit{connected}$ with the
 new vertices permitted by our acceptance of the branching $v$ (\lineref{addtobranchable}). Note that
 we are assuming that inside the main loops, we encounter every vertex in $\mathit{remaining} \cap
 \mathit{connected}$ before any vertex in $\mathit{remaining} \setminus \mathit{connected}$.
@@ -990,7 +990,7 @@ immediately (\lineref{bound}).
             &
             \begin{tikzpicture}[scale=0.33]
                     \node [anchor=west] (Ns) at (0, 3.5) { $\mathit{solution}$ };
-                    \node [anchor=west] (Nb) at (0, 2) { $\mathit{branchable}$ };
+                    \node [anchor=west] (Nb) at (0, 2) { $\mathit{connected}$ };
                     \node [anchor=west] (Nr) at (0, 0.5) { $\mathit{remaining}$ };
 
                     \node [anchor=west] (Vs) at (5.5, 3.5) { $\{ (a, 1) \}$ };
@@ -1037,8 +1037,10 @@ immediately (\lineref{bound}).
                     \draw (Mb3) -- (Md2);
             \end{tikzpicture}
             \\[0.1cm]
-            \stepcounter{stepcounter2}\roman{stepcounter2}) $\mathit{remaining} \setminus \mathit{branchable}$ &
-            \stepcounter{stepcounter2}\roman{stepcounter2}) $\mathit{remaining} \cap \mathit{branchable}$
+            \stepcounter{stepcounter2}\roman{stepcounter2}) $\mathit{remaining} \setminus
+            \mathit{connected}$ &
+            \stepcounter{stepcounter2}\roman{stepcounter2}) $\mathit{remaining} \cap
+            \mathit{connected}$
             \\
         };
     \end{tikzpicture}\\[0.1cm]\begin{tikzpicture}[scale=0.33]
@@ -1075,8 +1077,8 @@ immediately (\lineref{bound}).
     \caption{Solving a maximum common connected problem using an association graph. Suppose we
         have already mapped vertex $a$ to vertex $1$, giving the assignments on the right. Now we
         have two subgraphs to colour. We need two colours for $\mathit{remaining} \setminus
-        \mathit{branchable}$, and we place these two colour classes first in the $\mathit{colourClasses}$
-        variable. We can also colour $\mathit{remaining} \cap \mathit{branchable}$ using two
+        \mathit{connected}$, and we place these two colour classes first in the $\mathit{colourClasses}$
+        variable. We can also colour $\mathit{remaining} \cap \mathit{connected}$ using two
         colours, since we cannot simultaneously map $c$ to $2$ and $d$ to $3$, or vice-versa. Thus
         $\mathit{colourClasses}$ becomes a list of four colour classes. This tells us that if we hope to
         extend the current common subgraph by another four vertices, we
@@ -1084,7 +1086,7 @@ immediately (\lineref{bound}).
         possible, so the bound here gives an overestimate). The algorithm thus guesses $d \mapsto 3$ as its next
 assignment, and if that fails, $d \mapsto 2$, and so on; once $b \mapsto 3$ is reached, the bound
 decreases by one, and if $f \mapsto 5$ were reached we would stop due to a lack of remaining
-branchable vertices. }\label{figure:assocrestricted}
+connected association nodes. }\label{figure:assocrestricted}
 \end{figure}
 
 Finally, we describe the colouring process---an example is shown in \cref{figure:assocrestricted}.
