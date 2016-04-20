@@ -34,10 +34,10 @@
 
 % pretty colours
 \definecolor{uofgsandstone}{rgb}{0.321569, 0.278431, 0.231373}
-\definecolor{uofgsunshine}{rgb}{1.0, 0.862745, 0.211765}
-\definecolor{uofgcobalt}{rgb}{0, 0.615686, 0.92549}
-\definecolor{uofglawn}{rgb}{0.517647, 0.741176, 0}
-\definecolor{uofgthistle}{rgb}{0.584314, 0.070588, 0.447059}
+\definecolor{chromayellow}{rgb}{1.0, 1.0, 0.878431}
+\definecolor{chromagreen}{rgb}{0.564706, 0.933333, 0.564706}
+\definecolor{chromateal}{rgb}{0, 0.501961, 0.501961}
+\definecolor{chromanavy}{rgb}{0, 0, 0.501961}
 
 \newcommand{\lineref}[1]{line~\ref{#1}}
 \newcommand{\twolinesref}[2]{lines~\ref{#1} and~\ref{#2}}
@@ -79,15 +79,15 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
     \centering
     \begin{tikzpicture}[scale=0.33]%{{{
         \begin{scope}[rotate=90]
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
             \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
             \draw [very thick] (M2) -- (M4);
@@ -103,15 +103,15 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
         \end{scope}
 
         \begin{scope}[xshift=7cm, rotate=90]
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
             \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
             \draw [very thick] (M2) -- (M4);
@@ -125,14 +125,14 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
         \end{scope}
 
         \begin{scope}[xshift=18cm, rotate=90]
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
             \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M8) at ($(330:1.5) + (M6)$) {\phantom{0}};
             \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M9) at ($(270:1.5) + (M6)$) {\phantom{0}};
 
             \draw [very thick] (M1) -- (M2);
@@ -149,13 +149,13 @@ Universit\'e Lyon 1, LIRIS, UMR5205, F-69621, France  \and INSA-Lyon, LIRIS, UMR
         \end{scope}
 
         \begin{scope}[xshift=25cm, rotate=90]
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M1) at (90:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M2) at (150:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M3) at (30:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M4) at (210:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M5) at (330:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M6) at (270:1.5) {\phantom{0}};
+            \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (M7) at ($(210:1.5) + (M6)$) {\phantom{0}};
             \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M8) at ($(270:1.5) + (M6)$) {\phantom{0}};
             \node[draw, circle, draw=uofgsandstone!40, fill=white, inner sep=0.5pt, font=\normalsize] (M9) at ($(330:1.5) + (M8)$) {\phantom{0}};
 
@@ -464,7 +464,7 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
         \end{scope}
 
         \begin{scope}[xshift=12.8cm]
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
             \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
@@ -482,7 +482,7 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
             \draw [dotted] (Mb) -- (Md);
             \draw [dotted] (Mc) -- (Me);
 
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
@@ -504,8 +504,8 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
         \end{scope}
 
         \begin{scope}[xshift=25.6cm]
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
             \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
@@ -522,8 +522,8 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
             \draw [color=uofgsandstone!40] (Mb) -- (Md);
             \draw [color=uofgsandstone!40] (Mc) -- (Me);
 
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
@@ -544,10 +544,10 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
         \end{scope}
 
         \begin{scope}[yshift=-9cm]
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
-            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
             \node[draw, dotted, circle, fill=white, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
 
             \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
@@ -562,10 +562,10 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
             \draw [very thick] (Mb) -- (Md);
             \draw [color=uofgsandstone!40] (Mc) -- (Me);
 
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
-            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
 
             \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
@@ -584,10 +584,10 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
         \end{scope}
 
         \begin{scope}[xshift=12.8cm, yshift=-9cm]
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Ma) at (0, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 2) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 2) {\phantom{0}};
-            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
+            \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md) at (0, 0) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Me) at (2, 0) {\phantom{0}};
 
             \node [left = 0 of Ma, font=\small] { \vphantom{0}a };
@@ -602,10 +602,10 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
             \draw [very thick] (Mb) -- (Md);
             \draw [color=uofgsandstone!40] (Mc) -- (Me);
 
-            \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
-            \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (5.6, 4) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (M2) at (7.6, 4) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M3) at (5.6, 2) {\phantom{0}};
-            \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
+            \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (M4) at (7.6, 2) {\phantom{0}};
             \node[draw, circle, fill=white, inner sep=0.5pt, font=\normalsize] (M5) at (5.6, 0) {\phantom{0}};
 
             \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
@@ -879,10 +879,10 @@ immediately (\lineref{bound}).
             \stepcounter{stepcounter2}\roman{stepcounter2}) Search variables after guessing $a \mapsto 1$
             \\[0.2cm]
             \begin{tikzpicture}[scale=0.33]
-                    \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 2) {\phantom{0}};
-                    \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me5) at (3, 2) {\phantom{0}};
-                    \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mf4) at (0, 0) {\phantom{0}};
-                    \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mf5) at (3, 0) {\phantom{0}};
+                    \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 2) {\phantom{0}};
+                    \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Me5) at (3, 2) {\phantom{0}};
+                    \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (Mf4) at (0, 0) {\phantom{0}};
+                    \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (Mf5) at (3, 0) {\phantom{0}};
 
                     \node [above = 0 of Me4, font=\small] { \vphantom{0}(e, 4) };
                     \node [above = 0 of Me5, font=\small] { \vphantom{0}(e, 5) };
@@ -894,12 +894,12 @@ immediately (\lineref{bound}).
             \end{tikzpicture}
             &
             \begin{tikzpicture}[scale=0.33]
-                    \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb2) at (3, 2) {\phantom{0}};
-                    \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb3) at (6, 2) {\phantom{0}};
-                    \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Mc2) at (0, 0) {\phantom{0}};
-                    \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Mc3) at (3, 0) {\phantom{0}};
-                    \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md2) at (6, 0) {\phantom{0}};
-                    \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md3) at (9, 0) {\phantom{0}};
+                    \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb2) at (3, 2) {\phantom{0}};
+                    \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb3) at (6, 2) {\phantom{0}};
+                    \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Mc2) at (0, 0) {\phantom{0}};
+                    \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Mc3) at (3, 0) {\phantom{0}};
+                    \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md2) at (6, 0) {\phantom{0}};
+                    \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md3) at (9, 0) {\phantom{0}};
 
                     \node [above = 0 of Mb2, font=\small] { \vphantom{0}(b, 2) };
                     \node [above = 0 of Mb3, font=\small] { \vphantom{0}(b, 3) };
@@ -921,16 +921,16 @@ immediately (\lineref{bound}).
     \end{tikzpicture}\\[0.1cm]\begin{tikzpicture}[scale=0.33]
         \matrix (m) [matrix of nodes] {
             \begin{tikzpicture}[scale=0.33]
-                \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgsunshine, inner sep=0.5pt, font=\normalsize] (Me5) at (3, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mf4) at (6, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgcobalt, inner sep=0.5pt, font=\normalsize] (Mf5) at (9, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb2) at (12, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofglawn, inner sep=0.5pt, font=\normalsize] (Mb3) at (15, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Mc2) at (18, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Mc3) at (21, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md2) at (24, 0) {\phantom{0}};
-                \node[draw, circle, fill=uofgthistle, inner sep=0.5pt, font=\normalsize] (Md3) at (27, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Me4) at (0, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Me5) at (3, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (Mf4) at (6, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromateal, inner sep=0.5pt, font=\normalsize] (Mf5) at (9, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb2) at (12, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb3) at (15, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Mc2) at (18, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Mc3) at (21, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md2) at (24, 0) {\phantom{0}};
+                \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md3) at (27, 0) {\phantom{0}};
 
                 \node [above = 0 of Me4, font=\small, xshift=-0.5ex] { \vphantom{0}[[(e, 4), };
                 \node [above = 0 of Me5, font=\small] { \vphantom{0}(e, 5)], };

@@ -30,9 +30,9 @@ unset format y
 set key Left at graph 1, graph 0.33
 
 plot \
-    "unconnected-33.data" u (sprintf("%.1e",$4)+0):($4 >= 3600e3 ? 1e-10 : 1e-3) smooth cumulative ti "Clique" lc rgb '#4393C3', \
-    "unconnected-33.data" u (sprintf("%.1e",$2 * 1000)+0):($2 * 1000 >= 3600e3 ? 1e-10 : 1e-3) smooth cumulative ti "MAC" lc rgb '#7a0177' dt 2, \
-    "unconnected-33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1e-3) smooth cumulative ti "FC" lc rgb '#238443' dt 5
+    "unconnected-33.data" u (sprintf("%.1e",$4)+0):($4 >= 3600e3 ? 1e-10 : 1e-3) smooth cumulative ti "Clique" lc rgb '#90ee90', \
+    "unconnected-33.data" u (sprintf("%.1e",$2 * 1000)+0):($2 * 1000 >= 3600e3 ? 1e-10 : 1e-3) smooth cumulative ti "MAC" lc rgb '#008080' dt 2, \
+    "unconnected-33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1e-3) smooth cumulative ti "FC" lc rgb '#000080' dt 5
 
 set xlabel "Runtime (ms)"
 set ylabel "Thousands of Instances"
@@ -53,7 +53,7 @@ set key Left at graph 1, graph 0.33
 set label 1 at graph 0.5, graph 0.95 center "Unlabelled" front
 
 plot \
-    "unconnected-plain.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1e-3) smooth cumulative ti "FC" lc rgb '#238443' dt 5, \
-    "unconnected-plain.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1e-3) smooth cumulative ti "MAC" lc rgb '#7a0177' dt 2, \
-    "unconnected-plain.data" u (sprintf("%.1e",$4)+0):($4>=3600e3?1e-10:1e-3) smooth cumulative ti "Clique" lc rgb '#4393C3'
+    "unconnected-plain.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1e-3) smooth cumulative ti "FC" lc rgb '#000080' dt 5, \
+    "unconnected-plain.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1e-3) smooth cumulative ti "MAC" lc rgb '#008080' dt 2, \
+    "unconnected-plain.data" u (sprintf("%.1e",$4)+0):($4>=3600e3?1e-10:1e-3) smooth cumulative ti "Clique" lc rgb '#90ee90'
 
