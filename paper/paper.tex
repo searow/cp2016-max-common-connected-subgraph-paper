@@ -297,10 +297,10 @@ v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname
     \centering
     \begin{tikzpicture}[scale=0.33]%{{{
         \begin{scope}
-            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma) at (2, 10) {\phantom{0}};
-            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 8) {\phantom{0}};
-            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 8) {\phantom{0}};
-            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Md) at (4, 8) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma) at (2, 8) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 6) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 6) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Md) at (4, 6) {\phantom{0}};
 
             \node [right = 0 of Ma, font=\small] { \vphantom{0}a };
             \node [below = 0 of Mb, font=\small] { \vphantom{0}b };
@@ -334,18 +334,18 @@ v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname
             \draw [very thick] (M1) to [out=150, in=80, looseness=8] (M1);
         \end{scope}
 
-        \begin{scope}[xshift=15cm]
+        \begin{scope}[xshift=15cm, yshift=-1cm]
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma1) at (2.6, 9) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma2) at (4.2, 9) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma3) at (5.8, 9) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma4) at (7.4, 9) {\phantom{0}};
-            \node [above = 0 of Ma1, font=\small] { \vphantom{0}1 };
-            \node [above = 0 of Ma2, font=\small] { \vphantom{0}2 };
-            \node [above = 0 of Ma3, font=\small] { \vphantom{0}3 };
-            \node [above = 0 of Ma4, font=\small] { \vphantom{0}4 };
+            \node (La1) [above = 0 of Ma1, font=\small] { \vphantom{0}1 };
+            \node (La2) [above = 0 of Ma2, font=\small] { \vphantom{0}2 };
+            \node (La3) [above = 0 of Ma3, font=\small] { \vphantom{0}3 };
+            \node (La4) [above = 0 of Ma4, font=\small] { \vphantom{0}4 };
 
-            \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Ma1.north west) -- (Ma4.north east)
-            node [midway, above=0.7cm] { $a \mapsto$ };
+            \node [left=0 of La1] { $a \mapsto \{$ };
+            \node [right=0 of La4] { $\}$ };
 
             \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb1) at (1, 2.6) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb2) at (1, 4.2) {\phantom{0}};
@@ -363,13 +363,13 @@ v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname
             \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mc2) at (4.2, 1) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc3) at (5.8, 1) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc4) at (7.4, 1) {\phantom{0}};
-            \node [below = 0 of Mc1, font=\small] { \vphantom{0}1 };
-            \node [below = 0 of Mc2, font=\small] { \vphantom{0}2 };
-            \node [below = 0 of Mc3, font=\small] { \vphantom{0}3 };
-            \node [below = 0 of Mc4, font=\small] { \vphantom{0}4 };
+            \node (Lc1) [below = 0 of Mc1, font=\small] { \vphantom{0}1 };
+            \node (Lc2) [below = 0 of Mc2, font=\small] { \vphantom{0}2 };
+            \node (Lc3) [below = 0 of Mc3, font=\small] { \vphantom{0}3 };
+            \node (Lc4) [below = 0 of Mc4, font=\small] { \vphantom{0}4 };
 
-            \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Mc4.south east) -- (Mc1.south west)
-            node [midway, below=0.7cm] { $c \mapsto$ };
+            \node [left=0 of Lc1] { $c \mapsto \{$ };
+            \node [right=0 of Lc4] { $\}$ };
 
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md1) at (9, 2.6) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md2) at (9, 4.2) {\phantom{0}};
@@ -381,7 +381,7 @@ v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname
             \node [right = 0 of Md4, font=\small] { \vphantom{0}4 };
 
             \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Md4.north east) -- (Md1.south east)
-            node [midway, right=0.7cm] { $d \mapsto$ };
+            node [midway, right=0.7cm] { $\reflectbox{\ensuremath{\mapsto}} d$ };
 
             \begin{scope}[on background layer]
                 \draw [draw=uofgsandstone!40] ($(Ma1.south)!0.5!(Ma1)$) -- ($(Md4.west)!0.5!(Md4)$);
