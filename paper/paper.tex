@@ -882,7 +882,7 @@ take into account restricted branching.
 \nl \Begin{
     \nl $\KwSty{return}$ a greedy sequential colouring of the vertices in $\mathit{uncoloured}$,
     using the procedure of San Segundo et al.\ \cite{DBLP:journals/cor/SegundoRJ11} with a static
-    degree order from $G$ and $k_{min} = 0$. \;
+    degree order from $G$ and $k_{\mathit{min}} = 0$. \;
 }
 \caption{An algorithm for a maximum common connected induced subgraph isomorphism via an association graph.}
 \label{algorithm:mccis}
@@ -1106,7 +1106,7 @@ rule without also adapting the combined bound and ordering heuristic.)
 
 Our $\FuncSty{colour}$ procedure is a simple greedy sequential colouring. We use the bit-parallel
 algorithm introduced by San Segundo \textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}, with the
-$k_{min}$ parameter set to $0$, so we do not present it here. We use a simple static degree
+$k_{\mathit{min}}$ parameter set to $0$, so we do not present it here. We use a simple static degree
 ordering; other initial vertex orderings have been considered on general clique problems
 \cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}, and it is possible that
 special properties of the association graph could be exploited in this step (for example, it is
