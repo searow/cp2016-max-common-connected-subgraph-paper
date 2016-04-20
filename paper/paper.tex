@@ -293,8 +293,9 @@ H$ with vertices of the two original graphs, we call vertices of $G \modularprod
 \emph{matching nodes}, as each vertex $(u, u')$ of $G \modularproduct H$ denotes the matching of $u$
 with $u'$. The edges of $G \modularproduct H$ connect matching nodes which denote compatible
 assignments, so two matching nodes $(u, u')$ and  $(v, v')$ are adjacent if $u \neq v$ and $u' \neq
-v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname{E}(G) \Leftrightarrow
-(u', v') \in \operatorname{E}(H)$. We illustrate this in \cref{figure:association}.
+v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname{E}(G)
+\Leftrightarrow (u', v') \in \operatorname{E}(H)$, and if either both or neither of $u$ and $u'$
+have a loop, and likewise for $v$ and $v'$. We illustrate this in \cref{figure:association}.
 
 \begin{figure}[tb]
     \centering
@@ -404,8 +405,9 @@ v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname
 
     \caption{A maximum common induced subgraph between the two graphs on the left has three
         vertices---one solution is highlighted. On the right, the association graph encoding: the
-        highlighted clique of size three shows the same solution. In practice the isolated vertices
-        (representing assignments between incompatible vertices) would be omitted.}\label{figure:association}
+        highlighted clique of size three shows the same solution. In practice the isolated matching
+        nodes (representing assignments between incompatible vertices, due to the presence or
+    absence of loops) would be omitted.}\label{figure:association}
 \end{figure}
 
 A \emph{clique} is a subgraph whose vertices are all pairwise adjacent. A clique is \emph{maximal}
