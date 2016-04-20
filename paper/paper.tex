@@ -534,10 +534,10 @@ graphs, but not to the strongly connected case.
 \subsection{Ensuring Connectedness in CP}\label{mccs-cp}
 
 Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} implement the connectedness constraint by using a
-branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
+branching rule which selects the next variable to be assigned. Let $A$ be the
 set of variables already assigned to values different from $\bot$. The next variable to be assigned
 is chosen within the set of unassigned variables which are the neighbour of at least one vertex of
-$\mathit{CComp}$.  When this set is empty, all remaining unassigned variables are assigned to
+$A$.  When this set is empty, all remaining unassigned variables are assigned to
 $\bot$. We illustrate this in \cref{figure:restricted}.
 
 \begin{figure}[tb]
@@ -800,7 +800,7 @@ from all domains to which it belongs.
 
 Finally, the two approaches for ensuring connectedness (branching and filtering) are complementary
 and may be combined: at each step of the search, we select the next variable to be assigned within
-the neighbors of $\mathit{CComp}$, and each time a vertex of $H$ is removed from a domain we filter
+the neighbors of $A$, and each time a vertex of $H$ is removed from a domain we filter
 domains to ensure connectedness consistency.
 
 \begin{figure}[tb]
