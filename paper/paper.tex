@@ -370,7 +370,7 @@ number of vertices in each graph is no more than 35; for labelled graphs, which 
 computationally challenging, we select all 81,400 graph pairs, to include graphs with up to 100
 vertices.
 
-\begin{figure}[p]
+\begin{figure}[tb]
     \centering
     \input{gen-graph-unconnected-cumulative}
     \vspace*{1em}
@@ -378,13 +378,13 @@ vertices.
     \centering
     \input{gen-graph-unconnected-heatmap}
     \caption{The cumulative number of MCS instances solved in under a certain time: on the top, 33\%
-        labelled graphs, and in the middle, unlabelled and undirected graphs. On the bottom row, an
+        labelled graphs, and then unlabelled and undirected graphs. On the bottom, an
         instance-by-instance comparison of the clique model with the best CP model, with 33\%
         labelled graphs (with MAC) on the left, and unlabelled and undirected graphs (with FC) on
     the right.} \label{figure:unconnected-cumulative}
 \end{figure}
 
-The top two plots of \cref{figure:unconnected-cumulative} display the cumulative number of instances
+The two plots on the top of \cref{figure:unconnected-cumulative} display the cumulative number of instances
 solved with respect to time.  When graphs are labelled, the clique-based approach clearly
 outperforms either CP model, and MAC has a slight advantage over FC. For unlabelled graphs, the
 three approaches are broadly comparable, and ultimately FC beats MAC, which beats the clique
@@ -1013,7 +1013,7 @@ properties of the association graph could be exploited in this step.
 
 \subsection{Experimental Comparison of the CP and Clique Approaches}\label{mccs-eval}
 
-\begin{figure}[p]
+\begin{figure}[tb]
     \centering
     \input{gen-graph-connected-cumulative}
     \vspace*{1em}
@@ -1021,8 +1021,8 @@ properties of the association graph could be exploited in this step.
     \centering
     \input{gen-graph-connected-heatmap}
     \caption{The cumulative number of connected instances solved in under a certain time: on the
-        top, 33\% labelled undirected graphs with up to 100 vertices, and in the middle, unlabelled
-        and undirected graphs with up to 35 vertices. On the bottom row, an instance-by-instance
+        top, 33\% labelled undirected graphs with up to 100 vertices, and then unlabelled
+        and undirected graphs with up to 35 vertices. On the bottom, an instance-by-instance
         comparison of the association and CP Both approaches, with 33\% labelled graphs on the
         left, and unlabelled and undirected graphs on the right.} \label{figure:connected-cumulative}
 \end{figure}

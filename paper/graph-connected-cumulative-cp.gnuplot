@@ -1,6 +1,6 @@
 # vim: set et ft=gnuplot sw=4 :
 
-set terminal tikz color size 4.6in,2.3in font '\scriptsize'
+set terminal tikz color size 4.6in,1.9in font '\scriptsize'
 load "chromajs.pal"
 
 set output "gen-graph-connected-cumulative-cp.tex"
@@ -11,12 +11,10 @@ set border 3
 set lmargin 3
 set rmargin 3
 
-set nokey
-
 set label 1 at graph 0.5, graph 0.95 center '33\% Labelled' front
 
 set xlabel "Runtime (ms)"
-set ylabel "Thousands of Instances Solved"
+set ylabel "Thousands of Instances"
 set logscale x
 unset logscale y
 unset logscale cb
@@ -37,7 +35,7 @@ plot \
     "connected-undir33.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1e-3) smooth cumulative ti "MAC Filter" lc rgb '#238443' dt 5
 
 set xlabel "Runtime (ms)"
-set ylabel "Thousands of Instances Solved"
+set ylabel "Thousands of Instances"
 set logscale x
 unset logscale y
 unset logscale cb
