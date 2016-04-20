@@ -760,8 +760,8 @@ connectivity via the \emph{reachable} constraint, ensuring that there is a path 
 vertex to a specified set of vertices. One such constraint is then posted for each of the vertices
 in the graph and encodes the transitive closure of the graph. Brown et al.\ \cite{Brown:2005}
 explored the use of constraint programming in the generation of connected graphs with specified
-degree sequences.  Two constraints were combined, i.e.\ the graphical constraint (a backtrackable
-implementation of the Havel-Hakimi algorithm) with a connectivity constraint implemented using sets
+degree sequences.  Two constraints were combined: the graphical constraint (a backtrackable
+implementation of the Havel-Hakimi algorithm), and a connectivity constraint implemented using sets
 of vertices, where vertex sets $A$ and $B$ are combined when there exists a pair of vertices $v \in
 A$ and $w \in B$ and an edge $(v,w) \in E$. Residual degree counts are maintained on components and
 vertices to enforce graphicality and connectivity. Prosser and Unsworth
