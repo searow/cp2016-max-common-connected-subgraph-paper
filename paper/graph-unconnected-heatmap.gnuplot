@@ -34,7 +34,7 @@ set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 set format cb '$10^{%T}$'
 set tics front
-load "chromajs.pal"
+load "chromagreenblue.pal"
 
 plot \
     "unconnected-33-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
@@ -64,7 +64,7 @@ set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 set format cb '$10^{%T}$'
 set tics front
-load "chromajs.pal"
+load "chromagreenblue.pal"
 
 plot \
     "unconnected-plain-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \

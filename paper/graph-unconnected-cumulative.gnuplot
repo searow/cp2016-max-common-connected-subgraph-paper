@@ -1,7 +1,7 @@
 # vim: set et ft=gnuplot sw=4 :
 
 set terminal tikz color size 4.6in,1.9in font '\scriptsize'
-load "chromajs.pal"
+load "chromagreenblue.pal"
 
 set output "gen-graph-unconnected-cumulative.tex"
 

@@ -1,7 +1,7 @@
 # vim: set et ft=gnuplot sw=4 :
 
 set terminal tikz color size 4.6in,6.6in font '\scriptsize'
-load "chromajs.pal"
+load "chromagreenblue.pal"
 
 set output "gen-graph-connected-plain.tex"
 
