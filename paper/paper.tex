@@ -191,13 +191,13 @@ We introduce definitions and algorithms on undirected and unlabelled graphs with
 extension to general graphs is straightforward and is discussed in \cref{extension}. An undirected
 graph $G$ is defined by a finite set of vertices $\operatorname{V}(G)$ and a set of undirected edges
 $\operatorname{E}(G) \subseteq \operatorname{V}(G) \times \operatorname{V}(G)$, where $(u, v) \in
-\operatorname{E}(G) \Rightarrow (v, u) \in \operatorname{E}(G) \wedge u \ne v$. The neighbourhood of
+\operatorname{E}(G) \Rightarrow (v, u) \in \operatorname{E}(G)$. The neighbourhood of
 a vertex $v$, written $\operatorname{N}(G, v)$, is the set of vertices to which it is adjacent.
 Given a graph $G$, two vertices $v_s, v_e \in \operatorname{V}(G)$ are connected by a path in $G$ if
 there exists a sequence of vertices $(v_0, v_1, \ldots, v_k)$ such that $v_0 = v_s$, $v_k = v_e$,
 and each pair of successive vertices is connected by an edge, i.e.\ $\forall i\in \{1 \ldots k \},
-(v_{i-1}, v_i) \in \operatorname{E}(G)$. A graph $G$ is \emph{connected} if every pair of vertices
-is connected by a path.
+(v_{i-1}, v_i) \in \operatorname{E}(G)$. A graph $G$ is \emph{connected} if every non-adjacent pair
+of vertices is connected by a path.
 
 The \emph{subgraph} of a graph $G$ \emph{induced by} a set $H \subseteq \operatorname{V}(G)$,
 written $G[H]$, is the graph with vertex set $H$, and with every edge in $G$ which has both
@@ -242,9 +242,9 @@ that it outperforms CP on labelled graphs, whereas it is outperformed by CP on u
 
 There are two main approaches for solving MCS. The first approach (described in \cref{CP}) is based
 on CP, whilst the second (described in \cref{clique}) is based on a reformulation of MCS into a
-maximum clique problem. Both approaches are described for undirected, unlabelled graphs without
-loops; their extension to richer graphs is discussed in \cref{extension}.  (Other approaches have
-been tried, mixed integer programming \cite{DBLP:journals/anor/PivaS12} and heuristics
+maximum clique problem. Both approaches are described for undirected, unlabelled graphs; their
+extension to richer graphs is discussed in \cref{extension}.  (Other approaches have been tried,
+mixed integer programming \cite{DBLP:journals/anor/PivaS12} and heuristics
 \cite{DBLP:journals/jcisd/EnglertK15}; SAT encodings seem to struggle even for subgraph isomorphism
 \cite{UpcomingIJCAIPaper}.)
 
@@ -419,7 +419,7 @@ graph because it has a matching node $(u,\bot)$ for each vertex $u$ of $G$. Each
 $\left|\operatorname{V}(G)\right|$ in the microstructure corresponds to a common subgraph, the size
 of which is defined by the number of matching nodes that do not contain $\bot$.
 
-\subsection{Extension to Labelled or Directed Graphs, and Loops}\label{extension}
+\subsection{Extension to Labelled or Directed Graphs}\label{extension}
 
 In some applications, labels may be associated with vertices or edges. We denote $\lambda(u)$ and
 $\lambda((u, v))$ the label of a vertex $u$ and an edge $(u, v)$, respectively. Where graphs are
@@ -434,11 +434,8 @@ labels, and the set of matching edges to pairs of edges with compatible labels.
 
 The extension of MCS algorithms to directed graphs, where isomorphisms must preserve directed edges,
 is similarly straightforward.
-Finally, some datasets contain loops (self-adjacent vertices). In this case vertices with loops must
-be mapped to vertices with loops (with the same labels, if appropriate), and vertices without loops
-must be mapped to vertices without loops.
 
-Labels, directed edges and loops usually simplify the solution process, both for CP and clique-based
+Labels and directed edges usually simplify the solution process, both for CP and clique-based
 approaches: vertex labels reduce domain sizes for CP, and the number of matching nodes in the
 association graphs; edge labels tighten edge constraints for CP, and make the association graph
 sparser for clique-based approaches. It is worth noting that edge constraints do not help CP
