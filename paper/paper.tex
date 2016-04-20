@@ -291,7 +291,119 @@ H$ with vertices of the two original graphs, we call vertices of $G \modularprod
 with $u'$. The edges of $G \modularproduct H$ connect matching nodes which denote compatible
 assignments, so two matching nodes $(u, u')$ and  $(v, v')$ are adjacent if $u \neq v$ and $u' \neq
 v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname{E}(G) \Leftrightarrow
-(u', v') \in \operatorname{E}(H)$.
+(u', v') \in \operatorname{E}(H)$. We illustrate this in \cref{figure:association}.
+
+\begin{figure}[tb]
+    \centering
+    \begin{tikzpicture}[scale=0.33]%{{{
+        \begin{scope}
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma) at (2, 10) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mb) at (0, 8) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mc) at (2, 8) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Md) at (4, 8) {\phantom{0}};
+
+            \node [right = 0 of Ma, font=\small] { \vphantom{0}a };
+            \node [below = 0 of Mb, font=\small] { \vphantom{0}b };
+            \node [below = 0 of Mc, font=\small] { \vphantom{0}c };
+            \node [below = 0 of Md, font=\small] { \vphantom{0}d };
+
+            \draw [very thick] (Mb) -- (Mc);
+            \draw [very thick] (Mc) -- (Md);
+            \draw [color=uofgsandstone!40] (Ma) -- (Mc);
+            \draw [color=uofgsandstone!40] (Ma) to [out=150, in=80, looseness=8] (Ma);
+            \draw [very thick] (Mb) to [out=150, in=80, looseness=8] (Mb);
+        \end{scope}
+
+        \begin{scope}
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M1) at (1, 2) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M2) at (3, 2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (M3) at (1, 0) {\phantom{0}};
+            \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (M4) at (3, 0) {\phantom{0}};
+
+            \node [left = 0 of M1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of M2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of M3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of M4, font=\small] { \vphantom{0}4 };
+
+            \draw [very thick] (M1) -- (M2);
+            \draw [very thick] (M2) -- (M4);
+            \draw [color=uofgsandstone!40] (M3) -- (M4);
+            \draw [color=uofgsandstone!40] (M1) -- (M3);
+
+            \draw [color=uofgsandstone!40] (M3) to [out=280, in=210, looseness=8] (M3);
+            \draw [very thick] (M1) to [out=150, in=80, looseness=8] (M1);
+        \end{scope}
+
+        \begin{scope}[xshift=15cm]
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma1) at (2.6, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma2) at (4.2, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma3) at (5.8, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Ma4) at (7.4, 9) {\phantom{0}};
+            \node [above = 0 of Ma1, font=\small] { \vphantom{0}1 };
+            \node [above = 0 of Ma2, font=\small] { \vphantom{0}2 };
+            \node [above = 0 of Ma3, font=\small] { \vphantom{0}3 };
+            \node [above = 0 of Ma4, font=\small] { \vphantom{0}4 };
+
+            \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Ma1.north west) -- (Ma4.north east)
+            node [midway, above=0.7cm] { $a \mapsto$ };
+
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mb1) at (1, 2.6) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb2) at (1, 4.2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb3) at (1, 5.8) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mb4) at (1, 7.4) {\phantom{0}};
+            \node [left = 0 of Mb1, font=\small] { \vphantom{0}1 };
+            \node [left = 0 of Mb2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of Mb3, font=\small] { \vphantom{0}3 };
+            \node [left = 0 of Mb4, font=\small] { \vphantom{0}4 };
+
+            \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Mb1.south west) -- (Mb4.north west)
+            node [midway, left=0.7cm] { $b \mapsto$ };
+
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc1) at (2.6, 1) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mc2) at (4.2, 1) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc3) at (5.8, 1) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Mc4) at (7.4, 1) {\phantom{0}};
+            \node [below = 0 of Mc1, font=\small] { \vphantom{0}1 };
+            \node [below = 0 of Mc2, font=\small] { \vphantom{0}2 };
+            \node [below = 0 of Mc3, font=\small] { \vphantom{0}3 };
+            \node [below = 0 of Mc4, font=\small] { \vphantom{0}4 };
+
+            \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Mc4.south east) -- (Mc1.south west)
+            node [midway, below=0.7cm] { $c \mapsto$ };
+
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md1) at (9, 2.6) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md2) at (9, 4.2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=uofgsandstone!40, inner sep=0.5pt, font=\normalsize] (Md3) at (9, 5.8) {\phantom{0}};
+            \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Md4) at (9, 7.4) {\phantom{0}};
+            \node [right = 0 of Md1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of Md2, font=\small] { \vphantom{0}2 };
+            \node [right = 0 of Md3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of Md4, font=\small] { \vphantom{0}4 };
+
+            \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Md4.north east) -- (Md1.south east)
+            node [midway, right=0.7cm] { $d \mapsto$ };
+
+            \begin{scope}[on background layer]
+                \draw [draw=uofgsandstone!40] ($(Ma1.south)!0.5!(Ma1)$) -- ($(Md4.west)!0.5!(Md4)$);
+                \draw [draw=uofgsandstone!40] ($(Ma1.south)!0.5!(Ma1)$) -- ($(Mc2.north)!0.5!(Mc2)$);
+                \draw [draw=uofgsandstone!40] ($(Ma3.south)!0.5!(Ma3)$) -- ($(Mc4.north)!0.5!(Mc4)$);
+                \draw [draw=uofgsandstone!40] ($(Mb3.east)!0.5!(Mb3)$) -- ($(Mc4.north)!0.5!(Mc4)$);
+                \draw [draw=uofgsandstone!40] ($(Md2.west)!0.5!(Md2)$) -- ($(Mc4.north)!0.5!(Mc4)$);
+                \draw [draw=uofgsandstone!40] ($(Md2.west)!0.5!(Md2)$) -- ($(Ma3.south)!0.5!(Ma3)$);
+                \draw [draw=uofgsandstone!40] ($(Md2.west)!0.5!(Md2)$) -- ($(Mb3.east)!0.5!(Mb3)$);
+                \draw [very thick] ($(Mb1.east)!0.5!(Mb1)$) -- ($(Mc2.north)!0.5!(Mc2)$);
+                \draw [very thick] ($(Mb1.east)!0.5!(Mb1)$) -- ($(Md4.west)!0.5!(Md4)$);
+                \draw [very thick] ($(Mc2.north)!0.5!(Mc2)$) -- ($(Md4.west)!0.5!(Md4)$);
+        \end{scope}
+        \end{scope}
+
+    \end{tikzpicture}
+
+    \caption{A maximum common induced subgraph between the two graphs on the left has three
+        vertices---one solution is highlighted. On the right, the association graph encoding: the
+        highlighted clique of size three shows the same solution. In practice the isolated vertices
+        (representing assignments between incompatible vertices) would be omitted.}\label{figure:association}
+\end{figure}
 
 A \emph{clique} is a subgraph whose vertices are all pairwise adjacent. A clique is \emph{maximal}
 if it is not strictly included in any other clique, and it is \emph{maximum} if it is a largest
@@ -1029,9 +1141,6 @@ The heatmaps show a more detailed picture. As before, in the unlabelled case, th
 approach is almost never more than an order of magnitude better, and is often much worse. In the
 labelled case, however, there are now many instances where the CP approach does much better than the
 association approach, despite the association approach remaining much better overall.
-
-?? Can we figure out why? Is it time-to-find or time-to-prove? Assume that this will take up a few
-sentences of space.
 
 \section{Conclusion}
 
