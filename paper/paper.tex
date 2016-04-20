@@ -690,20 +690,22 @@ domains to ensure connectedness consistency.
     \centering
     \input{gen-graph-connected-cp}
     \caption{On top, the cumulative number of MCCS instances solved in under a certain time using
-        different CP techniques. Below, instance-by-instance comparisons.}
+        different CP techniques, for 33\% labelled (left) and unlabelled undirected (right) graphs.
+    Below, instance-by-instance comparisons.}
         \label{figure:connected-cp}
 \end{figure}
 
 \subsection{Experimental Comparison of CP Connectedness Techniques}\label{mccs-cp-eval}
 
 \Cref{figure:connected-cp} compares the three approaches for ensuring connectedness in CP: by
-branching (Branch), by filtering (Filter), or by combining branching and
-filtering (Both). We show only results using the best variant for each class---that is, MAC for
-labelled graphs, and FC for unlabelled graphs (the other results are very similar).  On labelled
-graphs, we see many instances which are solved by branching but not filtering, and vice versa.
-However, combining both is rarely much worse than just doing one or the other, and is often much
-better, even if on average it is slightly slower.  On unlabelled graphs, we observe that the three
-variants have rather similar performance.
+branching (Branch), by filtering (Filter), or by combining branching and filtering (Both). We show
+only results using the best variant for each class---that is, MAC for labelled graphs, and FC for
+unlabelled graphs (the other results are very similar).  On labelled graphs, we see many instances
+which are solved very quickly by branching but not at all by filtering, and vice versa.  However,
+combining both is rarely much worse than just doing one or the other, and is often much better, even
+if on average it is slightly slower.
+
+On unlabelled graphs, we observe that the three variants have rather similar performance.
 
 \subsection{Ensuring Connectedness in a Clique-Based Approach}\label{mccs-clique}
 
