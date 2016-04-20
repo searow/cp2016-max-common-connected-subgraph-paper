@@ -894,13 +894,13 @@ connected induced subgraph isomorphism via an association graph. If the addition
 restrictions are removed, the core of the algorithm is the same as the ``MCSa1'' clique algorithm
 used in the previous section (and we refer the reader to the previously cited works for
 implementation details on how to use bitsets and other data structures to implement the colouring
-stage with very low constant factors). The approach we describe here differs considerably from that
-of Koch \cite{DBLP:journals/tcs/Koch01} and Vismara and Valery \cite{DBLP:conf/mco/VismaraV08}:
-these earlier approaches worked by classifying labels in the association graph based upon whether a
-common vertex is shared, and then constructing cliques with particular edge properties---this is
-harder to integrate with a strong bound function.
+stage with very low constant factors). The way we extend this algorithm for connectedness differs
+considerably from that of Koch \cite{DBLP:journals/tcs/Koch01} and Vismara and Valery
+\cite{DBLP:conf/mco/VismaraV08}: these earlier approaches worked by classifying labels in the
+association graph based upon whether a common vertex is shared, and then constructing cliques with
+particular edge properties---this is harder to integrate with a strong bound function.
 
-We begin by building the association graph (\lineref{buildassoc}). The main part of the algorithm
+Our algorithm begins by building the association graph (\lineref{buildassoc}). The main part of the algorithm
 then works by building up candidate cliques in the $\mathit{solution}$ variable, by recursive calls
 to the $\mathit{search}$ procedure---starting from the empty set (\lineref{firstsearch}), each
 recursive subcall adds one vertex to $\mathit{solution}$ (\lineref{addv}) in such a way that
@@ -918,8 +918,8 @@ only the vertices in $\mathit{remaining}$ which are adjacent to $v$ (\lineref{fi
 The $\mathit{branchable}$ set contains the set of association graph vertices which correspond to
 vertices adjacent to an already-accepted vertex in the first input graph---in constraint programming terms, it is the
 set of assignments which could be made next which maintain connectedness. (Using only one of the two
-input graphs is sufficient for correctness, and has the advantage that the $\FuncSty{connected}$
-function may be implemented as a simple lookup into a precomputed array which maps each vertex in
+input graphs is sufficient for correctness, and has the advantage that the connectedness set
+may be determined by a simple lookup into a precomputed array which maps each vertex in
 the first input graph to a bitset.) At the top of search, this set is empty, and is not used (our
 first vertex selection is special, and does not care about connectedness). At subsequent depths, we
 may only accept vertices which are in this set, and if no such vertices remain then we return
