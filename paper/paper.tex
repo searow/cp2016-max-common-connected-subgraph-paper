@@ -536,8 +536,8 @@ graphs, but not to the strongly connected case.
 Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} implement the connectedness constraint by using a
 branching rule which selects the next variable to be assigned. Let $\mathit{CComp}$ be the
 set of variables already assigned to values different from $\bot$. The next variable to be assigned
-is chosen within the set of non assigned variables which are the neighbour of at least one vertex of
-$\mathit{CComp}$.  When this set is empty, all remaining non assigned variables are assigned to
+is chosen within the set of unassigned variables which are the neighbour of at least one vertex of
+$\mathit{CComp}$.  When this set is empty, all remaining unassigned variables are assigned to
 $\bot$. We illustrate this in \cref{figure:restricted}.
 
 \begin{figure}[tb]
