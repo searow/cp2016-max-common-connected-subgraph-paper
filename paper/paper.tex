@@ -44,8 +44,6 @@
 
 \newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
 
-\newcommand{\christine}[1]{{\color{green} Christine:#1}}
-
 \newcommand{\modularproduct}{\operatorname{\triangledown}}
 
 \title{Clique and Constraint Models for Maximum Common (Connected) Subgraph Problems}
@@ -221,14 +219,17 @@ a maximum number of vertices.
 \subsection{Overview}
 
 In \cref{existing}, we review existing approaches for solving the MCS problem, with a specific focus
-on Constraint Programming (CP)-based approaches, and on approaches that reduce the problem to
-finding a maximum clique in an association graph.
+on Constraint Programming (CP)-based techniques, and on reductions of the problem to finding a
+maximum clique in an association graph.
 
-Conventional wisdom is that clique-based approaches are less effective in practice, but previous
-experimental evaluations have used weak clique algorithms, or even maximal clique enumeration
-algorithms.  Therefore, in \cref{eval1}, we  re-evaluate the clique-based approach using a modern
-algorithm, and we show that it outperforms CP on labelled graphs, and that it is competitive with CP
-on unlabelled graphs.
+Previous experimental evaluations have used weak maximum clique algorithms, or even enumeration
+algorithms---for example, Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} compare a modified form
+of the Bron-Kerbosch maximal clique enumeration algorithm \cite{Bron:1973:AFC:362342.362367} with a
+CP optimisation approach. Our experience suggests that the optimisation form of the clique problem
+is often many orders of magnitude easier than enumeration, due to the possibility of employing a
+strong bound function to prune the search space.  Therefore, in \cref{eval1}, we  re-evaluate the
+clique-based approach using a modern algorithm, and we show that it outperforms CP on labelled
+graphs, and that it is competitive with CP on unlabelled graphs.
 
 Then, in \cref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global
 connectedness constraint to the model. Alternatively, we may use a special branching rule
@@ -827,11 +828,9 @@ On unlabelled graphs, we observe that the three variants have rather similar per
 
 \subsection{Ensuring Connectedness in a Clique-Based Approach}\label{mccs-clique}
 
-\christine{The approach should be compared with the approach proposed in \cite{DBLP:conf/mco/VismaraV08}.}
-
 It is not possible to determine connectedness from a raw association graph. However, we can take a
-maximum clique algorithm and mimic the CP branching strategy if we have access to the underlying graphs
-and can determine the ``meaning'' of the association graph vertices.
+maximum clique algorithm and mimic the CP branching strategy if we have access to the underlying
+graphs and can determine the ``meaning'' of the association graph vertices.
 
 Most modern maximum clique algorithms for dense graphs use some variation of greedy graph colouring
 as a bound---the underlying observation is that each vertex in a clique must be given a different
@@ -893,7 +892,11 @@ connected induced subgraph isomorphism via an association graph. If the addition
 restrictions are removed, the core of the algorithm is the same as the ``MCSa1'' clique algorithm
 used in the previous section (and we refer the reader to the previously cited works for
 implementation details on how to use bitsets and other data structures to implement the colouring
-stage with very low constant factors).
+stage with very low constant factors). The approach we describe here differs considerably from that
+of Koch \cite{DBLP:journals/tcs/Koch01} and Vismara and Valery \cite{DBLP:conf/mco/VismaraV08}:
+these earlier approaches worked by classifying labels in the association graph based upon whether a
+common vertex is shared, and then constructing cliques with particular edge properties---this is
+harder to integrate with a strong bound function.
 
 We begin by building the association graph (\lineref{buildassoc}). The main part of the algorithm
 then works by building up candidate cliques in the $\mathit{solution}$ variable, by recursive calls
