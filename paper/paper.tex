@@ -44,11 +44,6 @@
 
 \newcommand*\samethanks[1][\value{footnote}]{\footnotemark[#1]}
 
-\renewcommand{\textfraction}{0.1}
-\renewcommand{\floatpagefraction}{0.85}
-\renewcommand{\topfraction}{0.9}
-\renewcommand{\bottomfraction}{0.8}
-
 \newcommand{\christine}[1]{{\color{green} Christine:#1}}
 
 \newcommand{\modularproduct}{\operatorname{\triangledown}}
@@ -691,7 +686,7 @@ domains to ensure connectedness consistency.
     \centering
     \input{gen-graph-connected-cumulative-cp}
 
-    \vspace*{1em}
+    \vspace*{0.5em}
     \centering
     \input{gen-graph-connected-cp}
     \caption{On top, the cumulative number of MCCS instances solved in under a certain time using
@@ -713,6 +708,22 @@ variants have rather similar performance.
 \subsection{Ensuring Connectedness in a Clique-Based Approach}\label{mccs-clique}
 
 \christine{The approach should be compared with the approach proposed in \cite{DBLP:conf/mco/VismaraV08}.}
+
+It is not possible to determine connectedness from a raw association graph. However, we can take a
+maximum clique algorithm and mimic the CP branching strategy if we have access to the underlying graphs
+and can determine the ``meaning'' of the association graph vertices.
+
+Most modern maximum clique algorithms for dense graphs use some variation of greedy graph colouring
+as a bound---the underlying observation is that each vertex in a clique must be given a different
+colour in a colouring, so if we can colour a subset of vertices using $k$ colours then a maximum
+clique in this subset has at most $k$ vertices. However, the colouring is also used as a branching
+heuristic: vertices are selected in reverse from their colour classes in turn, starting with the
+last colour class created. Because of this coupling of branching and the bound (which is important
+in practice because it mimics a ``smallest domain first'' branching heuristic if colour classes are
+viewed as variables, without requiring a new bound to be calculated for every iteration
+\cite{DBLP:conf/cp/McCreeshP14}), if we were to select only a subset of vertices for branching at
+each stage inside a clique algorithm, we would lose completeness. Thus we must adapt the bound to
+take into account restricted branching.
 
 \begin{algorithm}[tb] \DontPrintSemicolon
 \nl $\FuncSty{associationMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
@@ -749,40 +760,13 @@ variants have rather similar performance.
 \vspace{0.5ex}
 \nl $\FuncSty{colour}$ :: (Graph $G$, Set $\mathit{uncoloured}$) $\rightarrow$ List of List of Vertex \;
 \nl \Begin{
-    \nl $\mathit{result} \gets []$ \;
-    \nl \While{$\mathit{uncoloured} \ne \emptyset$\label{whileuncoloured}}{
-        \nl $\mathit{colourClass} \gets []$ \label{newcolourclass} \;
-        \nl $\mathit{colourable} \gets \mathit{uncoloured}$ \;
-        \nl \While{$\mathit{colourable} \ne \emptyset$}{
-            \nl $v \gets \textnormal{the first vertex from}~\mathit{uncoloured}~\textnormal{by
-            static degree order from}~G$ \label{selectvtocolour} \;
-            \nl $\FuncSty{append}(\mathit{colourClass}, v)$ \label{addtocolourclass} \;
-            \nl $uncoloured \gets uncoloured \setminus \{ v \}$ \;
-            \nl $\mathit{colourable} \gets \mathit{colourable} \setminus \operatorname{N}(G, v)$ \;
-        }
-        \nl $\FuncSty{append}(\mathit{result}, \mathit{colourClass})$ \;
-    }
-    \nl $\KwSty{return} ~ \mathit{result}$ \;
+    \nl $\KwSty{return}$ a greedy sequential colouring of the vertices in $\mathit{uncoloured}$,
+    using the procedure of San Segundo et al.\ \cite{DBLP:journals/cor/SegundoRJ11} with a static
+    degree order from $G$ and $k_{min} = 0$. \;
 }
 \caption{An algorithm for a maximum common connected induced subgraph isomorphism via an association graph.}
 \label{algorithm:mccis}
 \end{algorithm}
-
-It is not possible to determine connectedness from a raw association graph. However, we can take a
-maximum clique algorithm and mimic the CP branching strategy if we have access to the underlying graphs
-and can determine the ``meaning'' of the association graph vertices.
-
-Most modern maximum clique algorithms for dense graphs use some variation of greedy graph colouring
-as a bound---the underlying observation is that each vertex in a clique must be given a different
-colour in a colouring, so if we can colour a subset of vertices using $k$ colours then a maximum
-clique in this subset has at most $k$ vertices. However, the colouring is also used as a branching
-heuristic: vertices are selected in reverse from their colour classes in turn, starting with the
-last colour class created. Because of this coupling of branching and the bound (which is important
-in practice because it mimics a ``smallest domain first'' branching heuristic if colour classes are
-viewed as variables, without requiring a new bound to be calculated for every iteration
-\cite{DBLP:conf/cp/McCreeshP14}), if we were to select only a subset of vertices for branching at
-each stage inside a clique algorithm, we would lose completeness. Thus we must adapt the bound to
-take into account restricted branching.
 
 In \cref{algorithm:mccis} we present a clique-inspired algorithm which finds a maximum common
 connected induced subgraph isomorphism via an association graph. If the additional branching
@@ -969,11 +953,10 @@ immediately (\lineref{bound}).
         \mathit{branchable}$, and we place these two colour classes first in the $\mathit{colourClasses}$
         variable. We can also colour $\mathit{remaining} \cap \mathit{branchable}$ using two
         colours, since we cannot simultaneously map $c$ to $2$ and $d$ to $3$, or vice-versa. Thus
-        $\mathit{colourClasses}$ becomes a list of four colour classes, the first three containing
-        two vertices each, and the last containing four vertices. This tells us that if we hope to
+        $\mathit{colourClasses}$ becomes a list of four colour classes. This tells us that if we hope to
         extend the current common subgraph by another four vertices, we
-        must pick one assignment from each of the four colour classes (which is not actually possible, so we
-    see the bound here gives an overestimate). The algorithm thus guesses $d \mapsto 3$ as its next
+        must pick one assignment from each of the four colour classes (which is not actually
+        possible, so the bound here gives an overestimate). The algorithm thus guesses $d \mapsto 3$ as its next
 assignment, and if that fails, $d \mapsto 2$, and so on; once $b \mapsto 3$ is reached, the bound
 decreases by one, and if $f \mapsto 5$ were reached we would stop due to a lack of remaining
 branchable vertices. }\label{figure:assocrestricted}
@@ -999,17 +982,18 @@ in $\mathit{remaining}$, and produced a colouring $[[v_1, v_2], [v_3], [v_4]]$, 
 extending $\mathit{solution}$ with $\{ v_1, v_3, v_4 \}$ gives an optimal solution. If $v_4$ was not
 $\mathit{connected}$ yet, we would not branch on that subtree, and the bound could eliminate
 branching on $v_3$ and $v_1$, so we would miss the solution. Thus we cannot simply add the branching
-rule without also adapting the combined bound / ordering heuristic.)
+rule without also adapting the combined bound and ordering heuristic.)
 
-Our $\FuncSty{colour}$ procedure is the same as the bit-parallel algorithm introduced by San Segundo
-\textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}. While we have remaining vertices to colour
-(\lineref{whileuncoloured}), we start a new colour class (\lineref{newcolourclass}), and then
-repeatedly pick a legal vertex to add to that colour class (\lineref{addtocolourclass}).  The
-selection of the next vertex to colour (\lineref{selectvtocolour}) may be performed efficiently in
-hardware if the association graph is permuted to be in degree order at the top of search. Other
-initial vertex orderings have been considered on general clique problems
-\cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}; it is possible that special
-properties of the association graph could be exploited in this step.
+Our $\FuncSty{colour}$ procedure is a simple greedy sequential colouring. We use the bit-parallel
+algorithm introduced by San Segundo \textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}, with the
+$k_{min}$ parameter set to $0$, so we do not present it here. We use a simple static degree
+ordering; other initial vertex orderings have been considered on general clique problems
+\cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}, and it is possible that
+special properties of the association graph could be exploited in this step (for example, it is
+always possible to colour the initial association graph using
+$\operatorname{min}(\left|\operatorname{V}(G_1)\right|, \left|\operatorname{V}(G_2)\right|)$
+colours, but with certain initial vertex orderings, a greedy sequential colouring will sometimes use
+many more colours).
 
 \subsection{Experimental Comparison of the CP and Clique Approaches}\label{mccs-eval}
 
