@@ -839,7 +839,7 @@ Most modern maximum clique algorithms for dense graphs use some variation of gre
 as a bound---the underlying observation is that each vertex in a clique must be given a different
 colour in a colouring, so if we can colour a subset of vertices using $k$ colours then a maximum
 clique in this subset has at most $k$ vertices. However, the colouring is also used as a branching
-heuristic: vertices are selected in reverse from their colour classes in turn, starting with the
+heuristic: vertices are selected in reverse order from their colour classes in turn, starting with the
 last colour class created. Because of this coupling of branching and the bound (which is important
 in practice because it mimics a ``smallest domain first'' branching heuristic if colour classes are
 viewed as variables, without requiring a new bound to be calculated for every iteration
