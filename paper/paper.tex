@@ -192,7 +192,8 @@ extension to general graphs is straightforward and is discussed in \cref{extensi
 graph $G$ is defined by a finite set of vertices $\operatorname{V}(G)$ and a set of undirected edges
 $\operatorname{E}(G) \subseteq \operatorname{V}(G) \times \operatorname{V}(G)$, where $(u, v) \in
 \operatorname{E}(G) \Rightarrow (v, u) \in \operatorname{E}(G)$. The neighbourhood of
-a vertex $v$, written $\operatorname{N}(G, v)$, is the set of vertices to which it is adjacent.
+a vertex $v$, written $\operatorname{N}(G, v)$, is the set of vertices to which it is adjacent, so
+$\operatorname{N}(G, v) = \{ u \in \operatorname{V}(G) : (u, v) \in \operatorname{E}(G) \}$.
 Given a graph $G$, two vertices $v_s, v_e \in \operatorname{V}(G)$ are connected by a path in $G$ if
 there exists a sequence of vertices $(v_0, v_1, \ldots, v_k)$ such that $v_0 = v_s$, $v_k = v_e$,
 and each pair of successive vertices is connected by an edge, i.e.\ $\forall i\in \{1 \ldots k \},
