@@ -20,7 +20,7 @@
 \makeatletter\@ifpackageloaded{refcheck}{\newcommand{\citesforrefcheck}{\nocite{*}}}{\newcommand{\citesforrefcheck}{}}\makeatother
 
 \usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing,
-    patterns, matrix}
+    patterns, matrix, shapes}
 
 % lncs style
 \crefname{algocf}{Algorithm}{Algorithms}
@@ -288,14 +288,14 @@ An alternative approach to MCS is to reduce the problem to finding a maximum cli
 association graph \cite{LeviG,bala86,dura99,DBLP:journals/jcamd/RaymondW02a}.
 An association graph (or compatibility graph, or weak modular product) of two graphs $G$ and $H$ is
 an undirected graph $G \modularproduct H$ with vertex set $\operatorname{V}(G \modularproduct H) =
-\operatorname{V}(G) \times \operatorname{V}(H)$---to avoid confusing vertices of $G \modularproduct
+\{ (v, v') \in \operatorname{V}(G) \times \operatorname{V}(H) : (v, v) \in \operatorname{E}(G)
+\Leftrightarrow (v', v') \in \operatorname{E}(H)\}$---to avoid confusing vertices of $G \modularproduct
 H$ with vertices of the two original graphs, we call vertices of $G \modularproduct H$
 \emph{matching nodes}, as each vertex $(u, u')$ of $G \modularproduct H$ denotes the matching of $u$
 with $u'$. The edges of $G \modularproduct H$ connect matching nodes which denote compatible
 assignments, so two matching nodes $(u, u')$ and  $(v, v')$ are adjacent if $u \neq v$ and $u' \neq
 v'$, and if they preserve both edges and non-edges, so $(u, v) \in \operatorname{E}(G)
-\Leftrightarrow (u', v') \in \operatorname{E}(H)$, and if either both or neither of $u$ and $u'$
-have a loop, and likewise for $v$ and $v'$. We illustrate this in \cref{figure:association}.
+\Leftrightarrow (u', v') \in \operatorname{E}(H)$. We illustrate this in \cref{figure:association}.
 
 \begin{figure}[tb]
     \centering
@@ -340,48 +340,48 @@ have a loop, and likewise for $v$ and $v'$. We illustrate this in \cref{figure:a
 
         \begin{scope}[xshift=15cm, yshift=-1cm]
             \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Ma1) at (2.6, 9) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Ma2) at (4.2, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Ma2) at (4.2, 9) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Ma3) at (5.8, 9) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Ma4) at (7.4, 9) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Ma4) at (7.4, 9) {\phantom{0}};
             \node (La1) [above = 0 of Ma1, font=\small] { \vphantom{0}1 };
-            \node (La2) [above = 0 of Ma2, font=\small] { \vphantom{0}2 };
+            \node (La2) [above = 0 of Ma2, font=\small, color=uofgsandstone!60] { \vphantom{0}2 };
             \node (La3) [above = 0 of Ma3, font=\small] { \vphantom{0}3 };
-            \node (La4) [above = 0 of Ma4, font=\small] { \vphantom{0}4 };
+            \node (La4) [above = 0 of Ma4, font=\small, color=uofgsandstone!60] { \vphantom{0}4 };
 
             \node [left=0 of La1] { $a \mapsto \{$ };
             \node [right=0 of La4] { $\}$ };
 
             \node[draw, circle, fill=chromayellow, inner sep=0.5pt, font=\normalsize] (Mb1) at (1, 2.6) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Mb2) at (1, 4.2) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Mb2) at (1, 4.2) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Mb3) at (1, 5.8) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Mb4) at (1, 7.4) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Mb4) at (1, 7.4) {\phantom{0}};
             \node [left = 0 of Mb1, font=\small] { \vphantom{0}1 };
-            \node [left = 0 of Mb2, font=\small] { \vphantom{0}2 };
+            \node [left = 0 of Mb2, font=\small, color=uofgsandstone!60] { \vphantom{0}2 };
             \node [left = 0 of Mb3, font=\small] { \vphantom{0}3 };
-            \node [left = 0 of Mb4, font=\small] { \vphantom{0}4 };
+            \node [left = 0 of Mb4, font=\small, color=uofgsandstone!60] { \vphantom{0}4 };
 
             \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Mb1.south west) -- (Mb4.north west)
             node [midway, left=0.7cm] { $b \mapsto$ };
 
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Mc1) at (2.6, 1) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Mc1) at (2.6, 1) {\phantom{0}};
             \node[draw, circle, fill=chromagreen, inner sep=0.5pt, font=\normalsize] (Mc2) at (4.2, 1) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Mc3) at (5.8, 1) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Mc3) at (5.8, 1) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Mc4) at (7.4, 1) {\phantom{0}};
-            \node (Lc1) [below = 0 of Mc1, font=\small] { \vphantom{0}1 };
+            \node (Lc1) [below = 0 of Mc1, font=\small, color=uofgsandstone!60] { \vphantom{0}1 };
             \node (Lc2) [below = 0 of Mc2, font=\small] { \vphantom{0}2 };
-            \node (Lc3) [below = 0 of Mc3, font=\small] { \vphantom{0}3 };
+            \node (Lc3) [below = 0 of Mc3, font=\small, color=uofgsandstone!60] { \vphantom{0}3 };
             \node (Lc4) [below = 0 of Mc4, font=\small] { \vphantom{0}4 };
 
             \node [left=0 of Lc1] { $c \mapsto \{$ };
             \node [right=0 of Lc4] { $\}$ };
 
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Md1) at (9, 2.6) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Md1) at (9, 2.6) {\phantom{0}};
             \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Md2) at (9, 4.2) {\phantom{0}};
-            \node[draw, circle, fill=white, draw=uofgsandstone!60, inner sep=0.5pt, font=\normalsize] (Md3) at (9, 5.8) {\phantom{0}};
+            \node[draw, circle, fill=white, draw=white, inner sep=0.5pt, font=\normalsize] (Md3) at (9, 5.8) {\phantom{0}};
             \node[draw, circle, fill=chromanavy, inner sep=0.5pt, font=\normalsize] (Md4) at (9, 7.4) {\phantom{0}};
-            \node [right = 0 of Md1, font=\small] { \vphantom{0}1 };
+            \node [right = 0 of Md1, font=\small, color=uofgsandstone!60] { \vphantom{0}1 };
             \node [right = 0 of Md2, font=\small] { \vphantom{0}2 };
-            \node [right = 0 of Md3, font=\small] { \vphantom{0}3 };
+            \node [right = 0 of Md3, font=\small, color=uofgsandstone!60] { \vphantom{0}3 };
             \node [right = 0 of Md4, font=\small] { \vphantom{0}4 };
 
             \draw [decorate, decoration={brace, raise=0.5cm}, very thick] (Md4.north east) -- (Md1.south east)
@@ -405,9 +405,9 @@ have a loop, and likewise for $v$ and $v'$. We illustrate this in \cref{figure:a
 
     \caption{A maximum common induced subgraph between the two graphs on the left has three
         vertices---one solution is highlighted. On the right, the association graph encoding: the
-        highlighted clique of size three shows the same solution. In practice the isolated matching
-        nodes (representing assignments between incompatible vertices, due to the presence or
-    absence of loops) would be omitted.}\label{figure:association}
+        highlighted clique of size three shows the same solution. The ``missing'' vertices
+        correspond to assignments which are impossible due to the presence or absence of
+        loops.}\label{figure:association}
 \end{figure}
 
 A \emph{clique} is a subgraph whose vertices are all pairwise adjacent. A clique is \emph{maximal}
