@@ -499,9 +499,11 @@ all 81,400 graph pairs, to include graphs with up to 100 vertices.
     the right.} \label{figure:unconnected-cumulative}
 \end{figure}
 
-The two plots on the top of \cref{figure:unconnected-cumulative} display the cumulative number of instances
-solved with respect to time.  When graphs are labelled, the clique-based approach clearly
-outperforms either CP model, and MAC has a slight advantage over FC. For unlabelled graphs, the
+The two plots on the top of \cref{figure:unconnected-cumulative} display the cumulative number of
+instances solved with respect to time.  When graphs are labelled, the clique-based approach clearly
+outperforms either CP model, and MAC has a slight advantage over FC. (Recall that edge labels
+    decrease the density of the association graph, which is typically very beneficial for clique
+algorithms, but do not help CP until $\bot$ is removed from domains.) For unlabelled graphs, the
 three approaches are broadly comparable, and ultimately FC beats MAC, which beats the clique
 approach. The bottom row gives a per-instance comparison of the best CP approach with the clique
 approach: the heatmaps are similar to scatter plots, but due to the large number of instances, we
