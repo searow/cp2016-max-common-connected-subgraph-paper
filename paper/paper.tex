@@ -1156,13 +1156,16 @@ association approach, despite the association approach remaining much better ove
 
 \section{Conclusion}
 
-We have seen that a modern clique algorithm can perform competitively for maximum common subgraph
-problems, particularly when edge labels are involved.  We believe there is further scope for
-tailoring clique algorithms for association graphs, including specialised inference, a bound
-function which is aware that it is working on an association graph, and better initial vertex
-orderings. Treating the first branch specially may also be beneficial, since the first branch has an
-unusually large effect on the search space with association graphs
-\cite{DBLP:conf/cocoon/SutersAZSSL05}.
+Contradicting earlier claims in the literature, we have seen that a modern clique algorithm can
+perform competitively for maximum common subgraph problems, particularly when edge labels are
+involved. However, the best approaches for these problems is still far behind the state-of-the-art
+for subgraph isomorphism, where we can often scale to unlabelled graphs with thousands of vertices.
+
+To start tackling this gap, we believe there is further scope for tailoring clique algorithms for
+association graphs, including specialised inference, a bound function which is aware that it is
+working on an association graph, and better initial vertex orderings. Treating the first branch
+specially may also be beneficial, since the first branch has an unusually large effect on the search
+space with association graphs \cite{DBLP:conf/cocoon/SutersAZSSL05}.
 
 For CP models, using a branching rule for correctness, rather than simply as an ordering heuristic,
 is unconventional and does not cleanly fit into the abstractions used by toolkits. However, we saw
