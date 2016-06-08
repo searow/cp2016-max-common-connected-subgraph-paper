@@ -850,8 +850,8 @@ last colour class created. Because of this coupling of branching and the bound (
 in practice because it mimics a ``smallest domain first'' branching heuristic if colour classes are
 viewed as variables, without requiring a new bound to be calculated for every iteration
 \cite{DBLP:conf/cp/McCreeshP14}), if we were to select only a subset of vertices for branching at
-each stage inside a clique algorithm, we would lose completeness. Thus we must adapt the bound to
-take into account restricted branching.
+each stage inside a clique algorithm, we would lose completeness. Thus we must adapt the bound in a
+non-trivial way to take into account restricted branching.
 
 \begin{algorithm}[tb] \DontPrintSemicolon
 \nl $\FuncSty{associationMCCIS}$ :: (Graph $G_1$, Graph $G_2$) $\rightarrow$ Map \;
@@ -895,7 +895,7 @@ take into account restricted branching.
 \label{algorithm:mccis}
 \end{algorithm}
 
-In \cref{algorithm:mccis} we present a clique-inspired algorithm which finds a maximum common
+In \cref{algorithm:mccis} we present a novel clique-inspired algorithm which finds a maximum common
 connected induced subgraph isomorphism via an association graph. If the additional branching
 restrictions are removed, the core of the algorithm is the same as the ``MCSa1'' clique algorithm
 used in the previous section (and we refer the reader to the previously cited works for
