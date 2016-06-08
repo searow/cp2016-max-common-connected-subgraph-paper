@@ -223,14 +223,14 @@ In \cref{existing}, we review existing approaches for solving the MCS problem, w
 on Constraint Programming (CP)-based techniques, and on reductions of the problem to finding a
 maximum clique in an association graph.
 
-Previous experimental evaluations have used weak maximum clique algorithms, or even enumeration
+Previous experimental evaluations have used simple maximum clique algorithms, or even enumeration
 algorithms---for example, Vismara and Valery \cite{DBLP:conf/mco/VismaraV08} compare a modified form
 of the Bron-Kerbosch maximal clique enumeration algorithm \cite{Bron:1973:AFC:362342.362367} with a
-CP optimisation approach. Our experience suggests that the optimisation form of the clique problem
-is often many orders of magnitude easier than enumeration, due to the possibility of employing a
-strong bound function to prune the search space.  Therefore, in \cref{eval1}, we  re-evaluate the
-clique-based approach using a modern algorithm, and we show that it outperforms CP on labelled
-graphs, and that it is competitive with CP on unlabelled graphs.
+CP optimisation approach. Our experience suggests that a modern maximum clique algorithm could give
+many orders of magnitude improvement, due to a strong bound function which prunes the search space.
+Therefore, in \cref{eval1}, we re-evaluate the clique-based approach using a modern algorithm, and
+we show that it outperforms CP on labelled graphs, and that it is competitive with CP on unlabelled
+graphs, contradicting earlier conclusions.
 
 Then, in \cref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global
 connectedness constraint to the model. Alternatively, we may use a special branching rule
@@ -457,10 +457,11 @@ increase the opportunities for filtering.
 Previous experimental evaluations of the association graph model have used either maximal clique
 enumeration algorithms \cite{DBLP:journals/tcs/Koch01,DBLP:conf/mco/VismaraV08} (even when the
 maximisation problem was being considered), or very simple maximum clique algorithms
-\cite{DBLP:conf/sspr/BunkeFGSV02,DBLP:journals/jgaa/ConteFV07}. Thus we re-evaluate the approach
-using a modern maximum clique algorithm. Association graphs are dense, even if the input is sparse,
-so we will using (the single-threaded, bit-parallel version of) the maximum clique solver by
-McCreesh and Prosser \cite{DBLP:journals/topc/McCreeshP15}, which implements Prosser's
+\cite{DBLP:conf/sspr/BunkeFGSV02,DBLP:journals/jgaa/ConteFV07}, and so their conclusions may now be
+overly pessimistic. Thus we re-evaluate the approach using a modern maximum clique algorithm.
+Association graphs are dense, even if the input is sparse, so we will using (the single-threaded,
+bit-parallel version of) the maximum clique solver by McCreesh and Prosser
+\cite{DBLP:journals/topc/McCreeshP15}, which implements Prosser's
 \cite{DBLP:journals/algorithms/Prosser12} ``MCSa1'' variant of a series of algorithms due to Tomita
 \textit{et al.}\
 \cite{DBLP:conf/dmtcs/TomitaS03,DBLP:journals/jgo/TomitaK07,DBLP:conf/walcom/TomitaSHTW10}, using a
