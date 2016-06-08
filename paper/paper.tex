@@ -234,13 +234,13 @@ graphs, contradicting earlier conclusions.
 
 Then, in \cref{mccs}, we consider the MCCS problem. For the CP approach, we may add a global
 connectedness constraint to the model. Alternatively, we may use a special branching rule
-\cite{DBLP:conf/mco/VismaraV08} to grow connected subgraphs only. These two techniques may
-be combined, and we experimentally show that the best results are obtained when combining them.
+\cite{DBLP:conf/mco/VismaraV08} to grow connected subgraphs only. These two techniques may be
+combined, and we experimentally show that the best results are in fact obtained when combining them.
 When solving the MCCS problem with a clique-based approach, neither technique seems directly viable
 with an association graph encoding.  However, we show that it is possible to adapt the combined
 branching and bounding rule used by modern clique algorithms to maintain connectedness during
-search.  We compare the clique-based approach with the best CP variant for MCCS, and we show
-that it outperforms CP on labelled graphs, whereas it is outperformed by CP on unlabelled graphs.
+search.  We compare the clique-based approach with the best CP variant for MCCS, and we show that it
+outperforms CP on labelled graphs, whereas it is outperformed by CP on unlabelled graphs.
 
 \section{Existing Complete Approaches for MCS}\label{existing}
 
@@ -254,7 +254,7 @@ mixed integer programming \cite{DBLP:journals/anor/PivaS12} and heuristics
 
 \subsection{Constraint Programming Models for MCS} \label{CP}
 
-McGregor \cite{McGreg82} proposed a branch and bound approach: each branch of the search tree
+McGregor \cite{McGreg82} proposed a branch and bound algorithm: each branch of the search tree
 corresponds to the matching of two vertices, and a bounding function evaluates the number of
 vertices that still may be matched so that the current branch is pruned as soon as this bound
 becomes lower than the size of the largest known common subgraph. CP approaches may be viewed as
@@ -271,7 +271,7 @@ ensure that variable assignments preserve edges and non-edges between matched ve
 order to ensure that each vertex of $H$ is assigned to at most one variable, i.e.\ $\forall u, v \in
 \operatorname{V}(G)~\textnormal{distinct,}~ (x_u = \bot) \vee (x_v = \bot) \vee (x_u \neq x_v)$.
 
-This CP model is improved by Ndiaye and Solnon \cite{DBLP:conf/cp/NdiayeS11} by replacing binary
+This CP model was improved by Ndiaye and Solnon \cite{DBLP:conf/cp/NdiayeS11} by replacing binary
 difference constraints with a soft global allDifferent constraint which maximizes the number of
 $x_u$ variables that are assigned to values different from $\bot$, while ensuring they are all
 different when they are not assigned to $\bot$. They find that the combination ``MAC+Bound'' (resp.
@@ -279,9 +279,9 @@ different when they are not assigned to $\bot$. They find that the combination `
 two previous approaches. The combination ``MAC+Bound'' maintains arc consistency~\cite{sabi94} of
 edge constraints, whereas the combination ``FC+Bound'' simply performs forward-checking on these
 constraints. In both combinations, the ``Bound'' filtering checks whether it is possible to assign
-distinct values to enough $x_u$ variables to surpass the best cost found so far (it is a weaker
+distinct values to enough $x_u$ variables to surpass the best cost found so far---it is a weaker
 version of GAC(\emph{softAllDiff}) \cite{peti01} which computes the maximum number of variables that
-can be assigned distinct values).
+can be assigned distinct values.
 
 \subsection{Reformulation of MCS to a Maximum Clique Problem}\label{clique}
 
@@ -760,8 +760,8 @@ $\bot$. We illustrate this in \cref{figure:restricted}.
 A more traditional CP approach would be to express connectedness as a conventional constraint. For
 example, CP(Graph) \cite{DBLP:conf/cp/DoomsDD05} introduces graph domain variables and enforces
 connectivity via the \emph{reachable} constraint, ensuring that there is a path from a specified
-vertex to a specified set of vertices. One such constraint is then posted for each of the vertices
-in the graph and encodes the transitive closure of the graph. Brown et al.\ \cite{Brown:2005}
+vertex to a specified set of vertices. One such constraint could be posted for each of the vertices
+in the graph, encoding the transitive closure of the graph. Brown et al.\ \cite{Brown:2005}
 explored the use of constraint programming in the generation of connected graphs with specified
 degree sequences.  Two constraints were combined: the graphical constraint (a backtrackable
 implementation of the Havel-Hakimi algorithm), and a connectivity constraint implemented using sets
@@ -793,7 +793,7 @@ starting from $u$ (resp.\ $v$), and we initialize $S$ (resp.\ $T$) with all visi
 for each vertex $v\in \operatorname{V}(G) \setminus S$, we set $x_v$ to $\bot$, and for each $w
 \in \operatorname{V}(H) \setminus T$, we remove $w$ from all domains to which it belongs.
 
-During the search, each time a variable is assigned to $\bot$, we remove the corresponding vertex
+During search, each time a variable is assigned to $\bot$, we remove the corresponding vertex
 from $S$ and perform a new traversal of $G[S]$ starting from the initial vertex $u$. For each vertex
 $w\in S$ that is not visited by the traversal, we remove $w$ from $S$ and assign $x_w$ to $\bot$.
 Also, each time a value is removed from a domain so that this value no longer belongs to any domain,
@@ -1116,7 +1116,7 @@ rule without also adapting the combined bound and ordering heuristic.)
 
 Our $\FuncSty{colour}$ procedure is a simple greedy sequential colouring. We use the bit-parallel
 algorithm introduced by San Segundo \textit{et al.}\ \cite{DBLP:journals/cor/SegundoRJ11}, with the
-$k_{\mathit{min}}$ parameter set to $0$, so we do not present it here. We use a simple static degree
+$k_{\mathit{min}}$ parameter set to $0$, so we do not describe it here. We use a simple static degree
 ordering; other initial vertex orderings have been considered on general clique problems
 \cite{DBLP:journals/algorithms/Prosser12,DBLP:conf/lion/SegundoLB14}, and it is possible that
 special properties of the association graph could be exploited in this step (for example, it is
