@@ -520,7 +520,15 @@ input graphs are very similar), the clique approach finds nearly every labelled 
 
 \section{Finding Maximum Common Connected Subgraphs}\label{mccs}
 
-In many applications, the common subgraph must be connected
+In many applications, the common subgraph must satisfy some additional constraints. These
+constraints are usually handled in a straightforward way in CP, by branching rules and/or constraint
+propagation. In clique-based approaches, some constraints may be easily handled by modifying the
+definition of the association graph---for example, constraints on pairs of vertices that may be
+matched are handled by removing inconsistent pairs from $\operatorname{V}(G \modularproduct H)$.
+However, more global constraints cannot be handled by modifying the definition of the association
+graph.
+
+In this paper, we focus on the connectedness constraint, which occurs in many applications
 \cite{DBLP:journals/tcs/Koch01,DBLP:journals/jcamd/RaymondW02a,DBLP:conf/mco/VismaraV08,Ehrlich:2011}.
 Adding the connectedness requirement makes certain special cases solvable in polynomial time,
 including outerplanar graphs of bounded degree \cite{DBLP:journals/algorithms/AkutsuT13} and trees
