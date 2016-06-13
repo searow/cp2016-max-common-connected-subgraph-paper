@@ -921,7 +921,7 @@ the next iteration where $v$ is instead rejected. When $v$ is accepted, we add i
 $\mathit{solution'}$ (\lineref{addvtosolution}), and create a new $\mathit{remaining'}$ containing
 only the vertices in $\mathit{remaining}$ which are adjacent to $v$ (\lineref{filterremaining}).
 
-The $\mathit{connected}$ set contains the set of association graph vertices which correspond to
+The $\mathit{connected}$ set contains the set of matching nodes which correspond to
 vertices adjacent to an already-accepted vertex in the first input graph---in constraint programming terms, it is the
 set of assignments which could be made next which maintain connectedness. (Using only one of the two
 input graphs is sufficient for correctness, and has the advantage that the connectedness set
