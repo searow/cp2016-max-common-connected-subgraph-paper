@@ -520,9 +520,9 @@ input graphs are very similar), the clique approach finds nearly every labelled 
 
 \section{Finding Maximum Common Connected Subgraphs}\label{mccs}
 
-In many applications, the common subgraph must satisfy some additional constraints. These
-constraints are usually handled in a straightforward way in CP, by branching rules and/or constraint
-propagation. In clique-based approaches, some constraints may be easily handled by modifying the
+In many applications, the common subgraph must satisfy some additional constraints. This
+is usually handled in a straightforward way in CP, by branching rules and/or constraint
+propagation. In clique-based approaches, some constraints may be handled by modifying the
 definition of the association graph---for example, constraints on pairs of vertices that may be
 matched are handled by removing inconsistent pairs from $\operatorname{V}(G \modularproduct H)$.
 However, more global constraints cannot be handled by modifying the definition of the association
@@ -782,8 +782,7 @@ vertices to enforce graphicality and connectivity. Prosser and Unsworth
 where decision variables are edges (the search process accepts and rejects edges). The constraint
 employed depth first search to maintain the set of tree edges and back edges, associating path
 counters on these edges. The counters were then used to detect the existence of cut-edges and
-protects these by forcing edges; the complexity of this constraint is cubic in the number of
-vertices.
+protects these by forcing edges.
 
 In all these previous works, the goal was to ensure that a given set of vertices is connected. For
 MCCS, the problem is slightly different: we have to ensure that the number of connected vertices
@@ -796,8 +795,8 @@ vertices of $G$ and $H$ respectively which may belong to the common subgraph, i.
 \setminus \{ \bot \}$. Connectedness consistency ensures that both $G[S]$ and $H[T]$ are
 connected graphs.
 
-Connectedness consistency is not ensured at the root node of the search---it is ensured only once a
-first variable has been assigned. Let $x_u$ be the first assigned variable, and $v$ the value
+Connectedness consistency is ensured only once a first variable has been assigned, rather than at
+the root of search. Let $x_u$ be the first assigned variable, and $v$ the value
 assigned to $x_u$. To ensure connectedness consistency, we perform a traversal of $G$ (resp.\ $H$),
 starting from $u$ (resp.\ $v$), and we initialize $S$ (resp.\ $T$) with all visited vertices. Then,
 for each vertex $v\in \operatorname{V}(G) \setminus S$, we set $x_v$ to $\bot$, and for each $w
@@ -869,7 +868,6 @@ non-trivial way to take into account restricted branching.
     \nl $\FuncSty{search}(G, \emptyset, \emptyset, \operatorname{V}(G))$ \label{firstsearch} \;
     \nl $\KwSty{return} ~ \mathit{incumbent}$ \;
 }
-\vspace{1ex}
 \nl $\FuncSty{search}$ :: (Graph $G$, Set $\mathit{solution}$, Set $\mathit{connected}$, Set $\mathit{remaining}$) \;
 \nl \Begin{
     \nl $\mathit{colourClasses} \gets \FuncSty{concatenate}($ \label{makecolours} \;
@@ -892,7 +890,6 @@ non-trivial way to take into account restricted branching.
          \nl $\FuncSty{removeLast}(\mathit{colourClasses})$ \;
      }
 }
-\vspace{0.5ex}
 \nl $\FuncSty{colour}$ :: (Graph $G$, Set $\mathit{uncoloured}$) $\rightarrow$ List of List of Vertex \;
 \nl \Begin{
     \nl $\KwSty{return}$ a greedy colouring of the vertices in $\mathit{uncoloured}$,
