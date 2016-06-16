@@ -1,6 +1,6 @@
 # vim: set et ft=gnuplot sw=4 :
 
-set terminal tikz color size 4.6in,1.7in font '\scriptsize'
+set terminal tikz color size 4.6in,1.7in font '\scriptsize' standalone
 load "chromagreenblue.pal"
 
 set output "gen-graph-connected-cumulative-cp.tex"

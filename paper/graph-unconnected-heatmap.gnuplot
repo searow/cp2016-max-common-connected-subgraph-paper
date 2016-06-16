@@ -1,6 +1,6 @@
 # vim: set et ft=gnuplot sw=4 :
 
-set terminal tikz color size 4.3in,2.9in font '\scriptsize'
+set terminal tikz color size 4.3in,2.9in font '\scriptsize' standalone
 
 set output "gen-graph-unconnected-heatmap.tex"
 

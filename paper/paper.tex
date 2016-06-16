@@ -2,9 +2,6 @@
 
 \documentclass{llncs}
 
-% \usepackage{showframe}
-% \usepackage{refcheck}
-
 \usepackage{microtype}                 % typographic perfection
 \usepackage{complexity}                % \P, \NP etc
 \usepackage{tikz}                      % For pretty pictures
@@ -12,15 +9,12 @@
 \usepackage{amssymb}                   % \triangledown
 \usepackage{hyperref}                  % clicky links
 \usepackage{cleveref}                  % no need to type Figure etc
-\usepackage{gnuplot-lua-tikz}          % graphs
 \usepackage[ruled,vlined]{algorithm2e} % algorithms (after cleverref!)
 \usepackage{cite}                      % automatically sort mass cites
 \usepackage[bottom]{footmisc}          % fix footnote + bottom figure on same page
 
-\makeatletter\@ifpackageloaded{refcheck}{\newcommand{\citesforrefcheck}{\nocite{*}}}{\newcommand{\citesforrefcheck}{}}\makeatother
-
 \usetikzlibrary{arrows, shadows, calc, positioning, decorations, decorations.pathreplacing,
-    patterns, matrix, shapes}
+    patterns, matrix, shapes, backgrounds}
 
 % lncs style
 \crefname{algocf}{Algorithm}{Algorithms}
@@ -487,11 +481,11 @@ all 81,400 graph pairs, to include graphs with up to 100 vertices.
 
 \begin{figure}[tb]
     \centering
-    \input{gen-graph-unconnected-cumulative}
+    \includegraphics{gen-graph-unconnected-cumulative.pdf}
     \vspace*{1em}
 
     \centering
-    \input{gen-graph-unconnected-heatmap}
+    \includegraphics{gen-graph-unconnected-heatmap.pdf}
     \caption{The cumulative number of MCS instances solved in under a certain time: on the top, 33\%
         labelled graphs, and then unlabelled and undirected graphs. On the bottom, an
         instance-by-instance comparison of the clique model with the best CP model, with 33\%
@@ -820,11 +814,11 @@ would not immediately eliminate $5$ from the domains of $d$ and $e$.
 
 \begin{figure}[tb]
     \centering
-    \input{gen-graph-connected-cumulative-cp}
+    \includegraphics{gen-graph-connected-cumulative-cp.pdf}
 
     \vspace*{0.5em}
     \centering
-    \input{gen-graph-connected-cp}
+    \includegraphics{gen-graph-connected-cp.pdf}
     \caption{On top, the cumulative number of MCCS instances solved in under a certain time using
         different CP techniques, for 33\% labelled (left) and unlabelled undirected (right) graphs.
     Below, instance-by-instance comparisons.}
@@ -1137,11 +1131,11 @@ many more colours).
 
 \begin{figure}[tb]
     \centering
-    \input{gen-graph-connected-cumulative}
+    \includegraphics{gen-graph-connected-cumulative.pdf}
     \vspace*{1em}
 
     \centering
-    \input{gen-graph-connected-heatmap}
+    \includegraphics{gen-graph-connected-heatmap.pdf}
     \caption{The cumulative number of connected instances solved in under a certain time: on the
         top, 33\% labelled undirected graphs with up to 100 vertices, and then unlabelled
         and undirected graphs with up to 35 vertices. On the bottom, an instance-by-instance
@@ -1192,8 +1186,6 @@ connected common subgraphs---this would make the branching approach impossible, 
 be much more complicated. From the datasets we selected, there appears to be little scope for
 per-instance algorithm selection, but other families of input data could lead to a different
 conclusion.
-
-\citesforrefcheck
 
 \bibliographystyle{splncs}
 \bibliography{paper}

@@ -4,12 +4,12 @@ all : tables graphs
 TABLES =
 
 GRAPHS = \
-	 gen-graph-unconnected-cumulative.tex \
-	 gen-graph-unconnected-heatmap.tex \
-	 gen-graph-connected-cumulative.tex \
-	 gen-graph-connected-heatmap.tex \
-	 gen-graph-connected-cp.tex \
-	 gen-graph-connected-cumulative-cp.tex
+	 gen-graph-unconnected-cumulative.pdf \
+	 gen-graph-unconnected-heatmap.pdf \
+	 gen-graph-connected-cumulative.pdf \
+	 gen-graph-connected-heatmap.pdf \
+	 gen-graph-connected-cp.pdf \
+	 gen-graph-connected-cumulative-cp.pdf
 
 DATA = connected-undir33.data connected-undir33-heatmap.data \
        connected-plain.data connected-plain-heatmap.data \
@@ -32,9 +32,10 @@ tables : $(TABLES)
 
 graphs : $(GRAPHS)
 
-gen-graph-%.tex : graph-%.gnuplot $(DATA)
+gen-graph-%.pdf : graph-%.gnuplot $(DATA)
 	gnuplot $<
-	sed -i -e '5s/^\(\\path.*\)/\% \1/' $@ # epic haxx
+	sed -i -e '5,18s/^\(\\path.*\)/\% \1/' gen-graph-$*.tex # epic haxx
+	latexmk -pdf gen-graph-$*
 
 connected-undir33-heatmap.data : connected-undir33.data heatmapify.rb
 	ruby heatmapify.rb connected-undir33.data 3 7 1000 1 > $@
