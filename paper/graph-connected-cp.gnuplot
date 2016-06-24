@@ -27,7 +27,7 @@ set logscale cb
 set cbrange [1:1000]
 set xtics 100 nomirror add ('1ms' 1) add ('' 1e2) add ('' 1e4) add ('' 1000e3) add ('1h~' 3600e3)
 set ytics 100 nomirror add ('1ms' 1) add ('' 1e2) add ('' 1e4) add ('' 1000e3) add ('1h~' 3600e3) offset character 1
-set cbtics 0 add ('0' 1) ('1' 2) ('10' 10) ('$10^2$' 1e2) ('$\ge10^3$' 1e3)
+set cbtics ('0' 1, '1' 2, '10' 10, '$10^2$' 1e2, '$\ge10^3$' 1e3)
 set format x '$10^{%T}$'
 set format y '$10^{%T}$'
 set format cb '$10^{%T}$'
