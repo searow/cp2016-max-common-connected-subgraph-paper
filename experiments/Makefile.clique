@@ -2,9 +2,10 @@ SHELL := /bin/bash
 FILTER := -1
 MODULUS := 1
 CATTER := cat
-INSTANCES := $(shell cut -d' ' -f1 instances.txt | $(CATTER) | if [[ $(FILTER) == -1 ]] ; then cat ; else awk "(NR % $(MODULUS)) == ($(FILTER) % $(MODULUS))" ; fi)
+INSTANCES_FILE := instances.txt
+INSTANCES := $(shell cut -d' ' -f1 $(INSTANCES_FILE) | $(CATTER) | if [[ $(FILTER) == -1 ]] ; then cat ; else awk "(NR % $(MODULUS)) == ($(FILTER) % $(MODULUS))" ; fi)
 TIMEOUT := 3600
-ALGORITHMS := clique-connected-a3-undir33 clique-connected-a3-plain clique-unconnected-33 clique-unconnected-plain
+ALGORITHMS := clique-connected-a3-undir33 clique-connected-a3-plain clique-unconnected-33 clique-unconnected-plain clique-unconnected-33-lgd clique-unconnected-plain-lgd
 STACK_SPACE := 10485760
 RESULTS := results
 
@@ -14,22 +15,32 @@ dir-% :
 	mkdir -p $(RESULTS) $(RESULTS)/$*
 
 $(RESULTS)/clique-connected-a3-undir33/%.out : | dir-clique-connected-a3-undir33
-	ulimit -s $(STACK_SPACE) ; ../../max-common-subgraph-paper/code/solve_max_common_subgraph --timeout $(TIMEOUT) --connected --undirected \
+	ulimit -s $(STACK_SPACE) ; ../code/solve_max_common_subgraph --timeout $(TIMEOUT) --connected --undirected \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f2 ) \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f3 ) > >(tee $@ ) || grep -q aborted $@
 
 $(RESULTS)/clique-connected-a3-plain/%.out : | dir-clique-connected-a3-plain
-	ulimit -s $(STACK_SPACE) ; ../../max-common-subgraph-paper/code/solve_max_common_subgraph --timeout $(TIMEOUT) --connected --undirected --unlabelled \
+	ulimit -s $(STACK_SPACE) ; ../code/solve_max_common_subgraph --timeout $(TIMEOUT) --connected --undirected --unlabelled \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f2 ) \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f3 ) > >(tee $@ ) || grep -q aborted $@
 
 $(RESULTS)/clique-unconnected-33/%.out : | dir-clique-unconnected-33
-	ulimit -s $(STACK_SPACE) ; ../../max-common-subgraph-paper/code/solve_max_common_subgraph --timeout $(TIMEOUT) \
+	ulimit -s $(STACK_SPACE) ; ../code/solve_max_common_subgraph --timeout $(TIMEOUT) \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f2 ) \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f3 ) > >(tee $@ ) || grep -q aborted $@
 
 $(RESULTS)/clique-unconnected-plain/%.out : | dir-clique-unconnected-plain
-	ulimit -s $(STACK_SPACE) ; ../../max-common-subgraph-paper/code/solve_max_common_subgraph --timeout $(TIMEOUT) --undirected --unlabelled \
+	ulimit -s $(STACK_SPACE) ; ../code/solve_max_common_subgraph --timeout $(TIMEOUT) --undirected --unlabelled \
+	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f2 ) \
+	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f3 ) > >(tee $@ ) || grep -q aborted $@
+
+$(RESULTS)/clique-unconnected-33-lgd/%.out : | dir-clique-unconnected-33-lgd
+	ulimit -s $(STACK_SPACE) ; ../code/solve_max_common_subgraph --timeout $(TIMEOUT) --lgd \
+	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f2 ) \
+	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f3 ) > >(tee $@ ) || grep -q aborted $@
+
+$(RESULTS)/clique-unconnected-plain-lgd/%.out : | dir-clique-unconnected-plain-lgd
+	ulimit -s $(STACK_SPACE) ; ../code/solve_max_common_subgraph --timeout $(TIMEOUT) --undirected --unlabelled --lgd \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f2 ) \
 	    $(shell grep "^`basename $*` " < instances.txt | cut -d' ' -f3 ) > >(tee $@ ) || grep -q aborted $@
 
