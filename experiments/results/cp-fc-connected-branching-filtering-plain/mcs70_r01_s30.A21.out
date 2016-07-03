@@ -1,0 +1,21 @@
+Parameters: GAD=1 vflib=1 dir=0 label=0 lowerbound=1 fileNameGp=../graphsdb/mcs70/rand/r01/mcs70_r01_s30.A21 fileNameGt=../graphsdb/mcs70/rand/r01/mcs70_r01_s30.B21
+Reading graphs...
+30 :  84
+30 :  83
+Initializing...
+maxdom : 30
+D->valSize : 900
+Solving...
+currentSize : 15 <-- 0.010351 s
+currentSize : 17 <-- 0.010577 s
+currentSize : 18 <-- 1.563341 s
+currentSize : 19 <-- 6.646259 s
+currentSize : 21 <-- 6.684758 s
+currentSize : 22 <-- 6.684936 s
+
+maxsize : 22
+nodes : 983400.000000
+filtered : 26980321.000000
+CCGP filtered : 1369243.000000
+CCGT filtered : 1060475.000000
+time : 9.726211

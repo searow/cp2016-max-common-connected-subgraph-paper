@@ -1,0 +1,22 @@
+Parameters: GAD=1 vflib=1 dir=1 label=1 lowerbound=1 fileNameGp=../graphsdb/mcs10/bvg/b03m/mcs10_b03m_s100.A86 fileNameGt=../graphsdb/mcs10/bvg/b03m/mcs10_b03m_s100.B86
+Reading graphs...
+100 : 150
+100 : 150
+Initializing...
+maxdom : 7
+D->valSize : 323
+Solving...
+Blb : 2 (clique : 33)
+currentSize : 33 <-- 0.003196 s
+currentSize : 34 <-- 0.035781 s
+currentSize : 35 <-- 0.054235 s
+currentSize : 36 <-- 0.179414 s
+currentSize : 37 <-- 4.395616 s
+currentSize : 38 <-- 145.392380 s
+currentSize : 39 <-- 1234.967529 s
+
+TIMEOUT
+maxsize : 39
+nodes : 758898108.000000
+filtered : 3137240260.000000
+time : 3600.000000

@@ -1,0 +1,23 @@
+Parameters: GAD=1 vflib=1 dir=0 label=1 lowerbound=1 fileNameGp=../graphsdb/mcs30/m3D/m3Dr6/mcs30_m3Dr6_s90.A48 fileNameGt=../graphsdb/mcs30/m3D/m3Dr6/mcs30_m3Dr6_s90.B48
+Reading graphs...
+90 :  262
+90 :  259
+Initializing...
+maxdom : 8
+D->valSize : 548
+Solving...
+currentSize : 1 <-- 0.009946 s
+currentSize : 3 <-- 0.010617 s
+currentSize : 13 <-- 0.012570 s
+currentSize : 16 <-- 0.013441 s
+currentSize : 20 <-- 0.014252 s
+currentSize : 24 <-- 0.014588 s
+currentSize : 27 <-- 0.212688 s
+
+TIMEOUT
+maxsize : 27
+nodes : 70923470.000000
+filtered : 367086975.000000
+CCGP filtered : 649617612.000000
+CCGT filtered : 541059414.000000
+time : 3600.000000

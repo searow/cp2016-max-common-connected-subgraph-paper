@@ -1,0 +1,19 @@
+Parameters: GAD=1 vflib=1 dir=0 label=0 lowerbound=1 fileNameGp=../graphsdb/mcs50/rand/r02/mcs50_r02_s25.A61 fileNameGt=../graphsdb/mcs50/rand/r02/mcs50_r02_s25.B61
+Reading graphs...
+25 :  111
+25 :  109
+Initializing...
+maxdom : 25
+D->valSize : 625
+Solving...
+currentSize : 10 <-- 0.004561 s
+currentSize : 11 <-- 0.004619 s
+currentSize : 12 <-- 0.005116 s
+currentSize : 13 <-- 5.816268 s
+
+maxsize : 13
+nodes : 9203400.000000
+filtered : 105782099.000000
+CCGP filtered : 137537.000000
+CCGT filtered : 318835.000000
+time : 69.803055

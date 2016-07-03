@@ -1,0 +1,20 @@
+Parameters: GAD=1 vflib=1 dir=0 label=1 lowerbound=1 fileNameGp=../graphsdb/mcs10/rand/r005/mcs10_r005_s100.A28 fileNameGt=../graphsdb/mcs10/rand/r005/mcs10_r005_s100.B28
+Reading graphs...
+100 :  484
+100 :  483
+Initializing...
+maxdom : 7
+D->valSize : 333
+Solving...
+Blb : 2 (clique : 19)
+currentSize : 19 <-- 0.005044 s
+currentSize : 20 <-- 0.007180 s
+currentSize : 21 <-- 3.333897 s
+currentSize : 22 <-- 140.425568 s
+currentSize : 23 <-- 1886.398315 s
+
+TIMEOUT
+maxsize : 23
+nodes : 702349739.000000
+filtered : 4425164813.000000
+time : 3600.000000

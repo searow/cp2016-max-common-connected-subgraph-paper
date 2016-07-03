@@ -1,0 +1,25 @@
+Parameters: GAD=1 vflib=1 dir=1 label=1 lowerbound=1 fileNameGp=../graphsdb/mcs30/m2D/m2Dr2/mcs30_m2Dr2_s100.A36 fileNameGt=../graphsdb/mcs30/m2D/m2Dr2/mcs30_m2Dr2_s100.B36
+Reading graphs...
+100 : 200
+100 : 200
+Initializing...
+maxdom : 7
+D->valSize : 334
+Solving...
+Blb : 2 (clique : 30)
+currentSize : 30 <-- 0.003648 s
+currentSize : 31 <-- 0.006201 s
+currentSize : 32 <-- 0.029932 s
+currentSize : 33 <-- 0.032984 s
+currentSize : 34 <-- 0.122665 s
+currentSize : 35 <-- 0.245849 s
+currentSize : 36 <-- 0.291614 s
+currentSize : 37 <-- 49.414890 s
+currentSize : 38 <-- 85.107529 s
+currentSize : 39 <-- 174.159363 s
+
+TIMEOUT
+maxsize : 39
+nodes : 684204939.000000
+filtered : 3371503187.000000
+time : 3600.000000
