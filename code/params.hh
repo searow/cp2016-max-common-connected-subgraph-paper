@@ -16,6 +16,9 @@ struct Params
 
     /// Connected only?
     bool connected = false;
+
+    /// Use lazy global domination rule?
+    bool lgd = false;
 };
 
 #endif

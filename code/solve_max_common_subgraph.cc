@@ -203,6 +203,7 @@ auto main(int argc, char * argv[]) -> int
             ("unlabelled",                            "Make the graph unlabelled)")
             ("undirected",                            "Make the graph undirected")
             ("connected",                             "Only find connected subgraphs")
+            ("lgd",                                   "Use lazy global domination rule")
             ;
 
         po::options_description all_options{ "All options" };
@@ -249,6 +250,8 @@ auto main(int argc, char * argv[]) -> int
             std::cerr << "Currently --connected requires --undirected" << std::endl;
             return EXIT_FAILURE;
         }
+
+        params.lgd = options_vars.count("ldg");
 
         /* Create graphs */
         auto graphs = std::make_pair(

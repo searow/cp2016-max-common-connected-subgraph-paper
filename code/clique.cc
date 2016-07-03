@@ -93,6 +93,8 @@ namespace
 
         std::vector<FixedBitSet<n_words_> > vertices_adjacent_to_by_g1;
 
+        std::vector<std::pair<bool, FixedBitSet<n_words_> > > unsets;
+
         CliqueConnectedMCS(const std::pair<Association, AssociatedEdges> & g, const Params & q, const VFGraph & g1) :
             association(g.first),
             params(q),
@@ -295,30 +297,68 @@ namespace
 
             colour_class_order(p, p_order, p_bounds);
 
+            int previous_v = -1;
+
             // for each v in p... (v comes later)
             for (int n = p.popcount() - 1 ; n >= 0 ; --n) {
                 // bound, timeout or early exit?
                 if (c.size() + p_bounds[n] <= incumbent.value || params.abort->load())
                     return;
 
+                if (params.lgd && -1 != previous_v)
+                    propagate_lazy_global_domination(previous_v, p);
+
                 auto v = p_order[n];
+                previous_v = v;
 
-                // consider taking v
-                c.push_back(v);
+                if (skip(v, p)) {
+                    p.unset(v);
+                }
+                else {
+                    // consider taking v
+                    c.push_back(v);
 
-                incumbent.update(c);
+                    incumbent.update(c);
 
-                // filter p to contain vertices adjacent to v
-                FixedBitSet<n_words_> new_p = p;
-                graph.intersect_with_row(v, new_p);
+                    // filter p to contain vertices adjacent to v
+                    FixedBitSet<n_words_> new_p = p;
+                    graph.intersect_with_row(v, new_p);
 
-                if (! new_p.empty())
-                    expand(c, new_p);
+                    if (! new_p.empty())
+                        expand(c, new_p);
 
-                // now consider not taking v
-                c.pop_back();
-                p.unset(v);
+                    // now consider not taking v
+                    c.pop_back();
+                    p.unset(v);
+                }
             }
+        }
+
+        void propagate_lazy_global_domination(BitWord v, FixedBitSet<n_words_> & p)
+        {
+            if (! unsets[v].first) {
+                unsets[v].first = true;
+
+                FixedBitSet<n_words_> nv = graph.neighbourhood(v);
+
+                for (unsigned i = 0 ; i < unsigned(graph.size()) ; ++i) {
+                    if (i == v)
+                        continue;
+
+                    FixedBitSet<n_words_> niv = graph.neighbourhood(i);
+                    niv.intersect_with_complement(nv);
+                    niv.unset(v);
+                    if (niv.empty())
+                        unsets[v].second.set(i);
+                }
+            }
+
+            p.intersect_with_complement(unsets[v].second);
+        }
+
+        auto skip(BitWord v, FixedBitSet<n_words_> & p) -> bool
+        {
+            return ! p.test(v);
         }
 
         auto run() -> Result
@@ -349,7 +389,7 @@ namespace
     template <template <unsigned> class SGI_>
     struct Apply
     {
-        template <unsigned size_, typename> using Type = SGI_<size_>;
+        template <unsigned n_words_, typename> using Type = SGI_<n_words_>;
     };
 }
 
