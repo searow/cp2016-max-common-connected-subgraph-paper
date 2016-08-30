@@ -543,9 +543,23 @@ Samba Ndojh Ndiaye, \\ Patrick Prosser and Christine Solnon}
 \end{frame}
 
 \begin{frame}{Connectedness as a Constraint}
+    \begin{itemize}
+        \item Once we have assigned one variable to a non-$\bot$ value, traverse the variable graph,
+            ignoring any variables assigned to $\bot$. Assign any unvisited variables to $\bot$.
+        \item Repeat whenever any variable is assigned to $\bot$ during search.
+        \item Also, traverse the value graph, ignoring any values not present in any domain. Remove
+            any unvisited values from every domain.
+        \item Repeat whenever a value is removed from every domain during search.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Connectedness via Restricted Branching}
+    \begin{itemize}
+        \item When selecting a variable for branching (except for the first variable), only select
+            from variables which are adjacent to at least one variable already assigned to
+            non-$\bot$.
+        \item If no such variable exists, assign every remaining domain to $\bot$.
+    \end{itemize}
 \end{frame}
 
 \begin{nearlyplainframe}[t]{Constraint, Branching, or Both?}
