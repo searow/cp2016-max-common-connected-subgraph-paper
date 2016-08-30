@@ -252,6 +252,16 @@ Samba Ndojh Ndiaye, \\ Patrick Prosser and Christine Solnon}
 \end{frame}
 
 \begin{frame}{CP Models}
+    \begin{itemize}
+        \item One variable for each vertex in the smaller input graph.
+        \item Domains range over vertices in the other input graph, plus $\bot$.
+        \item Objective is to maximise variables not assigned $\bot$.
+        \item Adjacent pairs of non-$\bot$ vertices must be mapped to adjacent pairs of vertices.
+        \item Non-adjacent pairs of non-$\bot$ vertices must be mapped to non-adjacent pairs of vertices.
+        \item All different except $\bot$, with number of allowed $\bot$ occurrences controlled by
+            the objective variable.
+        \item Smallest domain first, prefer vertices of similar degree.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Clique Models and Microstructure}
