@@ -13,7 +13,7 @@ set nokey
 
 unset colorbox
 
-set title '33\% Labelled'
+set title "Unlabelled"
 
 unset rmargin
 set size square
@@ -40,9 +40,9 @@ plot \
     "../paper/connected-plain-heatmap.data" u 2:1:($3+1) matrix w image notitle axes x2y2, \
     x w l lc 'black' notitle axes x1y1
 
-set colorbox user origin 1, graph 0 size 0.02, graph 1
+set title '33\% Labelled'
 
-set title "Unlabelled"
+set colorbox user origin 1, graph 0 size 0.02, graph 1
 
 unset rmargin
 set size square
