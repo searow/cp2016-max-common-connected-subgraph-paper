@@ -26,9 +26,9 @@ set key Left at graph 1, graph 0.33
 set title "Unlabelled"
 
 plot \
-    "../paper/connected-plain.data" u (sprintf("%.1e",$7*1000)+0):($7>=3600?1e-10:1) smooth cumulative ti "FC Both" lc rgb '#000080' dt 5, \
-    "../paper/connected-plain.data" u (sprintf("%.1e",$6*1000)+0):($6>=3600?1e-10:1) smooth cumulative ti "FC Branch" lc rgb '#90ee90', \
-    "../paper/connected-plain.data" u (sprintf("%.1e",$5*1000)+0):($5>=3600?1e-10:1) smooth cumulative ti "FC Filter" lc rgb '#008080' dt 2
+    "../paper/connected-plain.data" u (sprintf("%.1e",$7*1000)+0):($7>=3600?1e-10:1) smooth cumulative ti "FC Both" lc rgb '#ffb948' lw 2, \
+    "../paper/connected-plain.data" u (sprintf("%.1e",$6*1000)+0):($6>=3600?1e-10:1) smooth cumulative ti "FC Branch" lc rgb '#84bd00' lw 2, \
+    "../paper/connected-plain.data" u (sprintf("%.1e",$5*1000)+0):($5>=3600?1e-10:1) smooth cumulative ti "FC Filter" lc rgb '#009dec' lw 2
 
 set title '33\% Labelled'
 
@@ -47,7 +47,7 @@ set format y ''
 set key Left at graph 1, graph 0.33
 
 plot \
-    "../paper/connected-undir33.data" u (sprintf("%.1e",$4*1000)+0):($4>=3600?1e-10:1) smooth cumulative ti "MAC Both" lc rgb '#008080' dt 2, \
-    "../paper/connected-undir33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "MAC Branch" lc rgb '#90ee90', \
-    "../paper/connected-undir33.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1) smooth cumulative ti "MAC Filter" lc rgb '#000080' dt 5
+    "../paper/connected-undir33.data" u (sprintf("%.1e",$4*1000)+0):($4>=3600?1e-10:1) smooth cumulative ti "MAC Both" lc rgb '#ffb948' lw 2, \
+    "../paper/connected-undir33.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "MAC Branch" lc rgb '#84bd00' lw 2, \
+    "../paper/connected-undir33.data" u (sprintf("%.1e",$2*1000)+0):($2>=3600?1e-10:1) smooth cumulative ti "MAC Filter" lc rgb '#009dec' lw 2
 

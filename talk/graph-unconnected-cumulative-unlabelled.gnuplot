@@ -27,7 +27,7 @@ unset format y
 set key Left at graph 1, graph 0.33
 
 plot \
-    "../paper/unconnected-plain.data" u (sprintf("%.1e",$4)+0):($4 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" lc rgb '#90ee90', \
-    "../paper/unconnected-plain.data" u (sprintf("%.1e",$2 * 1000)+0):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "MAC" lc rgb '#008080' dt 2, \
-    "../paper/unconnected-plain.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "FC" lc rgb '#000080' dt 5
+    "../paper/unconnected-plain.data" u (sprintf("%.1e",$4)+0):($4 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "Clique" lc rgb '#003865' lw 2, \
+    "../paper/unconnected-plain.data" u (sprintf("%.1e",$2 * 1000)+0):($2 * 1000 >= 3600e3 ? 1e-10 : 1) smooth cumulative ti "MAC" lc rgb '#84bd00' lw 2, \
+    "../paper/unconnected-plain.data" u (sprintf("%.1e",$3*1000)+0):($3>=3600?1e-10:1) smooth cumulative ti "FC" lc rgb '#ffb948' lw 2
 
