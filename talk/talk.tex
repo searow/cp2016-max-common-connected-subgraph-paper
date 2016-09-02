@@ -542,11 +542,16 @@ Samba Ndojh Ndiaye, \\ Patrick Prosser and Christine Solnon}
     \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Connectedness as a Constraint}
+\begin{frame}{Connectedness as a Constraint (on Variables)}
     \begin{itemize}
         \item Once we have assigned one variable to a non-$\bot$ value, traverse the variable graph,
             ignoring any variables assigned to $\bot$. Assign any unvisited variables to $\bot$.
         \item Repeat whenever any variable is assigned to $\bot$ during search.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Connectedness as a Constraint (on Values)}
+    \begin{itemize}
         \item Also, traverse the value graph, ignoring any values not present in any domain. Remove
             any unvisited values from every domain.
         \item Repeat whenever a value is removed from every domain during search.
@@ -582,7 +587,9 @@ Samba Ndojh Ndiaye, \\ Patrick Prosser and Christine Solnon}
         \item On the other hand, we \emph{can} use restricted branching, if we give more information
             to the clique algorithm.
             \begin{itemize}
-                \item Integrating this with the bound and ordering heuristic is horribly technical.
+                \item Integrating this with the bound and ordering heuristic used in modern clique
+                    algorithms is horribly technical and was far harder than we make it look in the
+                    paper (honest!).
             \end{itemize}
     \end{itemize}
 \end{frame}
