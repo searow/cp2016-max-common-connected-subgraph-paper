@@ -544,27 +544,149 @@ Samba Ndojh Ndiaye, \\ Patrick Prosser and Christine Solnon}
 
 \begin{frame}{Connectedness as a Constraint (on Variables)}
     \begin{itemize}
-        \item Once we have assigned one variable to a non-$\bot$ value, traverse the variable graph,
-            ignoring any variables assigned to $\bot$. Assign any unvisited variables to $\bot$.
-        \item Repeat whenever any variable is assigned to $\bot$ during search.
+        \item We can do better than just verifying connectedness:
+            \begin{itemize}
+                \item Once we have assigned one variable to a non-$\bot$ value, traverse the variable graph,
+                    ignoring any variables assigned to $\bot$. Assign any unvisited variables to $\bot$.
+                \item Repeat whenever any variable is assigned to $\bot$ during search.
+            \end{itemize}
     \end{itemize}
+
+    \vspace{1em}
+
+    \begin{center}
+    \begin{tikzpicture}[scale=0.75]%{{{
+        \begin{scope}
+            \node <1>   [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Ma) at (0, 0) {\phantom{0}};
+            \node <2->  [draw, circle, fill=uofgcobalt, inner sep=2.5pt, font=\normalsize] (Ma) at (0, 0) {\phantom{0}};
+            \node[draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mb) at (2, 0) {\phantom{0}};
+            \node <1-2> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mc) at (2, -2) {\phantom{0}};
+            \node <3->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Mc) at (2, -2) {\phantom{0}};
+            \node <1-3> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Md) at (4, 0) {\phantom{0}};
+            \node <4->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Md) at (4, 0) {\phantom{0}};
+            \node <1-4> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Me) at (4, -2) {\phantom{0}};
+            \node <1-4> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mf) at (6, -2) {\phantom{0}};
+            \node <5->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Me) at (4, -2) {\phantom{0}};
+            \node <5->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Mf) at (6, -2) {\phantom{0}};
+
+            \draw <1-2> [very thick] (Mc) -- (Me);
+            \draw <1-2> [very thick] (Ma) -- (Mc);
+            \draw <1-2> [very thick] (Mb) -- (Mc);
+
+            \draw <3->  [color=uofgsandstone!60] (Mc) -- (Me);
+            \draw <3->  [color=uofgsandstone!60] (Ma) -- (Mc);
+            \draw <3->  [color=uofgsandstone!60] (Mb) -- (Mc);
+
+            \draw <1-3> [very thick] (Mb) -- (Md);
+            \draw <1-3> [very thick] (Md) -- (Me);
+            \draw <4->  [color=uofgsandstone!60] (Mb) -- (Md);
+            \draw <4->  [color=uofgsandstone!60] (Md) -- (Me);
+
+            \draw <1-4> [very thick] (Me) -- (Mf);
+            \draw <5->  [color=uofgsandstone!60] (Me) -- (Mf);
+
+            \draw [very thick] (Ma) -- (Mb);
+        \end{scope}
+    \end{tikzpicture}
+    \end{center}
 \end{frame}
 
 \begin{frame}{Connectedness as a Constraint (on Values)}
     \begin{itemize}
-        \item Also, traverse the value graph, ignoring any values not present in any domain. Remove
-            any unvisited values from every domain.
-        \item Repeat whenever a value is removed from every domain during search.
+        \item We can do something similar on the dual viewpoint:
+            \begin{itemize}
+                \item Also, traverse the value graph, ignoring any values not present in any domain. Remove
+                    any unvisited values from every domain.
+                \item Repeat whenever a value is removed from every domain during search.
+        \end{itemize}
     \end{itemize}
+
+    \vspace{1em}
+
+    \begin{center}
+    \begin{tikzpicture}[scale=0.75]%{{{
+        \begin{scope}
+            \node <1>   [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Ma) at (0, 0) {\phantom{0}};
+            \node <2->  [draw, circle, fill=uofgcobalt, inner sep=2.5pt, font=\normalsize] (Ma) at (0, 0) {\phantom{0}};
+            \node <1->  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mb) at (1, -1) {\phantom{0}};
+            \node <1->  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mc) at (1, 1) {\phantom{0}};
+            \node <1-2>  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Md) at (2, 0) {\phantom{0}};
+            \node <3->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Md) at (2, 0) {\phantom{0}};
+            \node <1-3>  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Me) at (3, -1) {\phantom{0}};
+            \node <1-3>  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mf) at (3, 1) {\phantom{0}};
+            \node <1-3>  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mg) at (4, 0) {\phantom{0}};
+            \node <4->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Me) at (3, -1) {\phantom{0}};
+            \node <4->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Mf) at (3, 1) {\phantom{0}};
+            \node <4->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Mg) at (4, 0) {\phantom{0}};
+
+            \draw <1-2> [very thick] (Mb) -- (Md);
+            \draw <1-2> [very thick] (Mc) -- (Md);
+            \draw <1-2> [very thick] (Md) -- (Me);
+            \draw <1-2> [very thick] (Md) -- (Mf);
+            \draw <3->  [draw=uofgsandstone!60] (Mb) -- (Md);
+            \draw <3->  [draw=uofgsandstone!60] (Mc) -- (Md);
+            \draw <3->  [draw=uofgsandstone!60] (Md) -- (Me);
+            \draw <3->  [draw=uofgsandstone!60] (Md) -- (Mf);
+
+            \draw <1-3> [very thick] (Me) -- (Mg);
+            \draw <1-3> [very thick] (Mf) -- (Mg);
+            \draw <4->  [draw=uofgsandstone!60] (Me) -- (Mg);
+            \draw <4->  [draw=uofgsandstone!60] (Mf) -- (Mg);
+
+            \draw [very thick] (Ma) -- (Mb);
+            \draw [very thick] (Ma) -- (Mc);
+        \end{scope}
+    \end{tikzpicture}
+    \end{center}
 \end{frame}
 
 \begin{frame}{Connectedness via Restricted Branching}
     \begin{itemize}
+        \item The following heretical approach is due to Vismara and Valery.
         \item When selecting a variable for branching (except for the first variable), only select
             from variables which are adjacent to at least one variable already assigned to
-            non-$\bot$.
+                    non-$\bot$.
         \item If no such variable exists, assign every remaining domain to $\bot$.
     \end{itemize}
+
+    \vspace{1em}
+
+    \begin{center}
+    \begin{tikzpicture}[scale=1.25]%{{{
+        \begin{scope}
+            \node <1>   [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Ma) at (0, 0) {\phantom{0}};
+            \node <2->  [draw, circle, fill=uofgcobalt, inner sep=2.5pt, font=\normalsize] (Ma) at (0, 0) {\phantom{0}};
+            \node <1-3> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mb) at (1, 0) {\phantom{0}};
+            \node <4->  [draw, circle, fill=uofgpumpkin, inner sep=2.5pt, font=\normalsize] (Mb) at (1, 0) {\phantom{0}};
+            \node <1-6>  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mc) at (1, -1) {\phantom{0}};
+            \node <7->  [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Mc) at (1, -1) {\phantom{0}};
+            \node <1-2> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Md) at (2, 0) {\phantom{0}};
+            \node <1-2> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Me) at (2, -1) {\phantom{0}};
+            \node <3-4>  [draw, circle, dotted, fill=white, inner sep=2.5pt, font=\normalsize] (Md) at (2, 0) {\phantom{0}};
+            \node <5>  [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Md) at (2, 0) {\phantom{0}};
+            \node <6->  [draw, circle, fill=uofglawn, inner sep=2.5pt, font=\normalsize] (Md) at (2, 0) {\phantom{0}};
+            \node <3-7>  [draw, circle, dotted, fill=white, inner sep=2.5pt, font=\normalsize] (Me) at (2, -1) {\phantom{0}};
+            \node <8->  [draw, circle, draw=uofgsandstone!60, fill=white, inner sep=2.5pt, font=\normalsize] (Me) at (2, -1) {\phantom{0}};
+            \node <1-2> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mf) at (3, 0) {\phantom{0}};
+            \node <3-7>  [draw, circle, dotted, fill=white, inner sep=2.5pt, font=\normalsize] (Mf) at (3, 0) {\phantom{0}};
+            \node <8-> [draw, circle, fill=white, draw=uofgsandstone!60, inner sep=2.5pt, font=\normalsize] (Mf) at (3, 0) {\phantom{0}};
+            \node <1-2> [draw, circle, fill=white, inner sep=2.5pt, font=\normalsize] (Mg) at (3, -1) {\phantom{0}};
+            \node <3-7>  [draw, circle, dotted, fill=white, inner sep=2.5pt, font=\normalsize] (Mg) at (3, -1) {\phantom{0}};
+            \node <8->  [draw, circle, draw=uofgsandstone!60, fill=white, inner sep=2.5pt, font=\normalsize] (Mg) at (3, -1) {\phantom{0}};
+
+            \draw [very thick] (Ma) -- (Mb);
+            \draw [very thick] (Mb) -- (Md);
+            \draw <1-6> [very thick] (Mc) -- (Me);
+            \draw <1-6> [very thick] (Ma) -- (Mc);
+            \draw <1-6> [very thick] (Mb) -- (Mc);
+            \draw <7-> [draw=uofgsandstone!60] (Mc) -- (Me);
+            \draw <7-> [draw=uofgsandstone!60] (Ma) -- (Mc);
+            \draw <7-> [draw=uofgsandstone!60] (Mb) -- (Mc);
+            \draw <1-7> [very thick] (Mf) -- (Mg);
+            \draw <8-> [draw=uofgsandstone!60] (Mf) -- (Mg);
+        \end{scope}
+    \end{tikzpicture}
+    \end{center}
 \end{frame}
 
 \begin{nearlyplainframe}[t]{Constraint, Branching, or Both?}
@@ -580,16 +702,16 @@ Samba Ndojh Ndiaye, \\ Patrick Prosser and Christine Solnon}
     }
 \end{nearlyplainframe}
 
-\begin{frame}{Connectedness in Clique-Like Algorithms}
+\begin{frame}{Connectedness in Clique-Like Algorithms?}
     \begin{itemize}
-        \item Connectedness doesn't decompose cleanly into binary constraints, so we can't encode it
-            as microstructure.
-        \item On the other hand, we \emph{can} use restricted branching, if we give more information
-            to the clique algorithm.
+        \item Connectedness doesn't decompose cleanly into binary constraints,
+            so we can't encode it as microstructure.
+        \item Modern maximum clique algorithms use a special bound function
+            which doesn't allow us to branch arbitrarily. Adapting the
+            restricted branching rule to work with this would be horribly
+            complicated and no-one in their right mind would even attempt it.
             \begin{itemize}
-                \item Integrating this with the bound and ordering heuristic used in modern clique
-                    algorithms is horribly technical and was far harder than we make it look in the
-                    paper (honest!).
+                \item <2-> But we did it anyway. See the paper for how.
             \end{itemize}
     \end{itemize}
 \end{frame}
