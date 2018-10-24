@@ -3,6 +3,7 @@
 #include "clique.hh"
 
 #include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -339,6 +340,33 @@ auto main(int argc, char * argv[]) -> int
                     }
             }
         }
+
+        /* Write the results to file .*/
+        // Output directory same as first input file directory.
+        std::string full_path = options_vars["pattern-file"].as<std::string>();
+        boost::filesystem::path p(full_path);
+        boost::filesystem::path dir = p.parent_path();
+        boost::filesystem::path out_path = dir / "output.csv";
+
+        // Write the results.
+        // Format:
+        // <size of edge mappings>>
+        // "<edge1_g1>, <edge1_g2>", "<edge2_g1>, <edge2_g2>", ...
+        std::ofstream myfile;
+        myfile.open(out_path.string());
+        myfile << "\"" << result.isomorphism.size() << "\"" << std::endl;
+        int counter = 0;
+        int size = result.isomorphism.size();
+        for (auto v : result.isomorphism) {
+            myfile << "\"" << v.first << "," << v.second << "\"";
+            if (counter < size - 1) {
+                myfile << ",";
+            }
+            counter++;
+        }
+        myfile << std::endl;
+
+        myfile << "\"" << overall_time.count() << "\"";
 
         return EXIT_SUCCESS;
     }
