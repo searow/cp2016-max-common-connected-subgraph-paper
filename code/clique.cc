@@ -77,8 +77,8 @@ namespace
                     if (value.compare_exchange_strong(current_value, new_c_size)) {
                         std::unique_lock<std::mutex> lock(mutex);
                         c = new_c;
-                        std::cerr << "-- " << (duration_cast<milliseconds>(steady_clock::now() - start_time)).count()
-                            << " " << new_c.size() << std::endl;
+                        //std::cerr << "-- " << (duration_cast<milliseconds>(steady_clock::now() - start_time)).count()
+                        //    << " " << new_c.size() << std::endl;
                         break;
                     }
                 }

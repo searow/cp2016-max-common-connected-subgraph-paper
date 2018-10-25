@@ -350,23 +350,25 @@ auto main(int argc, char * argv[]) -> int
 
         // Write the results.
         // Format:
-        // <size of edge mappings>>
-        // "<edge1_g1>, <edge1_g2>", "<edge2_g1>, <edge2_g2>", ...
+        // <num of nodes in mcis>>
+        // {<node1_g1>:<node1_g2>, <node2_g1>:<node2_g2>, ...}
+        // <time in ms>
         std::ofstream myfile;
         myfile.open(out_path.string());
-        myfile << "\"" << result.isomorphism.size() << "\"" << std::endl;
         int counter = 0;
         int size = result.isomorphism.size();
+        myfile << size << std::endl;
+        myfile << "{";
         for (auto v : result.isomorphism) {
-            myfile << "\"" << v.first << "," << v.second << "\"";
+            myfile << v.first << ":" << v.second;
             if (counter < size - 1) {
                 myfile << ",";
             }
             counter++;
         }
-        myfile << std::endl;
+        myfile << "}" << std::endl;
 
-        myfile << "\"" << overall_time.count() << "\"";
+        myfile << overall_time.count() << std::endl;
 
         return EXIT_SUCCESS;
     }
