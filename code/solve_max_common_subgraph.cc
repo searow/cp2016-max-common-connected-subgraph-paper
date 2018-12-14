@@ -77,7 +77,7 @@ namespace
         if (unlabelled)
             result.vertices_by_label.resize(1);
         else
-            result.vertices_by_label.resize(0x10000 >> (16 - k1));
+            result.vertices_by_label.resize(0x10000);
 
         result.vertex_labels.resize(result.size);
         result.edges.resize(result.size);
@@ -85,7 +85,7 @@ namespace
             e.resize(result.size);
 
         for (unsigned r = 0 ; r < result.size ; ++r) {
-            unsigned l = read_word(infile) >> (16 - k1);
+            unsigned l = read_word(infile);
             if (unlabelled)
                 l = 0;
             result.vertex_labels.at(r) = l;
@@ -281,13 +281,14 @@ auto main(int argc, char * argv[]) -> int
         auto overall_time = duration_cast<milliseconds>(steady_clock::now() - params.start_time);
 
         /* Display the results. */
-        std::cout << std::boolalpha << ! result.isomorphism.empty() << " " << result.nodes;
+        //std::cout << std::boolalpha << ! result.isomorphism.empty() << " " << result.nodes;
 
         if (aborted)
             std::cout << " aborted";
 
-        std::cout << " " << result.isomorphism.size() << std::endl;
+        //std::cout << " " << result.isomorphism.size() << std::endl;
 
+        /*
         for (auto v : result.isomorphism)
             std::cout << "(" << v.first << " -> " << v.second << ") ";
         std::cout << std::endl;
@@ -298,6 +299,7 @@ auto main(int argc, char * argv[]) -> int
                 std::cout << " " << t.count();
         }
         std::cout << std::endl;
+        */
 
         for (auto & p : result.isomorphism) {
             if (graphs.first.vertex_labels.at(p.first) != graphs.second.vertex_labels.at(p.second)) {
